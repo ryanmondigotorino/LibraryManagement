@@ -1,0 +1,153 @@
+.navimage{
+    width:40px;
+    height:40px;
+    border-radius: 50%;
+    margin-right:5%;
+}
+.navproflinks{
+    margin-right: 8%;
+}
+body{
+    font-family: 'Noto Serif', serif;
+}
+.box_shad {
+    width: 250px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.card_shad {
+    width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.img-cart{
+    width: 100%;
+    height: 300px;
+    border-style: solid;
+    border-color: lightgray; 
+}
+.item-choose{
+    cursor: pointer;
+}
+.items{
+    cursor: pointer;
+}
+.search-item-choose{
+    cursor: pointer;
+}
+.search-item-choose:hover{
+    opacity: 0.5;
+}
+.card-container{
+    height: 100%;
+    overflow-y: initial !important
+}
+.item-sale{
+    text-decoration-line: line-through;
+}
+.item-choose:hover{
+    opacity: 0.5;
+}
+.my-cart{
+    background: #DBDBDB;
+}
+.item-cart{
+    height:485px;
+    width:100%;
+    overflow-y: auto;
+}
+.my-itm{
+    padding: 0px 0px 0px 0px !important;
+}
+.item-cart1{
+    height:320px;
+    width:100%;
+    overflow-y: auto;
+}
+.table_shad{
+    width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.item-description{
+    margin-top: 5px;
+    font-weight: bold;
+}
+.item-title{
+    font-size: 25px;
+    font-weight: bold;
+}
+.getItems{
+    text-align: center;
+}
+.profile_content{
+    margin-left:5%;
+    margin-right:5%;
+}
+.image_profile{
+    border-style: solid;
+    border-color: lightgray; 
+}
+.imgup{
+    text-align:center;
+}
+.image_landing{
+    height: 300px;
+    width: 300px;
+    border-style: solid;
+    border-color: lightgray; 
+    border-radius: 50%;
+    margin-top:5%;
+    margin-bottom:5%;
+}
+.image_educ{
+    height: 125px;
+    width: 150px;
+    border-style: solid;
+    border-color: lightgray;
+    border-radius: 50%; 
+}
+.profile_container{
+    margin-top:10%;
+    margin-bottom:2%;
+}
+.profile_below{
+    margin-top:2%;
+    margin-bottom:5%;
+}
+.imgup{
+    text-align:center;
+}
+.img_cert{
+    width:80%;
+    height: 300px;
+    border-style: solid;
+    border-color: lightgray; 
+}
+@media (min-width: 320px){
+    .content-container{
+        max-width: 290px;
+    }
+}
+@media (min-width: 411px){
+    .content-container{
+        max-width: 370px;
+    }
+}
+@media (min-width: 768px){
+    .content-container{
+        max-width: 720px;
+    }
+}
+@media (min-width: 1024px){
+    .content-container{
+        max-width: 950px;
+    }
+}
+@media (min-width: 1200px){
+    .content-container{
+        max-width: 1280px;
+    }
+}
+.content-container{
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}

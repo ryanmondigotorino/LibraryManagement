@@ -1,0 +1,338 @@
+canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+.feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+}
+
+/*
+* Sidebar
+*/
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 48px 0 0; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+.button_shad {
+    width: 100px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.leads_shad1 {
+    width: 100%;
+    background-color: #C2AF97;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.leads_shad1:hover{
+    opacity: 0.5;
+}
+.leads_shad2 {
+    width: 100%;
+    background-color: #FED491;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.leads_shad2:hover{
+    opacity:0.5;
+}
+.leads_shad3 {
+    width: 100%;
+    background-color: #B97033;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.leads_shad4 {
+    width: 100%;
+    background-color: #B9AD33;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.item_image{
+    height: 235px;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-color: #000000;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.item_image:hover{
+    opacity:0.5;
+}
+.add-item {
+    width: 100%;
+    background-color: #FFFBF4;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.btn_add_item{
+    margin-top:15px;
+}
+.img-group{
+    text-align: center;
+}
+.table_shad{
+    width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.legend-green{
+    color: #68D66F;
+}
+.legend-light-orange{
+    color: #E27131;
+}
+.legend-orange{
+    color: #B74F15;
+}
+.legend-red{
+    color: #EC4E4E;
+}
+.search-item-choose{
+    cursor: pointer;
+}
+.search-item-choose:hover{
+    opacity: 0.5;
+}
+.leads{
+    font-size:30px;text-align:center;
+}
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+.sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+}
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+.sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: #999;
+}
+
+.sidebar .nav-link.active {
+    color: #007bff;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+    color: inherit;
+}
+
+.sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+}
+.items-dialog{
+    overflow-y: initial !important
+}
+.items-container{
+    height:500px !important;
+    overflow-y: auto;
+}
+.item-choose{
+    cursor: pointer;
+}
+
+.item-choose:hover{
+    opacity: 0.5;
+}
+
+.sale-item{
+    cursor: pointer;
+}
+.sale-item:hover{
+    opacity: 0.5;
+}
+
+.item-sale{
+    text-decoration-line: line-through;
+}
+
+.item-choose-click{
+    opacity: 1;
+}
+.card-container{
+    height: 100%;
+}
+.item-description{
+    margin-top: 5px;
+    font-weight: bold;
+}
+.item-title{
+    font-size: 25px;
+    font-weight: bold;
+}
+.item-cart1{
+    height:410px;
+    width:100%;
+    overflow-y: auto;
+}
+.item-cart{
+    height:520px;
+    width:100%;
+    overflow-y: auto;
+}
+.my-cart{
+    background: #DBDBDB;
+}
+
+
+.card_shad {
+    width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+/*
+* Content
+*/
+
+[role="main"] {
+    padding-top: 48px; /* Space for fixed navbar */
+}
+
+/*
+* Navbar
+*/
+.cntr{
+    text-align: center;
+}
+.account_line{
+    border-radius: 50%; 
+    width: 20px;
+    height: 20px;
+}
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
+.navbar .form-control {
+    padding: .75rem 1rem;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.form-control-dark {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .1);
+}
+
+.form-control-dark:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
+.navimage{
+    width:40px;
+    height:40px;
+    border-radius: 50%;
+    margin-right:5%;
+}
+.navproflinks{
+    margin-right: 8%;
+}
+body{
+    font-family: 'Noto Serif', serif;
+}
+.profile_content{
+    margin-left:5%;
+    margin-right:5%;
+}
+.image_landing{
+    height: 300px;
+    width: 300px;
+    border-style: solid;
+    border-color: lightgray; 
+    border-radius: 50%;
+    margin-top:5%;
+    margin-bottom:5%;
+}
+.itm_image{
+    cursor: pointer;
+}
+.image_educ{
+    height: 125px;
+    width: 150px;
+    border-style: solid;
+    border-color: lightgray;
+    border-radius: 50%; 
+}
+.profile_container{
+    margin-top:2%;
+    margin-bottom:2%;
+}
+.profile_below{
+    margin-top:1%;
+}
+.image_profile{
+    height: 300px;
+    width: 300px;
+    border-style: solid;
+    border-color: lightgray; 
+}
+.profile_modal{
+    height: 300px;
+    width: 250px;
+    border-style: solid;
+    border-color: lightgray; 
+}
+.imgup{
+    text-align:center;
+}
+.img_cert{
+    width:80%;
+    height: 300px;
+    border-style: solid;
+    border-color: lightgray; 
+}.img_receipt{
+    width:600px;
+    height: 500px;
+    border-style: solid;
+    border-color: lightgray; 
+}.cntr{
+    text-align:center;
+}.navHead{
+    font-weight:bold;
+    font-size: 15px;
+    color: #000000;
+}
+
+.receipt-img{
+    width:115px;
+    height:50px;
+}
+.receipt-title{
+    font-size: 15px;
+    font-weight: bold;
+}
+.receipt-description{
+    font-size: 10px;
+}
+.receipt-content{
+    font-size: 13px;
+}
+.receipt-head{
+    text-align:center;
+}
