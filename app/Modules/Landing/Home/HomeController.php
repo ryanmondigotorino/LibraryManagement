@@ -66,4 +66,14 @@ class HomeController extends Controller
     public function signupsubmit(Request $request){
         return $request->all();
     }
+    public function logout(Request $request){
+        $guard = $request->guard;
+        if(Auth::guard($guard)->check()){
+            $accountsData = CF::model($request->model)::find($request->id);
+            $accountsData->account_line = 0;
+            $accountsData->save();
+            Auth::guard($guard)->logout();
+            return 'success';
+        }
+    }
 }

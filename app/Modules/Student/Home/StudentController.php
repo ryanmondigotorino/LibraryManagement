@@ -20,6 +20,5 @@ class StudentController extends Controller
     public function index(Request $request){
         $base_data = Auth::guard('student')->user();
         return $base_data;
-        // return view($this->render('index'));
     }
 }
