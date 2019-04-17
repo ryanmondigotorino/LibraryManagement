@@ -11,8 +11,7 @@
     <link rel="stylesheet" href="{{ URL::asset('public/css/profile.css') }} ">
     <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
-    {{-- <link rel="shortcut icon" href="{{URL::asset('storage/uploads/App_Images/LS.png')}}" type="image/png"> --}}
-    <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5c7d3f0c9fbe5a0017077923&product=inline-share-buttons' async='async'></script>
+    <link rel="shortcut icon" href="{{URL::asset('storage/uploads/app_images/mainfavicon.png')}}" type="image/png">
     <title>Home</title>
     <style>
         body{

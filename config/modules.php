@@ -5,5 +5,11 @@ return [
         'Landing' => [
             'Home',
         ],
+        'Student' => [
+            'Home',
+        ],
+        'Admin' => [
+            'Dashboard',
+        ],
     ]
 ];
