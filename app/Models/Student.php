@@ -13,7 +13,6 @@ class Student extends BaseModel{
     protected $fillable = [
         'student_num',
         'course_id',
-        'school_id',
         'department_id',
         'firstname',
         'middlename',
@@ -32,6 +31,8 @@ class Student extends BaseModel{
     public static function rules($input = null){
         $id = isset($input['id']) ? $input['id'] : null;
         $data['rules'] = [
+            'course_id' => [ 'required' ],
+            'department_id' => [ 'required' ],
             'firstname' => [ 'required','regex:/^[a-zA-Z]+$/u','min:3' ],
             'lastname' => [ 'required','regex:/^[a-zA-Z]+$/u','min:3' ],
             'username' => [ 'required', Rule::unique('admins')->ignore($id), Rule::unique('students')->ignore($id)],
@@ -39,6 +40,10 @@ class Student extends BaseModel{
         ];
 
         $data['messages'] = [
+            'course_id.required' => 'Course Name is required.',
+            'department_id.required' => 'Department Name is required.',
+            'firstname.required' => 'First Name is required.',
+            'lastname.required' => 'Last Name is required.',
             'username.required' => 'Username is required.',
             'username.unique' => 'This Username is already in use..',
             'email.unique' => 'This Email is already in use.',
