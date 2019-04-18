@@ -176,7 +176,7 @@ class DashboardController extends Controller
         $start = $request->start;
         $length = $request->length;
         $columns = [
-            'students.id',
+            'students.student_num',
             'students.account_line',
             'students.image',
             'students.firstname',
@@ -187,6 +187,7 @@ class DashboardController extends Controller
         $studentDetails = CF::model('Student')
             ->select(
                 'students.id',
+                'students.student_num',
                 'students.account_line',
                 'students.image',
                 'students.firstname',
@@ -202,7 +203,7 @@ class DashboardController extends Controller
         $studentResultCount = $studentDetails->count();
         $studentDetails = $studentDetails->where(function($query) use ($request){
             $query
-                ->orWhere('students.id','LIKE',"%".$request->search['value']."%")
+                ->orWhere('students.student_num','LIKE',"%".$request->search['value']."%")
                 ->orWhere(DB::raw("CONCAT(students.firstname,' ',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
                 ->orWhere(DB::raw("CONCAT(students.firstname,'',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
                 ->orWhere(DB::raw("CONCAT(students.firstname,' ',students.middlename,' ',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
@@ -223,7 +224,7 @@ class DashboardController extends Controller
             $btn_name = $acc_stat == 0 ? 'ACTIVATE' : 'DEACTIVATE';
 
             $middlename = $value->middlename == null || $value->middlename == '' ? ' ' : ' '.$value->middlename.' ';
-            $array[$key]['id'] = $value->id;
+            $array[$key]['student_num'] = $value->student_num;
             $array[$key]['line_status'] = $value->account_line == 1 ? '<img src="'.URL::asset('storage/uploads/account_line/online.png').'" alt="online" class="account_line"/>  Online' : '<img src="'.URL::asset('storage/uploads/account_line/offline.png').'" alt="online" class="account_line"/> Offline';
             $array[$key]['image'] = '<img src="'.URL::asset('storage/uploads/profile_image/'.$value->image).'" alt="Profile Image" style="border-radius: 50%; width: 40px;height: 40px;"/>';
             $array[$key]['name'] = $value->firstname.$middlename.$value->lastname;
@@ -240,7 +241,7 @@ class DashboardController extends Controller
 
         foreach($result['account_details'] as $key => $value){
             $dataOutput = [
-                $value['id'],
+                $value['student_num'],
                 $value['line_status'],
                 $value['image'],
                 $value['name'],

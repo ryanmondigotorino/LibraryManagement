@@ -23,7 +23,7 @@
                                 <table class="table table-striped table_shad table-bordered table-hover get-students">
                                     <thead>
                                         <tr>
-                                            <th>No.</th>
+                                            <th>Student No.</th>
                                             <th>Status</th>
                                             <th>Image</th>
                                             <th>Name</th>
