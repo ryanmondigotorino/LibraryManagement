@@ -17,6 +17,10 @@ class DashboardController extends Controller
 {
     public static $view_path = "Admin.Dashboard";
 
+    public function __construct(){
+        date_default_timezone_set('Asia/Manila');
+    }
+
     public function index(Request $request){
         $base_data = Auth::guard('admin')->user();
         $getuserdata = CF::model('Admin')::find($base_data->id);
@@ -107,5 +111,117 @@ class DashboardController extends Controller
 
     public function getstudents(Request $request){
         
+    }
+
+    public function adminaudit(){
+        return view($this->render('audits.admin-audit'));
+    }
+
+    public function studentaudit(){
+        return view($this->render('audits.student-audit'));
+    }
+
+    public function getadminlogs(Request $request){
+        $start = $request->start;
+        $length = $request->length;
+        $columns = [
+            'admin_audits.id',
+            'admins.account_type',
+            'admins.email',
+            'admin_audits.action',
+            'admin_audits.ip_address',
+            'admin_audits.device',
+            'admin_audits.browser',
+            'admin_audits.operating_system',
+        ];
+
+        $adminAuditDetails = CF::model('Admin_audit')
+            ->select(
+                'admin_audits.id',
+                'admins.account_type',
+                'admins.email',
+                'admins.username',
+                'admin_audits.action',
+                'admin_audits.ip_address',
+                'admin_audits.device',
+                'admin_audits.browser',
+                'admin_audits.operating_system',
+                'admin_audits.created_at'
+            )
+            ->join('admins','admins.id','admin_audits.admin_id');
+        $adminAuditResultCount = $adminAuditDetails->count();
+        $adminAuditDetails = $adminAuditDetails->where(function($query) use ($request){
+            $query
+                ->orWhere('admin_audits.id','LIKE',"%".$request->search['value']."%")
+                ->orWhere('admins.account_type','LIKE',"%".$request->search['value']."%")
+                ->orWhere('admins.email','LIKE',"%".$request->search['value']."%")
+                ->orWhere('admins.username','LIKE',"%".$request->search['value']."%")
+                ->orWhere('admin_audits.action','LIKE',"%".$request->search['value']."%")
+                ->orWhere('admin_audits.ip_address','LIKE',"%".$request->search['value']."%")
+                ->orWhere('admin_audits.device','LIKE',"%".$request->search['value']."%")
+                ->orWhere('admin_audits.browser','LIKE',"%".$request->search['value']."%")
+                ->orWhere('admin_audits.operating_system','LIKE',"%".$request->search['value']."%")
+                ->orWhere('admin_audits.created_at','LIKE',"%".$request->search['value']."%");
+        })
+        ->offset($start)
+        ->limit($length)
+        ->orderBy($columns[$request->order[0]['column']],$request->order[0]['dir'])
+        ->get();
+
+        $array = $result = [];
+
+        foreach($adminAuditDetails as $key => $value){
+            $array[$key]['id'] = $value->id;
+            $array[$key]['account_type'] = $value->account_type;
+            $array[$key]['username'] = '<strong>'.$value->username.'</strong>';
+            $array[$key]['action'] = $value->action;
+            $array[$key]['ip_address'] = $value->ip_address;
+            $array[$key]['device'] = $value->device;
+            $array[$key]['browser'] = $value->browser;
+            $array[$key]['operating_system'] = $value->operating_system;
+            $array[$key]['created_at'] = date('m-j-y h:i:A',strtotime($value->created_at));
+        }
+
+        $totalCount = count($array);
+        $result['audit_details'] = $array;
+        $data = [];
+
+        foreach($result['audit_details'] as $key => $value){
+            $dataOutput = [
+                $value['id'],
+                $value['account_type'],
+                $value['username'],
+                $value['action'],
+                $value['ip_address'],
+                $value['device'],
+                $value['browser'],
+                $value['operating_system'],
+                $value['created_at']
+            ];
+            $data[] = $dataOutput;
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => $totalCount,
+            "recordsFiltered" => $adminAuditResultCount,
+            "data"            => $data
+            );
+            
+        return json_encode($json_data); 
+    }
+
+    public function getstudentlogs(Request $request){
+        $start = $request->start;
+        $length = $request->length;
+        $columns = [
+            'admin_audits.id',
+            'students.firstname',
+            'students.email',
+            'admin_audits.action',
+            'admin_audits.ip_address',
+            'admin_audits.device',
+            'admin_audits.browser',
+            'admin_audits.operating_system',
+        ];
     }
 }

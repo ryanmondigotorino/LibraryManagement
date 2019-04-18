@@ -10,6 +10,8 @@ return [
         ],
         'Admin' => [
             'Dashboard',
+            'Department',
+            'Course',
         ],
     ]
 ];

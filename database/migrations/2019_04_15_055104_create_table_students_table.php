@@ -17,7 +17,6 @@ class CreateTableStudentsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('student_num');
             $table->integer('course_id')->nullable();
-            $table->integer('school_id')->nullable();
             $table->integer('department_id')->nullable();
             $table->string('firstname',50);
             $table->string('middlename',50);

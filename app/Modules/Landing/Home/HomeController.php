@@ -12,10 +12,15 @@ use Auth;
 use View;
 use DB;
 use URL;
+use Browser;
 
 class HomeController extends Controller
 {
     public static $view_path = "Landing.Home";
+
+    public function __construct(){
+        date_default_timezone_set('Asia/Manila');
+    }
 
     public function index(Request $request){
         if(Auth::guard('student')->check()){
@@ -49,6 +54,13 @@ class HomeController extends Controller
         $admin = Auth::guard('admin')->attempt([$field => $request->email_username,'password' => $request->password,'account_status' => 1]);
         if($studentguard || $adminGuard){
             if($student || $admin){
+                if(Auth::guard('admin')->check()){
+                    $user = Auth::guard('admin')->user();
+                    $this->__auditlogs('admin',$user,$request->ip(),'Logged-in');
+                }elseif(Auth::guard('student')->check()){
+                    $user = Auth::guard('student')->user();
+                    $this->__auditlogs('student',$user,$request->ip(),'Logged-in');
+                }
                 $result['status'] = 'success';
                 $result['msg'] = 'Login Successful';
             }else{
@@ -70,10 +82,45 @@ class HomeController extends Controller
         $guard = $request->guard;
         if(Auth::guard($guard)->check()){
             $accountsData = CF::model($request->model)::find($request->id);
+            $this->__auditlogs($guard,$accountsData,$request->ip(),'Logged-out');
             $accountsData->account_line = 0;
             $accountsData->save();
             Auth::guard($guard)->logout();
             return 'success';
+        }
+    }
+
+    public function __auditlogs($acctype,$user,$ipaddress,$action){
+        $getDevice = '';
+        if(Browser::isMobile()){
+            $getDevice = 'Mobile';
+        }elseif(Browser::isTablet()){
+            $getDevice = 'Tablet';
+        }elseif(Browser::isDesktop()){
+            $getDevice = 'Desktop';
+        }elseif(Browser::isBot()){
+            $getDevice = 'Bot';
+        }
+        if($acctype == 'admin'){
+            $array = array(
+                'admin_id' => $user->id,
+                'action' => $action,
+                'ip_address' => $ipaddress,
+                'device' => $getDevice,
+                'browser' => Browser::browserName(),
+                'operating_system' => Browser::platformName(),
+            );
+            CF::model('Admin_audit')->saveData($array, true);
+        }elseif($acctype == 'student'){
+            $array = array(
+                'student_id' => $user->id,
+                'action' => $action,
+                'ip_address' => $request->ip(),
+                'device' => $getDevice,
+                'browser' => Browser::browserName(),
+                'operating_system' => Browser::platformName(),
+            );
+            CF::model('Student_audit')->saveData($array, true);
         }
     }
 }

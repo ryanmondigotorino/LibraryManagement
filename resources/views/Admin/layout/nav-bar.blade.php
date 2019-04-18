@@ -44,6 +44,54 @@
                         </a>
                     </li>
                 </ul>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span class="navHead">Course</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                        <span data-feather="plus-circle"></span>
+                    </a>
+                </h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('admin.course.index')}}">
+                            <span class="fa fa-table"></span>
+                            View Course
+                        </a>
+                    </li>
+                </ul>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span class="navHead">Department</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                        <span data-feather="plus-circle"></span>
+                    </a>
+                </h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('admin.department.index')}}">
+                            <span class="fa fa-table"></span>
+                            View Department
+                        </a>
+                    </li>
+                </ul>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span class="navHead">Audit Logs</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                        <span data-feather="plus-circle"></span>
+                    </a>
+                </h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('admin.dashboard.accounts.admin-audit')}}">
+                            <span class="fa fa-table"></span>
+                            View Admin Audit
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('admin.dashboard.accounts.student-audit')}}">
+                            <span class="fa fa-table"></span>
+                            View Student Audit
+                        </a>
+                    </li>
+                </ul>
             </div>
         </nav>
     </div>
