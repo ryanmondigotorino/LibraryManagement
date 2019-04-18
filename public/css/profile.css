@@ -8,7 +8,7 @@
     margin-right: 8%;
 }
 body{
-    font-family: 'Noto Serif', serif;
+    font-family: 'Nunito', sans-serif;
 }
 .box_shad {
     width: 250px;
@@ -111,6 +111,10 @@ body{
 .profile_below{
     margin-top:2%;
     margin-bottom:5%;
+}
+.login_container{
+    margin-top:10%;
+    margin-bottom:2%;
 }
 .imgup{
     text-align:center;

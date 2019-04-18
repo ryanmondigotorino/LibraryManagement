@@ -3,39 +3,66 @@
 @endsection
 
 @section('content')
-<div class="profile_container">
+<div class="login_container">
     <div class="row">
-        <div class="card box_shad" style="width:100%">
-            <div class="card-body">
-                <div class="profile_content">
-                    <h1><span class="fa fa-user"></span> Login</h1><hr>
-                    <div class="row" style="margin-bottom:2%;">
-                        <div class="col-lg-3">
-                            <h5>Get connected with us!</h5>
-                        </div>
-                        <div class="col-lg-7">
-                            <form class="loginClick">
-                                {{ csrf_field() }} 
-                                <div class="form-group">
-                                    <label for="email_username">Email/User Name</label>
-                                    <input type="text" class="form-control" name="email_username" placeholder="Enter here">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" name="password" placeholder="Enter password">
-                                </div>
-                                <div class="form-group pull-right">
-                                    <button type="submit" class="btn btn-secondary " name="sbmt">Login</button>
-                                </div>
-                            </form>
-                        </div>
+        <div class="col-lg-6">
+            <div id="slider" class="carousel slide" data-ride="carousel">
+
+                <ul class="carousel-indicators">
+                    <li data-target="#slider" data-slide-to="0" class="active"></li>
+                    <li data-target="#slider" data-slide-to="1"></li>
+                    <li data-target="#slider" data-slide-to="2"></li>
+                </ul>
+
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <img class="img-fluid" src="{{URL::asset('storage/uploads/login_images/books.jpg')}}" alt="Los Angeles">
                     </div>
+                    <div class="carousel-item">
+                    <img class="img-fluid" src="{{URL::asset('storage/uploads/login_images/shelf.jpg')}}" alt="Chicago">
+                    </div>
+                    <div class="carousel-item">
+                    <img class="img-fluid" src="{{URL::asset('storage/uploads/login_images/library.jpg')}}" alt="New York">
+                    </div>
+                </div>
+
+                <a class="carousel-control-prev" href="#slider" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#slider" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a>
+
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <h2 class="text-center">Welcome Back!</h2><hr>
+            <div class="row" style="margin-bottom:2%;">
+                <div class="col-lg-12">
+                    <form class="loginClick">
+                        {{ csrf_field() }} 
+                        <div class="form-group">
+                            <label for="email_username">Email or Username</label>
+                            <input type="text" class="form-control" name="email_username" placeholder="Enter here">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" placeholder="Enter password">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="col-md-12 btn btn-default login_button" style="background-color:#800; color:#fff;" name="sbmt">Login</button>
+                        </div>
+                    </form>
+                    <small>Don't have an account? <a href="" class="create_link"> REGISTER </a></small>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+
+
 
 @section('pageJs')
 <script>
