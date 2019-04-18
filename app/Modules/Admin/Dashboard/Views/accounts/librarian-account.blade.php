@@ -10,10 +10,10 @@
             <div class="card" style="width:100%">
                 <div class="card-body">
                     <div class="profile_content">
-                        <h1 class="h2"><span class="fa fa-area-chart"></span> Admins Account</h1><hr>
+                        <h1 class="h2"><span class="fa fa-area-chart"></span> Librarians Account</h1><hr>
                         <div class="row">
                             <div class="col-lg-12">
-                                <table class="table table-striped table_shad table-bordered table-hover get-admins">
+                                <table class="table table-striped table_shad table-bordered table-hover get-librarians">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
@@ -39,7 +39,7 @@
 @section('pageJs')
 <script>
     $(document).ready(function(){
-        $(".get-admins").DataTable({
+        $(".get-librarians").DataTable({
             responsive: true,
             serverSide: true,
             bPaginate: true,
@@ -48,9 +48,7 @@
             order: [[ 0, "desc" ]],
             ajax: {
                 url: "{{route('admin.dashboard.accounts.get-admins-account')}}",
-                data: {
-                    account_type: 'admin'
-                }
+                account_type: 'librarian'
             },
             createdRow : function(row, data, dataIndex){
                 var thisRow = $(row);

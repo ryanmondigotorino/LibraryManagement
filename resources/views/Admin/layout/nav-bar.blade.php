@@ -38,6 +38,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{route('admin.dashboard.accounts.librarian-account')}}">
+                            <span class="fa fa-book"></span>
+                            Librarian Account 
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{route('admin.dashboard.accounts.students-account')}}">
                             <span class="fa fa-users"></span>
                             Students Account

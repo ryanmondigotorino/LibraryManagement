@@ -11,6 +11,8 @@ Route::group(['prefix' => 'accounts', 'namespace' => '\App\Modules\Admin\Dashboa
     Route::get('/get-admin-account','DashboardController@getadmins')->name('admin.dashboard.accounts.get-admins-account');
     Route::get('/student-account','DashboardController@students')->name('admin.dashboard.accounts.students-account');
     Route::get('/get-students-account','DashboardController@getstudents')->name('admin.dashboard.accounts.get-students-account');
+    Route::get('/librarian-account','DashboardController@librarian')->name('admin.dashboard.accounts.librarian-account');
+    Route::post('/change-acc-stat','DashboardController@change_acc_stat')->name('admin.dashboard.accounts.change-acc-stat');
 
     Route::get('/admin-audit','DashboardController@adminaudit')->name('admin.dashboard.accounts.admin-audit');
     Route::get('/student-audit','DashboardController@studentaudit')->name('admin.dashboard.accounts.student-audit');

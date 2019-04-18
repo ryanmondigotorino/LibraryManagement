@@ -47,7 +47,8 @@ class DashboardController extends Controller
             'email',
             'date_registered'
         ];
-        $adminDetails = CF::model('Admin');
+        $adminDetails = CF::model('Admin')
+            ->where('account_type',$request->account_type);
         $adminResultCount = $adminDetails->count();
         $adminDetails = $adminDetails->where(function($query) use ($request){
             $query
@@ -104,6 +105,19 @@ class DashboardController extends Controller
             );
             
         return json_encode($json_data); 
+    }
+
+    public function change_acc_stat(Request $request){
+        $account_status = $request->acc_stat;
+        $putUpdateStatus = $account_status == 0 ? 1 : 0;
+        $accountsData = CF::model($request->model)::find($request->id);
+        $accountsData->account_status = $putUpdateStatus;
+        $accountsData->save();
+        return $putUpdateStatus;
+    }
+
+    public function librarian(Request $request){
+        return view($this->render('accounts.librarian-account'));
     }
 
     public function students(Request $request){
