@@ -16,4 +16,7 @@ Route::group(['prefix' => 'accounts', 'namespace' => '\App\Modules\Admin\Dashboa
     Route::get('/student-audit','DashboardController@studentaudit')->name('admin.dashboard.accounts.student-audit');
     Route::get('/get-admin-logs','DashboardController@getadminlogs')->name('admin.dashboard.accounts.get-admin-logs');
     Route::get('/get-student-logs','DashboardController@getstudentlogs')->name('admin.dashboard.accounts.get-student-logs');
+    Route::get('/get-student-logs','DashboardController@getstudentlogs')->name('admin.dashboard.accounts.get-student-logs');
+    Route::get('/admin-audit/download-xlsx','DashboardController@admindownloadXlsx')->name('admin.dashboard.accounts.admin-audit.download-xlsx');
+    Route::get('/student-audit/download-xlsx','DashboardController@studentdownloadXlsx')->name('admin.dashboard.accounts.student-audit.download-xlsx');
 });

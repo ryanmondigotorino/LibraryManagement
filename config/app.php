@@ -178,7 +178,7 @@ return [
         //Custom providers
 
         App\Modules\ModulesServiceProvider::class,
-
+        Cyberduck\LaravelExcel\ExcelServiceProvider::class
     ],
 
     /*

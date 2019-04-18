@@ -12,6 +12,7 @@ use Auth;
 use View;
 use DB;
 use URL;
+use Exporter;
 
 class DashboardController extends Controller
 {
@@ -122,12 +123,17 @@ class DashboardController extends Controller
     }
 
     public function getadminlogs(Request $request){
+        $dateRange = $request->datePicker != null ? $request->datePicker : '';
+        $arrDateRange = explode(' - ',$dateRange);
+        $dateFrom = date('Y-m-d',strtotime(str_replace('/','-',$arrDateRange[0])));
+        $dateTo = date('Y-m-d',strtotime(str_replace('/','-',$arrDateRange[1])));
+        
         $start = $request->start;
         $length = $request->length;
         $columns = [
             'admin_audits.id',
             'admins.account_type',
-            'admins.email',
+            'admins.username',
             'admin_audits.action',
             'admin_audits.ip_address',
             'admin_audits.device',
@@ -135,20 +141,7 @@ class DashboardController extends Controller
             'admin_audits.operating_system',
         ];
 
-        $adminAuditDetails = CF::model('Admin_audit')
-            ->select(
-                'admin_audits.id',
-                'admins.account_type',
-                'admins.email',
-                'admins.username',
-                'admin_audits.action',
-                'admin_audits.ip_address',
-                'admin_audits.device',
-                'admin_audits.browser',
-                'admin_audits.operating_system',
-                'admin_audits.created_at'
-            )
-            ->join('admins','admins.id','admin_audits.admin_id');
+        $adminAuditDetails = $this->__mainQueryAdminAudit($request,$dateFrom,$dateTo);
         $adminAuditResultCount = $adminAuditDetails->count();
         $adminAuditDetails = $adminAuditDetails->where(function($query) use ($request){
             $query
@@ -208,6 +201,82 @@ class DashboardController extends Controller
             );
             
         return json_encode($json_data); 
+    }
+
+    public function admindownloadXlsx(Request $request){
+        $dateRange = $request->date != null ? $request->date : '';
+        $arrDateRange = explode(' - ',$dateRange);
+        $dateFrom = date('Y-m-d',strtotime(str_replace('/','-',$arrDateRange[0])));
+        $dateTo = date('Y-m-d',strtotime(str_replace('/','-',$arrDateRange[1])));
+
+        $data[] = array(
+            'Id',
+            'Account Type',
+            'User Name',
+            'Action',
+            'IP Address',
+            'Device Use',
+            'Browser Use',
+            'Operating system use',
+            'Date Created',
+        );
+
+        $adminAuditDetails = $this->__mainQueryAdminAudit($request,$dateFrom,$dateTo);
+        $array = $result = [];
+        foreach($adminAuditDetails->get() as $key => $value){
+            $array[$key]['id'] = $value->id;
+            $array[$key]['account_type'] = $value->account_type;
+            $array[$key]['username'] = $value->username;
+            $array[$key]['action'] = $value->action;
+            $array[$key]['ip_address'] = $value->ip_address;
+            $array[$key]['device'] = $value->device;
+            $array[$key]['browser'] = $value->browser;
+            $array[$key]['operating_system'] = $value->operating_system;
+            $array[$key]['created_at'] = date('m-j-y h:i:A',strtotime($value->created_at));
+        }
+        $result['audit_details'] = $array;
+        foreach($result['audit_details'] as $key => $value){
+            $dataOutput = [
+                $value['id'],
+                $value['account_type'],
+                $value['username'],
+                $value['action'],
+                $value['ip_address'],
+                $value['device'],
+                $value['browser'],
+                $value['operating_system'],
+                $value['created_at']
+            ];
+            $data[] = $dataOutput;
+        };
+
+        $mainData = array(
+            array(
+                'Total # of Audit Logs', count($data) - 1
+            ),
+            array(''),
+            array(''),
+        );
+        return Exporter::make('Excel')->load(collect(array_merge($mainData,$data)))->stream(date('Y-m-d-HiA-').'audit-logs-lists.xlsx');
+    }
+
+    public function __mainQueryAdminAudit($request,$dateFrom,$dateTo){
+        $query = CF::model('Admin_audit')
+            ->select(
+                'admin_audits.id',
+                'admins.account_type',
+                'admins.email',
+                'admins.username',
+                'admin_audits.action',
+                'admin_audits.ip_address',
+                'admin_audits.device',
+                'admin_audits.browser',
+                'admin_audits.operating_system',
+                'admin_audits.created_at'
+            )
+            ->join('admins','admins.id','admin_audits.admin_id')
+            ->whereBetween(DB::raw('DATE(admin_audits.created_at)'),[$dateFrom,$dateTo]);
+        return $query;
     }
 
     public function getstudentlogs(Request $request){
