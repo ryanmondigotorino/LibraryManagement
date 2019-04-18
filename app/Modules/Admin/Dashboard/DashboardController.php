@@ -13,6 +13,7 @@ use View;
 use DB;
 use URL;
 use Exporter;
+use Validator;
 
 class DashboardController extends Controller
 {
@@ -116,16 +117,197 @@ class DashboardController extends Controller
         return $putUpdateStatus;
     }
 
+    public function addAdmins(Request $request){
+        DB::beginTransaction();
+        try{
+            $validator = Validator::make($request->all(),[
+                'password' => 'required_with:confirm_password|min:8|same:confirm_password',
+                'confirm_password' => 'required|min:8'
+            ]);
+            if($validator->fails()){
+                return array(
+                    'status' => 'error',
+                    'messages' => $validator->errors()->first()
+                );
+            }
+            $email = strtolower($request->email);
+            $admin = array(
+                'firstname' => $request->firstname,
+                'middlename' => $request->middlename,
+                'lastname' => $request->lastname,
+                'image' => 'noimage.png',
+                'email' => $email,
+                'username' => strtolower($request->username),
+                'password' => bcrypt($request->confirm_password),
+                'account_type' => $request->account_status,
+                'account_line' => 0,
+                'account_status' => 1,
+                'date_registered' => time(),
+            );
+            $result = CF::model('Admin')->saveData($admin, true);
+            DB::commit();
+            return $result;
+        }catch(\Exception $e){
+            $errors = json_decode($e->getMessage(), true);
+            $display_errors = [];
+            foreach($errors as $key => $value){
+                $display_errors[] = $value[0];
+            }
+            $result = [
+                'status' => 'error',
+                'messages' => implode("\n",$display_errors)
+            ];
+            DB::rollBack();
+            return $result;
+        }
+    }
+
     public function librarian(Request $request){
         return view($this->render('accounts.librarian-account'));
     }
 
     public function students(Request $request){
-        return view($this->render('accounts.student-account'));
+        $getCourse = CF::model('Course')::all();
+        $getDepartment = CF::model('Department')::all();
+        return view($this->render('accounts.student-account'),compact('getCourse','getDepartment'));
     }
 
     public function getstudents(Request $request){
-        
+        $start = $request->start;
+        $length = $request->length;
+        $columns = [
+            'students.id',
+            'students.account_line',
+            'students.image',
+            'students.firstname',
+            'students.email',
+            'courses.name',
+            'departments.department_name',
+        ];
+        $studentDetails = CF::model('Student')
+            ->select(
+                'students.id',
+                'students.account_line',
+                'students.image',
+                'students.firstname',
+                'students.middlename',
+                'students.lastname',
+                'students.email',
+                'students.account_status',
+                'courses.name',
+                'departments.department_name'
+            )
+            ->join('courses','courses.id','students.course_id')
+            ->join('departments','departments.id','students.department_id');
+        $studentResultCount = $studentDetails->count();
+        $studentDetails = $studentDetails->where(function($query) use ($request){
+            $query
+                ->orWhere('students.id','LIKE',"%".$request->search['value']."%")
+                ->orWhere(DB::raw("CONCAT(students.firstname,' ',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
+                ->orWhere(DB::raw("CONCAT(students.firstname,'',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
+                ->orWhere(DB::raw("CONCAT(students.firstname,' ',students.middlename,' ',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
+                ->orWhere('students.email','LIKE',"%".$request->search['value']."%")
+                ->orWhere('courses.name','LIKE',"%".$request->search['value']."%")
+                ->orWhere('departments.department_name','LIKE',"%".$request->search['value']."%");
+        })
+        ->offset($start)
+        ->limit($length)
+        ->orderBy($columns[$request->order[0]['column']],$request->order[0]['dir'])
+        ->get();
+
+        $array = $result = [];
+
+        foreach($studentDetails as $key => $value){
+            $acc_stat = $value->account_status;
+            $btn_class = $acc_stat == 0 ? 'btn-success' : 'btn-danger';
+            $btn_name = $acc_stat == 0 ? 'ACTIVATE' : 'DEACTIVATE';
+
+            $middlename = $value->middlename == null || $value->middlename == '' ? ' ' : ' '.$value->middlename.' ';
+            $array[$key]['id'] = $value->id;
+            $array[$key]['line_status'] = $value->account_line == 1 ? '<img src="'.URL::asset('storage/uploads/account_line/online.png').'" alt="online" class="account_line"/>  Online' : '<img src="'.URL::asset('storage/uploads/account_line/offline.png').'" alt="online" class="account_line"/> Offline';
+            $array[$key]['image'] = '<img src="'.URL::asset('storage/uploads/profile_image/'.$value->image).'" alt="Profile Image" style="border-radius: 50%; width: 40px;height: 40px;"/>';
+            $array[$key]['name'] = $value->firstname.$middlename.$value->lastname;
+            $array[$key]['email'] = $value->email;
+            $array[$key]['course_name'] = $value->name;
+            $array[$key]['department_name'] = $value->department_name;
+            $array[$key]['buttons'] = "
+                <button class='acc_stat btn ".$btn_class." box_shad' onclick='changeStat(".$value->id.",".$acc_stat.");'>".$btn_name."</button>
+            ";
+        }
+        $totalCount = count($array);
+        $result['account_details'] = $array;
+        $data = [];
+
+        foreach($result['account_details'] as $key => $value){
+            $dataOutput = [
+                $value['id'],
+                $value['line_status'],
+                $value['image'],
+                $value['name'],
+                $value['email'],
+                $value['course_name'],
+                $value['department_name'],
+                $value['buttons']
+            ];
+            $data[] = $dataOutput;
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => $totalCount,
+            "recordsFiltered" => $studentResultCount,
+            "data"            => $data
+            );
+            
+        return json_encode($json_data); 
+    }
+
+    public function addStudents(Request $request){
+        DB::beginTransaction();
+        try{
+            $validator = Validator::make($request->all(),[
+                'password' => 'required_with:confirm_password|min:8|same:confirm_password',
+                'confirm_password' => 'required|min:8'
+            ]);
+            if($validator->fails()){
+                return array(
+                    'status' => 'error',
+                    'messages' => $validator->errors()->first()
+                );
+            }
+            $email = strtolower($request->email);
+            $studentnum = CF::model('Student')->select('id')->withTrashed()->orderBy('id','desc')->limit(1);
+            $getStudentNumber = $studentnum->count() > 0 ? $studentnum->get()[0]->id + 1 : 1;
+            $students = array(
+                'student_num' => date('Y').str_pad($getStudentNumber, 5, '0', STR_PAD_LEFT),
+                'course_id' => $request->coursename,
+                'department_id' => $request->departmentname,
+                'firstname' => $request->firstname,
+                'middlename' => $request->middlename,
+                'lastname' => $request->lastname,
+                'image' => 'noimage.png',
+                'email' => $email,
+                'username' => strtolower($request->username),
+                'password' => bcrypt($request->confirm_password),
+                'account_line' => 0,
+                'account_status' => 1,
+                'date_registered' => time(),
+            );
+            $result = CF::model('Student')->saveData($students, true);
+            DB::commit();
+            return $result;
+        }catch(\Exception $e){
+            $errors = json_decode($e->getMessage(), true);
+            $display_errors = [];
+            foreach($errors as $key => $value){
+                $display_errors[] = $value[0];
+            }
+            $result = [
+                'status' => 'error',
+                'messages' => implode("\n",$display_errors)
+            ];
+            DB::rollBack();
+            return $result;
+        }
     }
 
     public function adminaudit(){

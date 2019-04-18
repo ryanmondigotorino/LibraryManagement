@@ -12,6 +12,7 @@ return [
             'Dashboard',
             'Department',
             'Course',
+            'Books'
         ],
     ]
 ];
