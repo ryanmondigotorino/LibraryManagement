@@ -21,7 +21,7 @@
                                     </div>
                                     <div>
                                         <button class="btn btn-secondary runSearch" type="button">Run</button>
-                                        <button type="button" class="btn btn-secondary download-reports"><span class="fa fa-download"></span> Download Reports</button>
+                                        <button type="button" class="btn btn-secondary download-reports"><span class="fa fa-download"></span> Download Logs</button>
                                     </div>
                                 </div>
                             </div>

@@ -49,6 +49,10 @@
             ajax: {
                 url: "{{route('admin.dashboard.accounts.get-admins-account')}}",
             },
+            createdRow : function(row, data, dataIndex){
+                var thisRow = $(row);
+                thisRow.addClass('cntr');
+            },
         });
     });
 </script>

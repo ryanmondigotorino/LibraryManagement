@@ -118,10 +118,6 @@ class DashboardController extends Controller
         return view($this->render('audits.admin-audit'));
     }
 
-    public function studentaudit(){
-        return view($this->render('audits.student-audit'));
-    }
-
     public function getadminlogs(Request $request){
         $dateRange = $request->datePicker != null ? $request->datePicker : '';
         $arrDateRange = explode(' - ',$dateRange);
@@ -277,6 +273,10 @@ class DashboardController extends Controller
             ->join('admins','admins.id','admin_audits.admin_id')
             ->whereBetween(DB::raw('DATE(admin_audits.created_at)'),[$dateFrom,$dateTo]);
         return $query;
+    }
+
+    public function studentaudit(){
+        return view($this->render('audits.student-audit'));
     }
 
     public function getstudentlogs(Request $request){

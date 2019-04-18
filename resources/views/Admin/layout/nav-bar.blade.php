@@ -54,7 +54,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('admin.course.index')}}">
                             <span class="fa fa-table"></span>
-                            View Course
+                            View Courses
                         </a>
                     </li>
                 </ul>
@@ -68,7 +68,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('admin.department.index')}}">
                             <span class="fa fa-table"></span>
-                            View Department
+                            View Departments
                         </a>
                     </li>
                 </ul>
