@@ -83,6 +83,22 @@
             }
         });
     });
+    function editcourse($id,$name){
+        console.log($id);
+    }
+    function deletecourse($id,$name){
+        swal({
+            title: "Confirmation!",
+            text: "Delete this "+$name+" course?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((result) => {
+            if(result){
+                console.log($id);
+            }
+        });
+    }
     $('.add-course').on('click',function(){
         $('#add-course').modal();
     });

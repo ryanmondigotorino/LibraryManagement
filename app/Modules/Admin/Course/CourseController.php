@@ -52,7 +52,10 @@ class CourseController extends Controller
             $array[$key]['id'] = $value->id;
             $array[$key]['name'] = $value->name;
             $array[$key]['created_at'] = date('M j Y',strtotime($value->created_at));
-            $array[$key]['button'] = '<button class="btn btn-danger"><span class="fa fa-trash"></span></button>';
+            $array[$key]['button'] = '
+                <button class="btn btn-secondary" onclick="editcourse('.$value->id.',\''.$value->name.'\');"><span class="fa fa-edit"></span></button>
+                <button class="btn btn-danger" onclick="deletecourse('.$value->id.',\''.$value->name.'\');"><span class="fa fa-trash"></span></button>
+            ';
         }
 
         $totalCount = count($array);
