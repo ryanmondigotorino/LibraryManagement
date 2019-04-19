@@ -8,7 +8,8 @@
     margin-right: 8%;
 }
 body{
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Varela Round', sans-serif;
+    font-weight: bold;
 }
 .box_shad {
     width: 250px;
@@ -112,10 +113,6 @@ body{
     margin-top:2%;
     margin-bottom:5%;
 }
-.login_container{
-    margin-top:10%;
-    margin-bottom:2%;
-}
 .imgup{
     text-align:center;
 }
@@ -150,8 +147,11 @@ body{
         max-width: 1280px;
     }
 }
-.content-container{
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+
+.login_form{
+    padding-top: 5%;
+}
+
+.carousel-inner img{
+    height: 98vh;
 }
