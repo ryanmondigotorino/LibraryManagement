@@ -282,6 +282,7 @@ body{
 .profile_container{
     margin-top:2%;
     margin-bottom:2%;
+    overflow-x: hidden;
 }
 .profile_below{
     margin-top:1%;
