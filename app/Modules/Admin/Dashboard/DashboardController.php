@@ -124,7 +124,7 @@ class DashboardController extends Controller
             $getStatusModel = 'Student';
         }
         $getActualStatus = $putUpdateStatus == 0 ? 'Deactivate': 'Activate';
-        AL::audits('admin',$currentLoggedId,$request->ip(),$getActualStatus.' '.$getStatusModel.' '.$accountsData->username);
+        AL::audits('admin',$currentLoggedId,$request->ip(),$getActualStatus.' '.$getStatusModel.' ('.$accountsData->username.')');
         return $putUpdateStatus;
     }
 
