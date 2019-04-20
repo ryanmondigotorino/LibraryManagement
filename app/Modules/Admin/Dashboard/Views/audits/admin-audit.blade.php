@@ -91,6 +91,9 @@
             searching: true,
             autoWidth : false,
             order: [[ 0, "desc" ]],
+            oLanguage: {
+                sProcessing: '<img src="{{URL::asset("public/icons/loading.gif")}}" style="width:50%; margin-bottom:10px;">'
+            },
             ajax: {
                 url: "{{route('admin.dashboard.accounts.get-admin-logs')}}",
                 data:{
