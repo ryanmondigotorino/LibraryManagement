@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use ClassFactory as CF;
+use AuditLogs as AL;
 use Illuminate\Support\Facades\Storage;
 
 use Auth;
 use View;
 use DB;
 use URL;
+use Browser;
 
 class CourseController extends Controller
 {
@@ -82,13 +84,16 @@ class CourseController extends Controller
     }
 
     public function addcourses(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
         DB::beginTransaction();
         try{
+            $courseName = $request->coursename;
             $course = [
-                'name' => $request->coursename,
+                'name' => $courseName,
             ];
             $result = CF::model('Course')->saveData($course, true);
             DB::commit();
+            AL::audits('admin',$currentLoggedId,$request->ip(),'Add course ('.$courseName.')');
             return $result;
         }catch(\Exception $e){
             $errors = json_decode($e->getMessage(), true);

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use ClassFactory as CF;
+use AuditLogs as AL;
 use Illuminate\Support\Facades\Storage;
 
 use Auth;
@@ -82,13 +83,16 @@ class DepartmentController extends Controller
     }
 
     public function adddepartment(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
         DB::beginTransaction();
         try{
+            $departmentName = $request->departmentname;
             $department = [
-                'department_name' => $request->departmentname,
+                'department_name' => $departmentName,
             ];
             $result = CF::model('Department')->saveData($department, true);
             DB::commit();
+            AL::audits('admin',$currentLoggedId,$request->ip(),'Add new department ('.$departmentName.')');
             return $result;
         }catch(\Exception $e){
             $errors = json_decode($e->getMessage(), true);

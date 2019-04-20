@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use ClassFactory as CF;
+use AuditLogs as AL;
 use Illuminate\Support\Facades\Storage;
 
 use Auth;
 use View;
 use DB;
 use URL;
+use Browser;
 
 class BooksController extends Controller
 {
@@ -31,7 +33,7 @@ class BooksController extends Controller
     }
 
     public function addbooksave(Request $request){
-        $currentLoggedId = Auth::guard('admin')->user()->id;
+        $currentLoggedId = Auth::guard('admin')->user();
         $frontImage = $request->book_front;
         $backImage = $request->book_back;
         if($frontImage == 'undefined'){
@@ -59,7 +61,7 @@ class BooksController extends Controller
                         break;
                     default:
                         $result['status'] = 'error';
-                        $result['messages'] = 'Invalid File Type';
+                        $result['messages'] = 'Invalid file type for Front Book Image.';
                         return $result;
                     break;
                 }
@@ -73,24 +75,25 @@ class BooksController extends Controller
                         break;
                     default:
                         $result['status'] = 'error';
-                        $result['messages'] = 'Invalid File Type';
+                        $result['messages'] = 'Invalid file type for Front Book Image.';
                         return $result;
                     break;
                 }
-
+                $bookTitle = $request->book_title;
                 $books = [
-                    'added_by' => $currentLoggedId,
+                    'added_by' => $currentLoggedId->id,
                     'front_image' => $frontImageName,
                     'back_image' => $backImageName,
                     'author' => $request->book_author,
                     'genre' => $request->book_genre,
-                    'title' => $request->book_title,
+                    'title' => $bookTitle,
                     'description' => $request->book_description,
                     'date_published' => strtotime($request->book_published),
                 ];
                 $result = CF::model('Book')->saveData($books, true);
                 Storage::disk('uploads')->putFileAs('uploads/book_images/book-('.$getBookId.')',$front_image_file,$frontImageName);
                 Storage::disk('uploads')->putFileAs('uploads/book_images/book-('.$getBookId.')',$back_image_file,$backImageName);
+                AL::audits('admin',$currentLoggedId,$request->ip(),'Add book ('.$bookTitle.')');
                 DB::commit();
                 return $result;
             }catch(\Exception $e){
