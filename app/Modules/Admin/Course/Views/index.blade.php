@@ -74,6 +74,10 @@
             searching: true,
             autoWidth : false,
             order: [[ 0, "desc" ]],
+            processing: true,
+            language: {
+                processing: '<img src="{{URL::asset("public/icons/loading.gif")}}" style="width:10%; margin-bottom:10px;">'
+            },
             ajax: {
                 url: "{{route('admin.course.get-courses')}}",
             },
