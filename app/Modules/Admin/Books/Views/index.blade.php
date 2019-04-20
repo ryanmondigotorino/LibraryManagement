@@ -15,9 +15,20 @@
                                 <h1 class="h2"><span class="fa fa-table"></span> Books</h1>
                             </div>
                             <div class="col-lg-2">
-                                <button type="button" class="btn btn-secondary add-books"><span class="fa fa-plus"></span> Add Books</button>
+                                <a href="{{route('admin.books.add-books')}}" class="btn btn-secondary"><span class="fa fa-plus"></span> Add Books</a>
                             </div>
                         </div><hr>
+                        <div class="row">
+                            @if($getBooks->count() > 0)
+                                @foreach($getBooks->get() as $books)
+                                    @include('Admin.includes.card-books-template')
+                                @endforeach
+                            @else
+                                <div class="col-lg-12">
+                                    <h1 class="mt-5 mb-5 text-center">No Books available.</h1>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

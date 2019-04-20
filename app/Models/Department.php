@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use App\Models\BaseModel;
 
 class Department extends BaseModel{
     use SoftDeletes;
