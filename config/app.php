@@ -231,6 +231,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'ClassFactory' => App\Library\ClassFactory::class,
+        'AuditLogs' => App\Library\AuditLogs::class,
         'Browser' => \hisorange\BrowserDetect\Facade::class,
     ],
 
