@@ -139,9 +139,11 @@ class CourseController extends Controller
     }
 
     public function deletecourses(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
         $courseDetails = CF::model('Course')::find($request->id);
         $courseDetails->course_status = 'down';
         $courseDetails->save();
+        AL::audits('admin',$currentLoggedId,$request->ip(),'Delete course ('.$courseDetails->name.')');
         return array(
             'status' => 'success',
             'messages' => 'Course successfully Deleted!'

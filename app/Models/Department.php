@@ -11,7 +11,8 @@ class Department extends BaseModel{
     use SoftDeletes;
 
     protected $fillable = [
-        'department_name'
+        'department_name',
+        'department_status'
     ];
 
     public static function rules($input = null){

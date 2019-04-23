@@ -62,6 +62,33 @@
         </div>
     </div>
 </div>
+@foreach($getDepartment as $department)
+    <div class="modal fade" id="edit-department-{{$department->id}}" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog items-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Department</h5>
+                    <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('admin.department.edit-department')}}" class="edit-department-form">@csrf
+                        <div class="form-group">
+                            <label for="departmentname">Department Name</label>
+                            <input type="text" class="form-control" name="departmentname" value="{{$department->department_name}}" placeholder="Enter Department Name">
+                        </div>
+                        <input type="hidden" name="departmentid" value="{{$department->id}}">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+                            <button type="submit" class="btn btn-secondary edit-department">Edit Department</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
 @endsection
 
 @section('pageJs')
@@ -87,19 +114,82 @@
             }
         });
     });
-    function editdepartment($id,$name){
-        console.log($id);
+    $('.edit-department-form').on('submit',function(event){
+        event.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            beforeSend: function(){
+                $('button[type="submit"].edit-department').prop('disabled',true);
+                $('button[type="submit"].edit-department').html('<i class="fa fa-spinner fa-pulse"></i>');
+            },
+            success: function(result){
+                if(result['status'] == 'success'){
+                    swal({
+                        title: 'Success!',
+                        text: result['messages'],
+                        icon: result['status']
+                    }).then((result) => {
+                        location.reload();
+                    });
+                }else{
+                    $('button[type="submit"].edit-department').prop('disabled',false);
+                    swal({
+                        title: 'Error!',
+                        text: result['messages'],
+                        icon: result['status']
+                    })
+                }
+            }
+        }).done(function(){
+            $('button[type="submit"].edit-department').html('Edit Department');
+        });
+    });
+    function editdepartment(id,name){
+        $('#edit-department-'+id).modal();
     }
-    function deletedepartment($id,$name){
+    function deletedepartment(id,name){
         swal({
             title: "Confirmation!",
-            text: "Delete this "+$name+" department?",
+            text: "Delete this "+name+" department?",
             icon: "warning",
             buttons: true,
             dangerMode: true,
         }).then((result) => {
             if(result){
-                console.log($id);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{route('admin.department.delete-department')}}",
+                    data: {
+                        id: id,
+                        _token: '{{csrf_token()}}'
+                    },
+                    beforeSend:function(){
+                        $('button.department-'+id).prop('disabled',true);
+                        $('button.department-'+id).html('<i class="fa fa-spinner fa-pulse"></i>');
+                    },
+                    success: function(result){
+                        if(result['status'] == 'success'){
+                            swal({
+                                title: 'Success!',
+                                text: result['messages'],
+                                icon: result['status']
+                            }).then((result) => {
+                                location.reload();
+                            });
+                        }else{
+                            $('button.department-'+id).prop('disabled',false);
+                            swal({
+                                title: 'Error!',
+                                text: result['messages'],
+                                icon: result['status']
+                            });
+                        }
+                    },
+                }).done(function(){
+                    $('button.department-'+id).html('<span class="fa fa-trash"></span>');
+                });
             }
         });
     }
@@ -117,7 +207,6 @@
                 $('button[type="submit"].add-department').html('<i class="fa fa-spinner fa-pulse"></i>');
             },
             success: function(result){
-                console.log(result);
                 if(result['status'] == 'success'){
                     swal({
                         title: 'Success!',

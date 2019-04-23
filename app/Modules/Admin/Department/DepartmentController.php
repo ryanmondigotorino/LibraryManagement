@@ -23,7 +23,8 @@ class DepartmentController extends Controller
     }
 
     public function index(Request $request){
-        return view($this->render('index'));
+        $getDepartment = CF::model('Department')->where('department_status','!=','down')->get();
+        return view($this->render('index'),compact('getDepartment'));
     }
 
     public function getdepartment(Request $request){
@@ -34,7 +35,8 @@ class DepartmentController extends Controller
             'department_name',
             'created_at',
         ];
-        $departmentDetails = CF::model('Department');
+        $departmentDetails = CF::model('Department')
+            ->where('department_status','!=','down');
         $departmentResultCount = $departmentDetails->count();
         $departmentDetails = $departmentDetails->where(function($query) use ($request){
             $query
@@ -55,7 +57,7 @@ class DepartmentController extends Controller
             $array[$key]['created_at'] = date('M j Y',strtotime($value->created_at));
             $array[$key]['button'] = '
                 <button class="btn btn-secondary" onclick="editdepartment('.$value->id.',\''.$value->department_name.'\');"><span class="fa fa-edit"></span></button>
-                <button class="btn btn-danger" onclick="deletedepartment('.$value->id.',\''.$value->department_name.'\');"><span class="fa fa-trash"></span></button>
+                <button class="btn btn-danger department-'.$value->id.'" onclick="deletedepartment('.$value->id.',\''.$value->department_name.'\');"><span class="fa fa-trash"></span></button>
             ';
         }
 
@@ -89,6 +91,7 @@ class DepartmentController extends Controller
             $departmentName = $request->departmentname;
             $department = [
                 'department_name' => $departmentName,
+                'department_status' => 'up'
             ];
             $result = CF::model('Department')->saveData($department, true);
             DB::commit();
@@ -109,5 +112,40 @@ class DepartmentController extends Controller
         }
         Session::flash('message',$result['status']);
         return back();
+    }
+    public function editdepartment(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
+        $departmentName = $request->departmentname;
+        $validateDepartment = CF::model('Department')
+            ->where('department_status','!=','down')
+            ->where('department_name',$departmentName)
+            ->count();
+        if($validateDepartment > 0){
+            return array(
+                'status' => 'error',
+                'messages' => 'The Department name is already taken'
+            );
+        }
+        $departmentDetails = CF::model('Department')::find($request->departmentid);
+        $message = 'Edit department ('.$departmentDetails->department_name.' to '.$departmentName.')';
+        AL::audits('admin',$currentLoggedId,$request->ip(),$message);
+        $departmentDetails->department_name = $departmentName;
+        $departmentDetails->save();
+        return array(
+            'status' => 'success',
+            'messages' => 'Department successfully Edited!'
+        );
+    }
+
+    public function deletedepartment(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
+        $departmentDetails = CF::model('Department')::find($request->id);
+        $departmentDetails->department_status = 'down';
+        $departmentDetails->save();
+        AL::audits('admin',$currentLoggedId,$request->ip(),'Delete department ('.$departmentDetails->name.')');
+        return array(
+            'status' => 'success',
+            'messages' => 'Department successfully Deleted!'
+        );
     }
 }
