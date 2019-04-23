@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use ClassFactory as CF;
+use AuditLogs as AL;
 use Illuminate\Support\Facades\Storage;
 
 use Auth;
@@ -14,6 +15,7 @@ use DB;
 use URL;
 use Exporter;
 use Validator;
+use Browser;
 
 class DashboardController extends Controller
 {
@@ -109,15 +111,25 @@ class DashboardController extends Controller
     }
 
     public function change_acc_stat(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
         $account_status = $request->acc_stat;
         $putUpdateStatus = $account_status == 0 ? 1 : 0;
-        $accountsData = CF::model($request->model)::find($request->id);
+        $model = $request->model;
+        $accountsData = CF::model($model)::find($request->id);
         $accountsData->account_status = $putUpdateStatus;
         $accountsData->save();
+        if($model == 'Admin'){
+            $getStatusModel = $accountsData->account_type == 'admin' ? 'Admin' : 'Librarian';
+        }else{
+            $getStatusModel = 'Student';
+        }
+        $getActualStatus = $putUpdateStatus == 0 ? 'Deactivate': 'Activate';
+        AL::audits('admin',$currentLoggedId,$request->ip(),$getActualStatus.' '.$getStatusModel.' ('.$accountsData->username.')');
         return $putUpdateStatus;
     }
 
     public function addAdmins(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
         DB::beginTransaction();
         try{
             $validator = Validator::make($request->all(),[
@@ -131,21 +143,24 @@ class DashboardController extends Controller
                 );
             }
             $email = strtolower($request->email);
+            $username = strtolower($request->username);
+            $acctype = $request->account_status;
             $admin = array(
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
                 'lastname' => $request->lastname,
                 'image' => 'noimage.png',
                 'email' => $email,
-                'username' => strtolower($request->username),
+                'username' => $username,
                 'password' => bcrypt($request->confirm_password),
-                'account_type' => $request->account_status,
+                'account_type' => $acctype,
                 'account_line' => 0,
                 'account_status' => 1,
                 'date_registered' => time(),
             );
             $result = CF::model('Admin')->saveData($admin, true);
             DB::commit();
+            AL::audits('admin',$currentLoggedId,$request->ip(),'Add new '.$acctype.' ('.$username.')');
             return $result;
         }catch(\Exception $e){
             $errors = json_decode($e->getMessage(), true);
@@ -167,8 +182,8 @@ class DashboardController extends Controller
     }
 
     public function students(Request $request){
-        $getCourse = CF::model('Course')::all();
-        $getDepartment = CF::model('Department')::all();
+        $getCourse = CF::model('Course')->where('course_status','!=','down')->get();
+        $getDepartment = CF::model('Department')->where('department_status','!=','down')->get();
         return view($this->render('accounts.student-account'),compact('getCourse','getDepartment'));
     }
 
@@ -263,6 +278,7 @@ class DashboardController extends Controller
     }
 
     public function addStudents(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
         DB::beginTransaction();
         try{
             $validator = Validator::make($request->all(),[
@@ -278,6 +294,7 @@ class DashboardController extends Controller
             $email = strtolower($request->email);
             $studentnum = CF::model('Student')->select('id')->withTrashed()->orderBy('id','desc')->limit(1);
             $getStudentNumber = $studentnum->count() > 0 ? $studentnum->get()[0]->id + 1 : 1;
+            $username = strtolower($request->username);
             $students = array(
                 'student_num' => date('Y').str_pad($getStudentNumber, 5, '0', STR_PAD_LEFT),
                 'course_id' => $request->coursename,
@@ -287,7 +304,7 @@ class DashboardController extends Controller
                 'lastname' => $request->lastname,
                 'image' => 'noimage.png',
                 'email' => $email,
-                'username' => strtolower($request->username),
+                'username' => $username,
                 'password' => bcrypt($request->confirm_password),
                 'account_line' => 0,
                 'account_status' => 1,
@@ -295,6 +312,7 @@ class DashboardController extends Controller
             );
             $result = CF::model('Student')->saveData($students, true);
             DB::commit();
+            AL::audits('admin',$currentLoggedId,$request->ip(),'Add new student ('.$username.')');
             return $result;
         }catch(\Exception $e){
             $errors = json_decode($e->getMessage(), true);
@@ -397,6 +415,7 @@ class DashboardController extends Controller
     }
 
     public function admindownloadXlsx(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
         $dateRange = $request->date != null ? $request->date : '';
         $arrDateRange = explode(' - ',$dateRange);
         $dateFrom = date('Y-m-d',strtotime(str_replace('/','-',$arrDateRange[0])));
@@ -450,6 +469,7 @@ class DashboardController extends Controller
             array(''),
             array(''),
         );
+        AL::audits('admin',$currentLoggedId,$request->ip(),'Download the Audit Logs for Admin');
         return Exporter::make('Excel')->load(collect(array_merge($mainData,$data)))->stream(date('Y-m-d-HiA-').'audit-logs-lists.xlsx');
     }
 
