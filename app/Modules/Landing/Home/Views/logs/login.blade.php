@@ -4,10 +4,9 @@
 
 @section('content')
 <div class="login_container">
-    <div class="col-lg-6 col-xl-6 slider">
-        <div class="row">
+    <div class="row">
+        <div class="col-lg-6">
             <div id="slider" class="carousel slide" data-ride="carousel">
-
                 <ul class="carousel-indicators">
                     <li data-target="#slider" data-slide-to="0"></li>
                     <li data-target="#slider" data-slide-to="1"  class="active"></li>
@@ -32,35 +31,33 @@
                 <a class="carousel-control-next" href="#slider" data-slide="next">
                     <span class="carousel-control-next-icon"></span>
                 </a>
-
+            </div>
+        </div>
+        <div class="col-lg-6 mt-5 text-center login_form">
+            <img class="logo" src="{{URL::asset('storage/uploads/login_images/logo.png')}}" alt="">
+            <h2 class="text-center bold login-title">WELCOME</h2>
+            <div class="row">
+                <div class="col-sm-7 col-lg-7 col-xl-8 text-center ml-auto mr-auto">
+                    <hr>
+                    <form class="loginClick">
+                        {{ csrf_field() }} 
+                        <div class="form-group">
+                            <label for="email_username">Email or Username</label>
+                            <input type="text" class="form-control username" name="email_username" placeholder="Username or Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control password" name="password" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="col-md-12 btn btn-default login_button" style="background-color:#800; color:#fff;" name="sbmt">LOGIN</button>
+                        </div>
+                    </form>
+                    <small>Don't have an account? <a href="{{route('landing.home.sign-up')}}" class="create_link"> REGISTER. </a></small>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-6 col-xl-6 mt-5 login_form">
-        <h2 class="text-center bold login-title">Welcome Back!</h2>
-        <div class="row">
-            <div class="col-sm-7 col-lg-7 col-xl-8 text-center ml-auto mr-auto">
-                <hr>
-                <form class="loginClick">
-                    {{ csrf_field() }} 
-                    <div class="form-group">
-                        <label for="email_username">Email or Username</label>
-                        <input type="text" class="form-control username" name="email_username" placeholder="Username or Email">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control password" name="password" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="col-md-12 btn btn-default login_button" style="background-color:#800; color:#fff;" name="sbmt">LOGIN</button>
-                    </div>
-                </form>
-                <small>Don't have an account? <a href="{{route('landing.home.sign-up')}}" class="create_link"> REGISTER. </a></small>
-            </div>
-        </div>
-    </div>
-
-</div>
 @endsection
 
 

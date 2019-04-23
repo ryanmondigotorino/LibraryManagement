@@ -127,7 +127,7 @@ body{
         max-width: 320px;
     }
     .login-title{
-        letter-spacing: 3px;
+        letter-spacing: 5px;
     }
     .username{
         border-top: 0 !important;
@@ -138,6 +138,11 @@ body{
         border-top: 0 !important;
         border-left: 0 !important;
         border-right: 0 !important;
+    }
+    .logo{
+        width: 150px;
+        height: 90px;
+        padding-bottom: 2%;
     }
 }
 @media (min-width: 375px){
@@ -145,7 +150,7 @@ body{
         max-width: 375px;
     }
     .login-title{
-        letter-spacing: 3px;
+        letter-spacing: 5px;
     }
     .username{
         border-top: 0 !important;
@@ -156,6 +161,11 @@ body{
         border-top: 0 !important;
         border-left: 0 !important;
         border-right: 0 !important;
+    }
+    .logo{
+        width: 150px;
+        height: 90px;
+        padding-bottom: 3%;
     }
 
 }
@@ -164,7 +174,7 @@ body{
         max-width: 470px;
     }
     .login-title{
-        letter-spacing: 3px;
+        letter-spacing: 5px;
     }
     .username{
         border-top: 0 !important;
@@ -179,13 +189,13 @@ body{
 }
 @media (min-width: 768px){
     .content-container{
-        max-width: 720px;
+        max-width: 770px;
     }
     a{
         color: #800;
     }
     .login-title{
-        letter-spacing: 3px;
+        letter-spacing: 5px;
     }
     .username{
         border-top: 0 !important;
@@ -197,11 +207,38 @@ body{
         border-left: 0 !important;
         border-right: 0 !important;
     }
+    .logo{
+        width: 200px;
+        height: 100px;
+        padding-bottom: 3%;
+    }
 }
 @media (min-width: 1024px){
     .content-container{
-        max-width: 950px;
+        max-width: 1050px;
     }
+    a{
+        color: #800;
+    }
+    .login-title{
+        letter-spacing: 5px;
+    }
+    .username{
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+    }
+    .password{
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+    }
+    .logo{
+        width: 200px;
+        height: 100px;
+        padding-bottom: 3%;
+    }
+    
 }
 @media (min-width: 1200px){
     .content-container{
@@ -211,12 +248,16 @@ body{
         color: #800;
     }
     .login-title{
-        letter-spacing: 2px;
+        letter-spacing: 5px;
     }
-}
-
-.login_form{
-    padding-top: 10%;
+    .login_form{
+        padding-top: 5%;
+    }
+    .logo{
+        width: 200px;
+        height: 100px;
+        padding-bottom: 2%;
+    }
 }
 
 .carousel-inner img{

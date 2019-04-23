@@ -16,13 +16,13 @@
 
                 <div class="carousel-inner">
                     <div class="carousel-item">
-                    <img class="img-fluid" src="{{URL::asset('storage/uploads/login_images/books.jpg')}}" alt="Floating Books">
+                    <img class="img-fluid" src="{{URL::asset('storage/uploads/signup_images/crosswalk.jpg')}}" alt="Floating Books">
                     </div>
                     <div class="carousel-item active">
-                    <img class="img-fluid" src="{{URL::asset('storage/uploads/login_images/shelf.jpg')}}" alt="Books">
+                    <img class="img-fluid" src="{{URL::asset('storage/uploads/signup_images/crowd.jpg')}}" alt="Books">
                     </div>
                     <div class="carousel-item">
-                    <img class="img-fluid" src="{{URL::asset('storage/uploads/login_images/library.jpg')}}" alt="Library">
+                    <img class="img-fluid" src="{{URL::asset('storage/uploads/signup_images/people.jpg')}}" alt="Library">
                     </div>
                 </div>
 
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="col-lg-6 col-xl-6 mt-5">
-            <h1><span class="fa fa-user"></span> Sign-up</h1><hr>
+            <h2>REGISTER</h2><hr>
                 <form class="sign-up-form">
                     {{ csrf_field() }}
                     <div class="row">
@@ -68,10 +68,18 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-                            <label for="address">Address</label>
-                            <textarea name="address" rows="2" class="form-control" placeholder="Enter Address"></textarea>
-                        </div>
+                            <div class="col-md-6">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" placeholder="Enter Email" name="email">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gender">Gender</label>
+                                <select name="gender" class="form-control">
+                                    <option selected disabled>Choose...</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -88,7 +96,7 @@
                             <label for="confirmpassword">Confirm Password</label>
                             <input type="password" class="form-control" placeholder="Confirm Password" name="confirmpassword" id="confirmpassword">
                         </div>
-                    </div><hr>
+                    </div>
                     <div class="row">
                         <div class="col-md-10">
                             <button class="btn btn-secondary pull-right" type="submit">Create Account</button>
