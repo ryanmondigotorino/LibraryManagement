@@ -182,7 +182,7 @@ class DashboardController extends Controller
     }
 
     public function students(Request $request){
-        $getCourse = CF::model('Course')::all();
+        $getCourse = CF::model('Course')->where('course_status','!=','down')->get();
         $getDepartment = CF::model('Department')::all();
         return view($this->render('accounts.student-account'),compact('getCourse','getDepartment'));
     }
