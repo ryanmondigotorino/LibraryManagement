@@ -17,22 +17,15 @@
     @yield('pageCss')
 </head>
 <body onload="myFunction()">
-    @if ('landing.home.login' && 'landing.home.sign-up')
-        <div id="loader"></div>
-        <div style="display:none;" id="myDiv" class="animate-bottom">
-            <div class="content-container">
-                @yield('content')
-            </div>
-        </div>
-    @else
+    <div class="content1">
         @include("Landing.layout.nav-bar")
-        <div id="loader"></div>
-        <div style="display:none;" id="myDiv" class="animate-bottom">
-            <div class="content-container">
-                @yield('content')
-            </div>
+    </div>
+    <div id="loader"></div>
+    <div style="display:none;" id="myDiv" class="animate-bottom">
+        <div class="content-container">
+            @yield('content')
         </div>
-    @endif
+    </div>
 </body>
 
 <script src="{{ URL::asset('public/js/bootstrap/jquery-3.3.1.min.js') }}"></script>
@@ -43,6 +36,20 @@
 <script src="{{ URL::asset('public/js/jquery-validator.js') }}"></script>
 
 <script>
+    $(document).ready(function(){
+        var path = window.location.pathname;
+        console.log(path)
+    });
+
+    $(document).ready(function(){
+        var path = window.location.pathname;
+        if(path.includes('login') || path.includes('sign-up')){
+            $('div.content1').addClass('d-none');
+        }else{
+            $('div.content1').removeClass('d-none');
+            $('body').addClass('landing_page');
+        }
+    });
     var myVar;
     function myFunction() {
         myVar = setTimeout(showPage, 100);
