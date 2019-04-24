@@ -14,7 +14,7 @@ class Book extends BaseModel{
         'added_by',
         'front_image',
         'back_image',
-        'author',
+        'author_id',
         'genre',
         'title',
         'description',
@@ -25,7 +25,7 @@ class Book extends BaseModel{
         $id = isset($input['id']) ? $input['id'] : null;
         $data['rules'] = [
             'added_by' => [ 'required' ],
-            'author' => [ 'required','min:3' ],
+            'author_id' => [ 'required' ],
             'genre' => [ 'required','min:3' ],
             'title' => [ 'required','min:3' ],
             'description' => [ 'min:3' ],

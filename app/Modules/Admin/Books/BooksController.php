@@ -24,12 +24,28 @@ class BooksController extends Controller
     }
 
     public function index(){
-        $getBooks = CF::model('Book');
+        $getBooks = CF::model('Book')
+            ->select(
+                'books.id',
+                'books.front_image',
+                'books.back_image',
+                'books.genre',
+                'books.title',
+                'books.description',
+                'books.date_published',
+                'books.created_at',
+                'authors.name as author_name',
+                'authors.image as author_image',
+                'authors.email as author_email',
+                'authors.favorite_quote as author_quote'
+            )
+            ->leftjoin('authors','authors.id','books.author_id');
         return view($this->render('index'),compact('getBooks'));
     }
 
     public function addbooks(){
-        return view($this->render('content.add-books'));
+        $getAuthors = CF::model('Author')::all();
+        return view($this->render('content.add-books'),compact('getAuthors'));
     }
 
     public function addbooksave(Request $request){
@@ -84,7 +100,7 @@ class BooksController extends Controller
                     'added_by' => $currentLoggedId->id,
                     'front_image' => $frontImageName,
                     'back_image' => $backImageName,
-                    'author' => $request->book_author,
+                    'author_id' => $request->book_author,
                     'genre' => $request->book_genre,
                     'title' => $bookTitle,
                     'description' => $request->book_description,
