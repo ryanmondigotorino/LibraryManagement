@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ URL::asset('public/css/bootstrap/bootstrap.min.css') }} ">
     <link rel="stylesheet" href="{{ URL::asset('public/css/pageloader.css') }} ">
     <link rel="stylesheet" href="{{ URL::asset('public/css/profile.css') }} ">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     <link rel="shortcut icon" href="{{URL::asset('storage/uploads/app_images/mainfavicon.png')}}" type="image/png">
     <title>Home</title>
@@ -17,14 +17,24 @@
     @yield('pageCss')
 </head>
 <body onload="myFunction()">
-    @include("Landing.layout.nav-bar")
-    <div id="loader"></div>
-    <div style="display:none;" id="myDiv" class="animate-bottom">
-        <div class="content-container mt-5">
-            @yield('content')
+    @if ('landing.home.login' && 'landing.home.sign-up')
+        <div id="loader"></div>
+        <div style="display:none;" id="myDiv" class="animate-bottom">
+            <div class="content-container">
+                @yield('content')
+            </div>
         </div>
-    </div>
+    @else
+        @include("Landing.layout.nav-bar")
+        <div id="loader"></div>
+        <div style="display:none;" id="myDiv" class="animate-bottom">
+            <div class="content-container">
+                @yield('content')
+            </div>
+        </div>
+    @endif
 </body>
+
 <script src="{{ URL::asset('public/js/bootstrap/jquery-3.3.1.min.js') }}"></script>
 <script src="{{ URL::asset('public/js/bootstrap/popper.min.js') }}"></script>
 <script src="{{ URL::asset('public/js/bootstrap/bootstrap.min.js') }}"></script>
