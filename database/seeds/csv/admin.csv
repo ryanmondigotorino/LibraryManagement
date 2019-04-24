@@ -1,0 +1,2 @@
+id,firstname,middlename,lastname,image,email,username,password,account_type,account_line,account_status,date_registered,deleted_at,remember_token
+1,Admin,NULL,Administrator,noimage.png,administrator@gmail.com,admin,123456789,admin,1,1,1545874238,NULL,NULL
