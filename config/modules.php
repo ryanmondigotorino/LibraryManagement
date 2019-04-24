@@ -12,6 +12,7 @@ return [
             'Dashboard',
             'Department',
             'Course',
+            'Author',
             'Books',
             'Reports'
         ],
