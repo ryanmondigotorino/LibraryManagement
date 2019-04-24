@@ -9,7 +9,7 @@
                     <div class="col-lg-8">
                         <h2 style="margin-top:5%;"></h2>
                         <h5>{{$authors->name}}</h5><hr>
-                        <h6><b>Email:</b> {{$authors->email}}</h6>
+                        <h6><b>Email:</b> {{$authors->email == null || $authors->email == '' ? 'No email available' : $authors->email}}</h6>
                         <h6><b>Quote: </b> {{$authors->favorite_quote}}</h6><hr>
                         <button type="button" class="btn btn-secondary pull-right"><span class="fa fa-edit"></span></button>
                     </div>
