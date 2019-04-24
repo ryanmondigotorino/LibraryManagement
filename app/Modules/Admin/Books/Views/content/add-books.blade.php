@@ -38,7 +38,12 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="booktitle">Book Author</label>
-                                        <input type="text" class="form-control" name="book_author" placeholder="Enter Book Author">
+                                        <select name="book_author" class="form-control">
+                                            <option selected disabled>Choose...</option>
+                                            @foreach($getAuthors as $authors)
+                                                <option value="{{$authors->id}}">{{$authors->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="booktitle">Book Title</label>
@@ -109,7 +114,7 @@
         var formData = new FormData();
         formData.append('book_front',frontImage);
         formData.append('book_back',backImage);
-        formData.append('book_author',$('input[name="book_author"]').val());
+        formData.append('book_author',$('select[name="book_author"]').val());
         formData.append('book_title',$('input[name="book_title"]').val());
         formData.append('book_genre',$('input[name="book_genre"]').val());
         formData.append('book_description',$('textarea[name="book_description"]').val());
