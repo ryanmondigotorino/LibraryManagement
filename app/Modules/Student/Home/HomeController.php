@@ -13,7 +13,7 @@ use View;
 use DB;
 use URL;
 
-class StudentController extends Controller
+class HomeController extends Controller
 {
     public static $view_path = "Student.Home";
 
