@@ -18,7 +18,6 @@ class StudentController extends Controller
     public static $view_path = "Student.Home";
 
     public function index(Request $request){
-        $base_data = Auth::guard('student')->user();
-        return $base_data;
+        return view($this->render('index'));
     }
 }

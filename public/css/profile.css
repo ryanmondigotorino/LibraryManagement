@@ -254,6 +254,10 @@ body{
     border-right: 0 !important;
 }
 
+a.dropdown-toggle:hover{
+    cursor: pointer !important;
+}
+
 .signup_form{
     padding-top: 5%;
 }
