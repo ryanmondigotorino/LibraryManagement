@@ -72,12 +72,14 @@
             url:"{{route('landing.home.login-submit')}}",
             data: $(this).serialize(),
             beforeSend: function(){
+                $("button[type='submit']").prop('disabled',true);
                 $("button[type='submit']").html('<i class="fa fa-spinner fa-pulse"></i> Processing');
             },
             success: function(result){
                 if(result['status'] == 'success'){
                     location.reload();
                 }else if(result['status'] == 'warning'){
+                    $("button[type='submit']").prop('disabled',false);
                     swal({
                         title: "Warning",
                         text: result['msg'],
@@ -85,6 +87,7 @@
                         button: "Ok",
                     });
                 }else{
+                    $("button[type='submit']").prop('disabled',false);
                     swal({
                         title: "Error",
                         text: result['msg'],

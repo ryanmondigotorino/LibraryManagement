@@ -37,7 +37,7 @@
         </div>
         <div class="col-lg-6 col-xl-6 signup_form">
             <h2 class="text-center signup_title">CREATE YOUR ACCOUNT</h2><hr>
-                <form class="sign-up-form">
+                <form class="sign-up-form" action="{{route('landing.home.sign-up-submit')}}">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col-md-4">
@@ -80,17 +80,23 @@
                     <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email">Course</label>
-                                    <input type="email" class="form-control" placeholder="Enter Email" name="email">
+                                    <label for="course">Course</label>
+                                    <select name="course" class="form-control">
+                                        <option selected disabled>Choose Course</option>
+                                        @foreach($getCourses as $course)
+                                            <option value="{{$course->id}}">{{$course->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="gender">Department</label>
+                                    <label for="department">Department</label>
                                     <select name=department class="form-control">
                                         <option selected disabled>Choose Department</option>
-                                        <option value="IT">IT</option>
-                                        <option value="Engineering">Engineering</option>
+                                        @foreach($getDepartments as $department)
+                                            <option value="{{$department->id}}">{{$department->department_name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -112,8 +118,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="confirmpassword">Confirm Password</label>
-                                <input type="password" class="form-control" placeholder="Confirm Password" name="confirmpassword" id="confirmpassword">
+                                <label for="confirm_password">Confirm Password</label>
+                                <input type="password" class="form-control" placeholder="Confirm Password" name="confirm_password" id="confirmpassword">
                             </div>
                         </div>
                     </div>
@@ -129,4 +135,38 @@
 @endsection
 
 @section('pageJs')
+<script>
+    $('form.sign-up-form').on('submit',function(event){
+        event.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            beforeSend: function(){
+                $('button[type="submit"].btn.btn-default').prop('disabled',true);
+                $('button[type="submit"].btn.btn-default').html('<i class="fa fa-spinner fa-pulse"></i> Processing');
+            },
+            success:function(result){
+                if(result['status'] == 'success'){
+                    swal({
+                        title: "Success",
+                        text: 'Please Check your email for account verification.',
+                        icon: result['status'],
+                    }).then((resultStatus) => {
+                        location.reload();
+                    });
+                }else{
+                    $('button[type="submit"].btn.btn-default').prop('disabled',false);
+                    swal({
+                        title: "Error",
+                        text: result['messages'],
+                        icon: result['status'],
+                    });
+                }
+            }
+        }).done(function(){
+            $('button[type="submit"].btn.btn-default').html('SIGN UP');
+        });
+    });
+</script>
 @endsection
