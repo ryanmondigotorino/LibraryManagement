@@ -6,20 +6,10 @@
         <a class="p-3 text-white" href="">EXPLORE</a>
         <a class="p-3 text-white" href="">CONTACT</a>
     </nav>
-    {{-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Login/Sign-up
-    </button>
+    <a class="fa fa-user pr-2 text-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true"></a>
     <div class="dropdown-menu dropdown-menu-right">
         <a class="dropdown-item" href="{{route('landing.home.sign-up')}}"><span class="fa fa-user-plus"></span> Sign-up</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{{route('landing.home.login')}}"><span class="fa fa-user"></span> Login</a>
-    </div> --}}
-    {{-- <i class="fa fa-instagram p-2 text-light" aria-hidden="true"><a href="#"></a></i>
-    <i class="fa fa-twitter p-2 text-light" aria-hidden="true"><a href="#"></a></i>
-    <i class="fa fa-facebook p-2 text-light" aria-hidden="true"><a href="#"></a></i>
-    <i class="fa fa-globe pl-2 pr-5 text-light" aria-hidden="true"><a href="#"></a></i> --}}
-    <i class="fa fa-user pr-2 text-light" aria-hidden="true"><a href="#"></a></i>
-
-
-
+    </div>
 </div>
