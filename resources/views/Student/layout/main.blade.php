@@ -17,14 +17,10 @@
     @yield('pageCss')
 </head>
 <body onload="myFunction()">
-    <div class="content1">
-        @include("Student.layout.nav-bar")
-    </div>
+    @yield('student-nav-bar')
     <div id="loader"></div>
     <div style="display:none;" id="myDiv" class="animate-bottom">
-        <div class="content-container">
-            @yield('content')
-        </div>
+        @yield('content')
     </div>
 </body>
 
@@ -36,15 +32,6 @@
 <script src="{{ URL::asset('public/js/jquery-validator.js') }}"></script>
 
 <script>
-    $(document).ready(function(){
-        var path = window.location.pathname;
-        if(path.includes('login') || path.includes('sign-up')){
-            $('div.content1').addClass('d-none');
-        }else{
-            $('div.content1').removeClass('d-none');
-            $('body').addClass('landing_page');
-        }
-    });
     $('.logout_click').on('click',function(){
         swal({
             title: "Confirmation",

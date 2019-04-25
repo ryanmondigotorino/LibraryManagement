@@ -7,6 +7,7 @@ return [
         ],
         'Student' => [
             'Home',
+            'Author',
         ],
         'Admin' => [
             'Dashboard',
