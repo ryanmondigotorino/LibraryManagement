@@ -18,6 +18,12 @@ class StudentController extends Controller
     public static $view_path = "Student.Home";
 
     public function index(Request $request){
+        $base_data = Auth::guard('student')->user();
+        $getuserdata = CF::model('Student')::find($base_data->id);
+        if($base_data->account_line == 0){
+            $getuserdata->account_line = 1;
+            $getuserdata->save();
+        }
         return view($this->render('index'));
     }
 }

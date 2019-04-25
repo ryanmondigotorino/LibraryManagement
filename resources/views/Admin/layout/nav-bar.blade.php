@@ -84,13 +84,13 @@
                         </a>
                     </li>
                 </ul>
-                <h6 class="{{$base_data->account_type == 'librarian' ? 'd-none' : 'sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted'}}">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span class="navHead">Author</span>
                     <a class="d-flex align-items-center text-muted" href="#">
                         <span data-feather="plus-circle"></span>
                     </a>
                 </h6>
-                <ul class="nav flex-column {{$base_data->account_type == 'librarian' ? 'd-none' : ''}}">
+                <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('admin.author.index')}}">
                             <span class="fa fa-table"></span>
