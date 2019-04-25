@@ -497,17 +497,164 @@ class DashboardController extends Controller
     }
 
     public function getstudentlogs(Request $request){
+        $dateRange = $request->datePicker != null ? $request->datePicker : '';
+        $arrDateRange = explode(' - ',$dateRange);
+        $dateFrom = date('Y-m-d',strtotime(str_replace('/','-',$arrDateRange[0])));
+        $dateTo = date('Y-m-d',strtotime(str_replace('/','-',$arrDateRange[1])));
+        
         $start = $request->start;
         $length = $request->length;
         $columns = [
-            'admin_audits.id',
+            'student_audits.id',
             'students.firstname',
-            'students.email',
-            'admin_audits.action',
-            'admin_audits.ip_address',
-            'admin_audits.device',
-            'admin_audits.browser',
-            'admin_audits.operating_system',
+            'students.username',
+            'student_audits.action',
+            'student_audits.ip_address',
+            'student_audits.device',
+            'student_audits.browser',
+            'student_audits.operating_system',
         ];
+
+        $adminAuditDetails = $this->__mainQueryStudentAudit($request,$dateFrom,$dateTo);
+        $adminAuditResultCount = $adminAuditDetails->count();
+        $adminAuditDetails = $adminAuditDetails->where(function($query) use ($request){
+            $query
+                ->orWhere('student_audits.id','LIKE',"%".$request->search['value']."%")
+                ->orWhere(DB::raw("CONCAT(students.firstname,' ',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
+                ->orWhere(DB::raw("CONCAT(students.firstname,'',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
+                ->orWhere(DB::raw("CONCAT(students.firstname,' ',students.middlename,' ',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
+                ->orWhere('students.email','LIKE',"%".$request->search['value']."%")
+                ->orWhere('students.username','LIKE',"%".$request->search['value']."%")
+                ->orWhere('student_audits.action','LIKE',"%".$request->search['value']."%")
+                ->orWhere('student_audits.ip_address','LIKE',"%".$request->search['value']."%")
+                ->orWhere('student_audits.device','LIKE',"%".$request->search['value']."%")
+                ->orWhere('student_audits.browser','LIKE',"%".$request->search['value']."%")
+                ->orWhere('student_audits.operating_system','LIKE',"%".$request->search['value']."%")
+                ->orWhere('student_audits.created_at','LIKE',"%".$request->search['value']."%");
+        })
+        ->offset($start)
+        ->limit($length)
+        ->orderBy($columns[$request->order[0]['column']],$request->order[0]['dir'])
+        ->get();
+
+        $array = $result = [];
+
+        foreach($adminAuditDetails as $key => $value){
+            $array[$key]['id'] = $value->id;
+            $array[$key]['firstname'] = $value->firstname.' '.$value->lastname;
+            $array[$key]['username'] = '<strong>'.$value->username.'</strong>';
+            $array[$key]['action'] = $value->action;
+            $array[$key]['ip_address'] = $value->ip_address;
+            $array[$key]['device'] = $value->device;
+            $array[$key]['browser'] = $value->browser;
+            $array[$key]['operating_system'] = $value->operating_system;
+            $array[$key]['created_at'] = date('m-j-y h:i:A',strtotime($value->created_at));
+        }
+
+        $totalCount = count($array);
+        $result['audit_details'] = $array;
+        $data = [];
+
+        foreach($result['audit_details'] as $key => $value){
+            $dataOutput = [
+                $value['id'],
+                $value['firstname'],
+                $value['username'],
+                $value['action'],
+                $value['ip_address'],
+                $value['device'],
+                $value['browser'],
+                $value['operating_system'],
+                $value['created_at']
+            ];
+            $data[] = $dataOutput;
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => $totalCount,
+            "recordsFiltered" => $adminAuditResultCount,
+            "data"            => $data
+            );
+            
+        return json_encode($json_data); 
+    }
+
+    public function studentdownloadXlsx(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
+        $dateRange = $request->date != null ? $request->date : '';
+        $arrDateRange = explode(' - ',$dateRange);
+        $dateFrom = date('Y-m-d',strtotime(str_replace('/','-',$arrDateRange[0])));
+        $dateTo = date('Y-m-d',strtotime(str_replace('/','-',$arrDateRange[1])));
+
+        $data[] = array(
+            'Id',
+            'Student Name',
+            'User Name',
+            'Action',
+            'IP Address',
+            'Device Use',
+            'Browser Use',
+            'Operating system use',
+            'Date Created',
+        );
+
+        $adminAuditDetails = $this->__mainQueryStudentAudit($request,$dateFrom,$dateTo);
+        $array = $result = [];
+        foreach($adminAuditDetails->get() as $key => $value){
+            $array[$key]['id'] = $value->id;
+            $array[$key]['name'] = $value->firstname.' '.$value->lastname;
+            $array[$key]['username'] = $value->username;
+            $array[$key]['action'] = $value->action;
+            $array[$key]['ip_address'] = $value->ip_address;
+            $array[$key]['device'] = $value->device;
+            $array[$key]['browser'] = $value->browser;
+            $array[$key]['operating_system'] = $value->operating_system;
+            $array[$key]['created_at'] = date('m-j-y h:i:A',strtotime($value->created_at));
+        }
+        $result['audit_details'] = $array;
+        foreach($result['audit_details'] as $key => $value){
+            $dataOutput = [
+                $value['id'],
+                $value['name'],
+                $value['username'],
+                $value['action'],
+                $value['ip_address'],
+                $value['device'],
+                $value['browser'],
+                $value['operating_system'],
+                $value['created_at']
+            ];
+            $data[] = $dataOutput;
+        };
+
+        $mainData = array(
+            array(
+                'Total # of Audit Logs', count($data) - 1
+            ),
+            array(''),
+            array(''),
+        );
+        AL::audits('admin',$currentLoggedId,$request->ip(),'Download the Audit Logs for Student');
+        return Exporter::make('Excel')->load(collect(array_merge($mainData,$data)))->stream(date('Y-m-d-HiA-').'audit-logs-lists.xlsx');
+    }
+
+    public function __mainQueryStudentAudit($request,$dateFrom,$dateTo){
+        $query = CF::model('Student_audit')
+            ->select(
+                'student_audits.id',
+                'students.firstname',
+                'students.lastname',
+                'students.email',
+                'students.username',
+                'student_audits.action',
+                'student_audits.ip_address',
+                'student_audits.device',
+                'student_audits.browser',
+                'student_audits.operating_system',
+                'student_audits.created_at'
+            )
+            ->join('students','students.id','student_audits.student_id')
+            ->whereBetween(DB::raw('DATE(student_audits.created_at)'),[$dateFrom,$dateTo]);
+        return $query;
     }
 }
