@@ -38,11 +38,6 @@
 <script>
     $(document).ready(function(){
         var path = window.location.pathname;
-        console.log(path)
-    });
-
-    $(document).ready(function(){
-        var path = window.location.pathname;
         if(path.includes('login') || path.includes('sign-up')){
             $('div.content1').addClass('d-none');
         }else{
