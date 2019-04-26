@@ -154,6 +154,7 @@ class BooksController extends Controller
     }
 
     public function editbooksave(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
         $id = $request->book_id;
         $getBookDetails = CF::model('Book')::find($id);
         $frontImage = $request->book_front;
@@ -196,14 +197,16 @@ class BooksController extends Controller
             Storage::disk('uploads')->delete('uploads/book_images/book-('.$getBookDetails->id.')/'.$getBookDetails->back_image);
             Storage::disk('uploads')->putFileAs('uploads/book_images/book-('.$getBookDetails->id.')',$backImage,$backimageName);
         }
+        $bookTitle = $request->book_title;
         $getBookDetails->author_id = $request->book_author;
         $getBookDetails->front_image = $frontimageName;
         $getBookDetails->back_image = $backimageName;
         $getBookDetails->genre = $request->book_genre;
-        $getBookDetails->title = $request->book_title;
+        $getBookDetails->title = $bookTitle;
         $getBookDetails->description = $request->book_description;
         $getBookDetails->date_published = strtotime($request->book_published);
         $getBookDetails->save();
+        AL::audits('admin',$currentLoggedId,$request->ip(),'Edit book ('.$bookTitle.')');
         return [
             'status' => 'success',
             'messages' => 'Book Successfully Updated'
