@@ -94,4 +94,7 @@ class ExploreController extends Controller
                 'placeholderCategory'
             ));
     }
+    public function viewbook(){
+        return view($this->render('content.view-book'));
+    }
 }
