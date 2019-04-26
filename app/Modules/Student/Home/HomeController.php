@@ -24,6 +24,23 @@ class HomeController extends Controller
             $getuserdata->account_line = 1;
             $getuserdata->save();
         }
-        return view($this->render('index'));
+
+        $getBooks = CF::model('Book')
+        ->select(
+            'books.id',
+            'books.front_image',
+            'books.back_image',
+            'books.genre',
+            'books.title',
+            'books.description',
+            'books.date_published',
+            'books.created_at',
+            'authors.name as author_name',
+            'authors.image as author_image',
+            'authors.email as author_email',
+            'authors.favorite_quote as author_quote'
+        )
+        ->leftjoin('authors','authors.id','books.author_id');
+        return view($this->render('index'),compact('getBooks'));
     }
 }
