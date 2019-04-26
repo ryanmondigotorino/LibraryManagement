@@ -22,6 +22,7 @@
     <div style="display:none;" id="myDiv" class="animate-bottom">
         @yield('content')
     </div>
+    <div class="footer"></div>
 </body>
 
 <script src="{{ URL::asset('public/js/bootstrap/jquery-3.3.1.min.js') }}"></script>
