@@ -361,15 +361,16 @@ a.dropdown-toggle:hover{
 
 .explore_page{
     background: url('assets/explore-bg.png');
-    background-size: 100%;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .landing_page{
     background-image: url('assets/landing_bg.png');
-    background-position: center;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-attachment: fixed;
     height: 615px;
 }
 
