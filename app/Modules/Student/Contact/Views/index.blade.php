@@ -12,6 +12,11 @@
     .content-container{
         margin-top: 9%;
     }
+    .about_img{
+        width: 300px;
+        height: 500px;
+        margin: 0 3% 0 20%;
+    }
     .inner-box{
         background-color: rgba(255, 255, 255, 0.5);
         width: 100%;
@@ -49,27 +54,29 @@
 @section('content')
 <div class="content-container">
     <div class="row">
-        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <img class="about_img" src="{{URL::asset('public/css/assets/contact_images/about-us-bg-img.png')}}">
+        </div>
         <div class="col-lg-7">
             <div class="inner-box">
                 <h3 style="font-weight:bold; color: #A94C4C; padding: 5px 0 0 5px; letter-spacing: 3px;">ABOUT US</h3>
                 <div class="outer-box">
                     <div class="row">
-                        <img class="img-first" src="{{URL::asset('storage/uploads/contact_images/Ryan.jpg')}}" alt="Ryan">
+                        <img class="img-first" src="{{URL::asset('public/css/assets/contact_images/Ryan.jpg')}}" alt="Ryan">
                         <div class="desc">
                             <h4>Ryan Torino</h4>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit<p>
                         </div>
                     </div>
                     <div class="row">    
-                        <img class="img-second" src="{{URL::asset('storage/uploads/contact_images/Henrie.jpg')}}" alt="Henrie">
+                        <img class="img-second" src="{{URL::asset('public/css/assets/contact_images/Henrie.jpg')}}" alt="Henrie">
                         <div class="desc">
                             <h4>Henrieta Avelino</h4>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit<p>
                         </div>
                     </div>
                     <div class="row">
-                        <img class="img-third" src="{{URL::asset('storage/uploads/contact_images/Ellis.jpg')}}" alt="Ellis">
+                        <img class="img-third" src="{{URL::asset('public/css/assets/contact_images/Ellis.jpg')}}" alt="Ellis">
                         <div class="desc">
                             <h4>Ellis Hilao</h4>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit<p>
