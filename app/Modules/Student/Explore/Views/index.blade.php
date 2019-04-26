@@ -135,7 +135,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-1"></div>
                                 <div class="col-lg-8">
-                                    <div class="books-inline-container">
+                                    <div class="books-inline-container" data-id="{{$books->id}}">
                                         <p class="category-font-sections mt-2 ml-4">
                                             <b>{{($key + 1). '. ' .$books->title}}</b>, by 
                                             ({{$books->author_name == null || $books->author_name == '' ? 'No Author Available' : $books->author_name}})
@@ -144,7 +144,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
-                                    <button class="btn btn-view-books mt-1" data-view="{{$books->id}} ">View</button>
+                                    <button class="btn btn-view-books mt-1" data-id="{{$books->id}}">View</button>
                                 </div>
                             </div>
                         @endforeach
@@ -168,6 +168,18 @@
 @section('pageJs')
 <script>
     $('body').addClass('explore_page');
+    $('div.books-inline-container').on('click',function(){
+        var id = $(this).attr('data-id');
+        var linkid = "{{route('student.explore.view-book','id')}}";
+        var url = linkid.replace('id',id);
+        location.href=url;
+    });
+    $('button.btn-view-books').on('click',function(){
+        var id = $(this).attr('data-id');
+        var linkid = "{{route('student.explore.view-book','id')}}";
+        var url = linkid.replace('id',id);
+        location.href=url;
+    });
     $('.search-explore').on('submit',function(event){
         event.preventDefault();
         var thisTarget = $(event.target);

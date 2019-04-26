@@ -95,6 +95,7 @@ class AuthorController extends Controller
     }
 
     public function editAuthorSave(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
         $id = $request->author_id;
         $getAuthorDetails = CF::model('Author')::find($id);
         $image = $request->authorImage;
@@ -117,11 +118,13 @@ class AuthorController extends Controller
             Storage::disk('uploads')->delete('uploads/authors/author-('.$getAuthorDetails->id.')/'.$getAuthorDetails->image);
             Storage::disk('uploads')->putFileAs('uploads/authors/author-('.$getAuthorDetails->id.')',$image,$imageName);
         }
+        $authorName = $request->author_name;
         $getAuthorDetails->image = $imageName;
-        $getAuthorDetails->name = $request->author_name;
+        $getAuthorDetails->name = $authorName;
         $getAuthorDetails->email = $request->author_email;
         $getAuthorDetails->favorite_quote = $request->quote;
         $getAuthorDetails->save();
+        AL::audits('admin',$currentLoggedId,$request->ip(),'Edit author ('.$authorName.')');
         return array(
             'status' => 'success',
             'messages' => 'Author successfully Updated'
