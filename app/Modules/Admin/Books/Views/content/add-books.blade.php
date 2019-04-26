@@ -51,7 +51,12 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="booktitle">Book Genre</label>
-                                        <input type="text" class="form-control" name="book_genre" placeholder="Enter Book Genre">
+                                        <select name="book_genre" class="form-control">
+                                            <option selected disabled>Choose...</option>
+                                            @foreach(config('books.book_category') as $genre)
+                                                <option value="{{$genre}}">{{$genre}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="booktitle">Book Description</label>
@@ -116,7 +121,7 @@
         formData.append('book_back',backImage);
         formData.append('book_author',$('select[name="book_author"]').val());
         formData.append('book_title',$('input[name="book_title"]').val());
-        formData.append('book_genre',$('input[name="book_genre"]').val());
+        formData.append('book_genre',$('select[name="book_genre"]').val());
         formData.append('book_description',$('textarea[name="book_description"]').val());
         formData.append('book_published',$('input[name="book_published"]').val());
         formData.append('_token','{{csrf_token()}}');

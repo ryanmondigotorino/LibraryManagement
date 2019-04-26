@@ -8,7 +8,8 @@ return [
         'Student' => [
             'Home',
             'Author',
-            'Contact'
+            'Contact',
+            'Explore'
         ],
         'Admin' => [
             'Dashboard',
