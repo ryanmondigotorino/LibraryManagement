@@ -94,7 +94,26 @@ class ExploreController extends Controller
                 'placeholderCategory'
             ));
     }
-    public function viewbook(){
-        return view($this->render('content.view-book'));
+    public function viewbook(Request $request,$id){
+        $getBooks = CF::model('Book')
+            ->select(
+                'books.id',
+                'books.front_image',
+                'books.back_image',
+                'books.genre',
+                'books.title',
+                'books.description',
+                'books.date_published',
+                'books.created_at',
+                'authors.id as author_id',
+                'authors.name as author_name',
+                'authors.image as author_image',
+                'authors.email as author_email',
+                'authors.favorite_quote as author_quote'
+            )
+            ->leftjoin('authors','authors.id','books.author_id')
+            ->where('books.id',$id)
+            ->get();
+        return view($this->render('content.view-book'),compact('getBooks'));
     }
 }

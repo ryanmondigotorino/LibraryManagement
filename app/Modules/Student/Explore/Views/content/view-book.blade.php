@@ -68,27 +68,18 @@
         <div class="col-lg-9">
             <button class="btn btn-default back_btn"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
             <div class="desc__box">
-                <h2 style="color:#FF3900;">TITLE OF THE BOOK</h2>
+                <h2 style="color:#FF3900;">{{$getBooks[0]->title}}</h2>
                 <p>
-                    Times are changing fast and whilst some of us were simply born 
-                    into this meteoric times there are others who were not.
-                </p>
-                <p>
-                    Text Default dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-                    invidunt ut <br> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-                    invidunt ut labore et dolore magna aliquyam erat, sed dia. Hui ipsum dolor sit amet, consetetur sadipscing elitr, 
-                    sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed dia.
-                    Text Default Lorem ipsum dolor sit amet, consetetur sadipscing elitr, 
-                    sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed dia
+                    {{$getBooks[0]->description}}
                 </p>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="author_desc">
-                <img class="author_img" src="{{URL::asset('public/css/assets/author_image.jpg')}}" alt="">
+                <img class="author_img" src="{{URL::asset('storage/uploads/authors/author-('.$getBooks[0]->author_id.')/'.$getBooks[0]->author_image)}}" alt="">
                 <p style="margin-top: 50%; font-family: 'Quicksand', sans-serif; text-align: center;">Written by:</p>
-                <p style="text-align: center; font-family: 'Quicksand', sans-serif; color:#FF3900;">John Green</p>
-                <p style="text-align: center; font-family: 'Quicksand', sans-serif;">@mrses | hello@my500.com</p>
+                <p style="text-align: center; font-family: 'Quicksand', sans-serif; color:#FF3900;">{{$getBooks[0]->author_name}}</p>
+                <p style="text-align: center; font-family: 'Quicksand', sans-serif;">{{$getBooks[0]->author_email}}</p>
                 <button class="btn btn-outline-secondary borrow_btn ml-2">BORROW THIS BOOK</button>
             </div>
         </div>
@@ -96,8 +87,8 @@
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8 books_img">
-            <img class="book_cover" src="{{URL::asset('public/css/assets/front_cover.jpg')}}" alt="Front Cover">
-            <img class="book_cover" src="{{URL::asset('public/css/assets/back_cover.jpg')}}" alt="Back Cover">
+            <img class="book_cover" src="{{URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->front_image)}}" alt="Front Cover">
+            <img class="book_cover" src="{{URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->back_image)}}" alt="Back Cover">
         </div>
         <div class="col-lg-2"></div>
     </div>
@@ -105,4 +96,9 @@
 @endsection
 
 @section('pageJs')
+<script>
+    $('button.back_btn').on('click',function(){
+        location.href="{{route('student.explore.index')}}";
+    });
+</script>
 @endsection

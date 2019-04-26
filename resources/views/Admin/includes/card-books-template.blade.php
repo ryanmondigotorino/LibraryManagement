@@ -13,8 +13,11 @@
                 </div><hr>
             </div>
             <div class="dec pull-right">
-                <button class="btn btn-default" type="button"><span class="fa fa-eye"></span></button> 
-                <button class="btn btn-secondary {{Auth::guard('admin')->check() ? '':'d-none'}}" type="button"><span class="fa fa-edit"></span></button>
+                <?php
+                    $routes = Auth::guard('admin')->check() ? route('admin.books.view-books',[$books->id,$books->title]) : route('student.explore.view-book',$books->id);
+                ?>
+                <a href="{{$routes}}" class="btn btn-secondary"><span class="fa fa-eye"></span></a> 
+                <a href="{{route('admin.books.edit-books',$books->id)}}" class="btn btn-secondary {{Auth::guard('admin')->check() ? '':'d-none'}}"><span class="fa fa-edit"></span></a>
             </div>
         </div>
     </div>

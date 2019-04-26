@@ -33,7 +33,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="booktitle">Quote</label>
-                                        <input type="text" class="form-control" name="quote" value="{{$getAuthors->favorite_quote}}" placeholder="Enter quote (optional)">
+                                        <textarea name="quote" class="form-control" rows="5" placeholder="Enter quote (optional)">{{$getAuthors->favorite_quote}}</textarea>
                                     </div>
                                     <input type="hidden" value="{{$getAuthors->id}}" name="author_id">
                                     <div class="form-group">
@@ -75,7 +75,7 @@
         formData.append('author_id',$('input[name="author_id"]').val());
         formData.append('author_name',$('input[name="author_name"]').val());
         formData.append('author_email',$('input[name="author_email"]').val());
-        formData.append('quote',$('input[name="quote"]').val());
+        formData.append('quote',$('textarea[name="quote"]').val());
         formData.append('_token','{{csrf_token()}}');
         $.ajax({
             type:'POST',
@@ -84,7 +84,7 @@
             contentType: false,
             processData: false,
             beforeSend:function(){
-                // $('button[type="submit"].edit-author').prop('disabled',true);
+                $('button[type="submit"].edit-author').prop('disabled',true);
                 $('button[type="submit"].edit-author').html('<i class="fa fa-spinner fa-pulse"></i>');
             },
             success: function(result){
