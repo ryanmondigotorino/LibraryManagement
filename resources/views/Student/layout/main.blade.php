@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ URL::asset('public/css/pageloader.css') }} ">
     <link rel="stylesheet" href="{{ URL::asset('public/css/profile.css') }} ">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     <link rel="shortcut icon" href="{{URL::asset('storage/uploads/app_images/mainfavicon.png')}}" type="image/png">
     <title>Home</title>
