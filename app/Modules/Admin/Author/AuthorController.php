@@ -88,4 +88,65 @@ class AuthorController extends Controller
             return back();
         }
     }
+
+    public function editAuthor(Request $request,$id){
+        $getAuthors = CF::model('Author')::find($id);
+        return view($this->render('content.edit-author'),compact('getAuthors'));
+    }
+
+    public function editAuthorSave(Request $request){
+        $id = $request->author_id;
+        $getAuthorDetails = CF::model('Author')::find($id);
+        $image = $request->authorImage;
+        if($image == 'undefined'){
+            $imageName = $getAuthorDetails->image;
+        }else{
+            $extension = strtolower($image->extension());
+            switch ($extension){
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                    $imageName = 'library-authors-'.time().'.'.$extension;
+                    break;
+                default:
+                    $result['status'] = 'error';
+                    $result['messages'] = 'Invalid file type for Front Book Image.';
+                    return $result;
+                break;
+            }
+            Storage::disk('uploads')->delete('uploads/authors/author-('.$getAuthorDetails->id.')/'.$getAuthorDetails->image);
+            Storage::disk('uploads')->putFileAs('uploads/authors/author-('.$getAuthorDetails->id.')',$image,$imageName);
+        }
+        $getAuthorDetails->image = $imageName;
+        $getAuthorDetails->name = $request->author_name;
+        $getAuthorDetails->email = $request->author_email;
+        $getAuthorDetails->favorite_quote = $request->quote;
+        $getAuthorDetails->save();
+        return array(
+            'status' => 'success',
+            'messages' => 'Author successfully Updated'
+        );
+    }
+
+    public function viewAuthor(Request $request,$id,$slug){
+        $getAuthors = CF::model('Author')::find($id);
+        $getBooks = CF::model('Book')
+            ->select(
+                'books.id',
+                'books.front_image',
+                'books.back_image',
+                'books.genre',
+                'books.title',
+                'books.description',
+                'books.date_published',
+                'books.created_at',
+                'authors.name as author_name',
+                'authors.image as author_image',
+                'authors.email as author_email',
+                'authors.favorite_quote as author_quote'
+            )
+            ->leftjoin('authors','authors.id','books.author_id')
+            ->where('authors.id',$id);
+        return view($this->render('content.view-author'),compact('getAuthors','getBooks'));
+    }
 }

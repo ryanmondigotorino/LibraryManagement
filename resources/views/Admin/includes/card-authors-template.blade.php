@@ -11,7 +11,10 @@
                         <h5>{{$authors->name}}</h5><hr>
                         <h6><b>Email:</b> {{$authors->email == null || $authors->email == '' ? 'No email available' : $authors->email}}</h6>
                         <h6><b>Quote: </b> {{$authors->favorite_quote}}</h6><hr>
-                        <button type="button" class="btn btn-secondary pull-right"><span class="fa fa-edit"></span></button>
+                        <div class="pull-right">
+                            <a href="{{route('admin.author.edit-author',$authors->id)}}" class="btn btn-secondary" title="Edit"><span class="fa fa-edit"></span></a>
+                            <a href="{{route('admin.author.view-author',[$authors->id,$authors->name])}}" class="btn btn-secondary" title="View"><span class="fa fa-eye"></span></a>
+                        </div>
                     </div>
                 </div>
             </div>
