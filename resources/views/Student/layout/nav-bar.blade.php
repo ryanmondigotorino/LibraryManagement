@@ -3,7 +3,7 @@
     <nav class="my-1 my-md-0 mr-md-auto">
         <a class="p-3 text-white" href="{{route('student.home.index')}}">HOME</a>
         <a class="p-3 text-white" href="{{route('student.author.index')}}">AUTHORS</a> 
-        <a class="p-3 text-white" href="">EXPLORE</a>
+        <a class="p-3 text-white" href="{{route('student.explore.index')}}">EXPLORE</a>
         <a class="p-3 text-white" href="{{route('student.contact.index')}}">CONTACT</a>
     </nav>
     <a class="fa fa-user pr-2 text-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true"></a>

@@ -13,7 +13,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link sidebar-font-text" href="#">
+                <a class="nav-link sidebar-font-text" href="{{route('student.explore.index')}}">
                     EXPLORE
                 </a>
             </li>
