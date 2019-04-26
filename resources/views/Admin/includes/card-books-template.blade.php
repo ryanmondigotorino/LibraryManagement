@@ -13,8 +13,8 @@
                 </div><hr>
             </div>
             <div class="dec pull-right">
-                <button class="btn btn-default" type="button"><span class="fa fa-eye"></span></button>
-                <button class="btn btn-secondary" type="button"><span class="fa fa-edit"></span></button>
+                <button class="btn btn-default" type="button"><span class="fa fa-eye"></span></button> 
+                <button class="btn btn-secondary {{Auth::guard('admin')->check() ? '':'d-none'}}" type="button"><span class="fa fa-edit"></span></button>
             </div>
         </div>
     </div>
