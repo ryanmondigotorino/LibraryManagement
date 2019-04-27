@@ -279,6 +279,7 @@ class ExploreController extends Controller
         $currentLoggedId = Auth::guard('student')->user();
         $id = $request->id;
         $getBorrowedDetails = CF::model('Borrow')::find($id);
+        $getBorrowedDetails->borrowed_status = 'pending';
         $getBorrowedDetails->return_in = strtotime("+".$days." weekdays",$getBorrowedDetails->return_in);
         $getBorrowedDetails->save();
         AL::audits('student',$currentLoggedId,$request->ip(),'Renew Borrowed Detail id ('.$id.')');
