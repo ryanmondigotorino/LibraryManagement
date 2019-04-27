@@ -119,7 +119,8 @@ class ExploreController extends Controller
     }
 
     public function borrowedBooks(Request $request){
-        return view($this->render('content.borrowed-book'));
+        $getBorrowedDetails = CF::model('Borrow')::all();
+        return view($this->render('content.borrowed-book'),compact('getBorrowedDetails'));
     }
 
     public function getBorrowedBooks(Request $request){
@@ -183,7 +184,9 @@ class ExploreController extends Controller
             $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : $value->penalty;
             $array[$key]['borrowed_status'] = $value->borrowed_status;
             $btn_pending = $value->borrowed_status == 'approved' || $value->borrowed_status == 'returned' ? 'd-none' : '';
+            $btn_renew = $value->borrowed_status == 'approved'? '' : 'd-none';
             $array[$key]['button'] = '
+                <button class="btn btn-success '.$btn_renew.' renew-'.$value->id.'" onclick="renewBorrow('.$value->id.');"><span class="fa fa-plus"></span> Renew Borrow</button>
                 <button class="btn btn-danger '.$btn_pending.' borrow-'.$value->id.'" onclick="deleteBorrow('.$value->id.');"><span class="fa fa-remove"></span> Cancel Borrow</button>
             ';
         }
@@ -265,6 +268,20 @@ class ExploreController extends Controller
         $getBorrowedDetails->borrowed_status = 'deleted';
         $getBorrowedDetails->save();
         AL::audits('student',$currentLoggedId,$request->ip(),'Cancel Borrowed Detail id ('.$id.')');
+        return array(
+            'status' => 'success',
+            'messages' => 'Borrow details succesfully canceled!'
+        );
+    }
+
+    public function borrowedBooksRenew(Request $request){
+        $days = $request->days_extend;
+        $currentLoggedId = Auth::guard('student')->user();
+        $id = $request->id;
+        $getBorrowedDetails = CF::model('Borrow')::find($id);
+        $getBorrowedDetails->return_in = strtotime("+".$days." weekdays",$getBorrowedDetails->return_in);
+        $getBorrowedDetails->save();
+        AL::audits('student',$currentLoggedId,$request->ip(),'Renew Borrowed Detail id ('.$id.')');
         return array(
             'status' => 'success',
             'messages' => 'Borrow details succesfully canceled!'
