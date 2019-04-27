@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'dashboard', 'namespace' => '\App\Modules\Admin\Dashboard','middleware' => ['web','admin','revalidate'],'guard' => 'admin'], function(){
     Route::get('/','DashboardController@index')->name('admin.dashboard.index');
+    Route::get('/get-borrowed-books-chart','DashboardController@getBorrowedBooksChart')->name('admin.dashboard.get-borrowed-books-chart');
 });
 
 Route::group(['prefix' => 'accounts', 'namespace' => '\App\Modules\Admin\Dashboard', 'middleware' => ['web','admin','revalidate'],'guard' => 'admin'], function(){

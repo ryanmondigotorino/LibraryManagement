@@ -64,9 +64,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.books.reservation')}}">
+                        <a class="nav-link" href="{{route('admin.books.borrowed')}}">
                             <span class="fa fa-check"></span>
-                            Reservations
+                            Borrowed
                         </a>
                     </li>
                 </ul>

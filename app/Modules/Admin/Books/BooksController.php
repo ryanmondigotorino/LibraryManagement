@@ -218,7 +218,131 @@ class BooksController extends Controller
         return view($this->render('content.view-books'));
     }
 
-    public function reservation(){
-        return view($this->render('content.reservation'));
+    public function borrowed(){
+        $getBorrowedDetails = CF::model('Borrow')::all();
+        return view($this->render('content.borrow-books'),compact('getBorrowedDetails'));
+    }
+
+    public function getborrowed(Request $request){
+        $start = $request->start;
+        $length = $request->length;
+        $columns = [
+            'borrows.id',
+            'students.student_num',
+            'students.lastname',
+            'borrows.books',
+            'borrows.return_in',
+            'borrows.penalty',
+            'borrows.borrowed_status',
+        ];
+        $borrowedDetails = CF::model('Borrow')
+            ->select(
+                'borrows.id',
+                'students.student_num',
+                'students.firstname',
+                'students.middlename',
+                'students.lastname',
+                'borrows.books',
+                'borrows.return_in',
+                'borrows.penalty',
+                'borrows.borrowed_status'
+            )
+            ->join('students','students.id','borrows.student_id')
+            ->where('borrows.borrowed_status','!=','deleted');
+        $borrowedDetailsCount = $borrowedDetails->count();
+        $borrowedDetails = $borrowedDetails->where(function($query) use ($request){
+            $query
+                ->orWhere('borrows.id','LIKE',"%".$request->search['value']."%")
+                ->orWhere('students.student_num','LIKE',"%".$request->search['value']."%")
+                ->orWhere(DB::raw("CONCAT(students.firstname,' ',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
+                ->orWhere(DB::raw("CONCAT(students.firstname,'',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
+                ->orWhere(DB::raw("CONCAT(students.firstname,' ',students.middlename,' ',students.lastname)"), 'LIKE', "%".$request->search['value']."%")
+                ->orWhere('borrows.penalty','LIKE',"%".$request->search['value']."%")
+                ->orWhere('borrows.borrowed_status','LIKE',"%".$request->search['value']."%");
+        })
+        ->offset($start)
+        ->limit($length)
+        ->orderBy($columns[$request->order[0]['column']],$request->order[0]['dir'])
+        ->get();
+
+        $array = $result = [];
+
+        foreach($borrowedDetails as $key => $value){
+            $books_id = json_decode($value->books);
+            $book = [];
+            foreach($books_id as $key => $bookVal){
+                $getBooks = CF::model('Book')::find($key);
+                $book['title'] = $getBooks->title;
+            }
+            $middlename = $value->middlename == null || $value->middlename == '' ? ' ' : ' '.$value->middlename.' ';
+            $array[$key]['id'] = $value->id;
+            $array[$key]['student_num'] = $value->student_num;
+            $array[$key]['student_name'] = $value->firstname.$middlename.$value->lastname;
+            $array[$key]['books'] = $book['title'];
+            $array[$key]['date_return'] = date('M j Y',$value->return_in);
+            $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : $value->penalty;
+            $array[$key]['borrowed_status'] = $value->borrowed_status;
+            $btn_status = $value->borrowed_status == 'approved' ? 'd-none' : '';
+            $array[$key]['button'] = '
+                <button class="btn btn-success '.$btn_status.'" onclick="approveBorrow('.$value->id.');"><span class="fa fa-check"></span></button>
+                <button class="btn btn-danger '.$btn_status.' borrow-'.$value->id.'" onclick="deleteBorrow('.$value->id.');"><span class="fa fa-trash"></span></button>
+            ';
+        }
+        $totalCount = count($array);
+        $result['borrowed_details'] = $array;
+        $data = [];
+
+        foreach($result['borrowed_details'] as $key => $value){
+            $dataOutput = [
+                $value['id'],
+                $value['student_num'],
+                $value['student_name'],
+                $value['books'],
+                $value['date_return'],
+                $value['penalty'],
+                $value['borrowed_status'],
+                $value['button'],
+            ];
+            $data[] = $dataOutput;
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => $totalCount,
+            "recordsFiltered" => $borrowedDetailsCount,
+            "data"            => $data
+            );
+            
+        return json_encode($json_data); 
+    }
+
+    public function approvedborrowed(Request $request){
+        $penalty = $request->penalty;
+        if($penalty == null || $penalty == ''){
+            return array(
+                'status' => 'error',
+                'messages' => 'Penalty Cannot be null'
+            );
+        }
+        $getBorrowedDetails = CF::model('Borrow')::find($request->borrow_id);
+        $getBorrowedDetails->penalty = $penalty;
+        $getBorrowedDetails->borrowed_status = 'approved';
+        $getBorrowedDetails->save();
+        return array(
+            'status' => 'success',
+            'messages' => 'Borrow details succesfully approved!'
+        );
+    }
+
+    public function deleteborrowed(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
+        $id = $request->id;
+        $getBorrowedDetails = CF::model('Borrow')::find($id);
+        $getBorrowedDetails->borrowed_status = 'deleted';
+        $getBorrowedDetails->save();
+        AL::audits('admin',$currentLoggedId,$request->ip(),'Delete Borrowed Detail id ('.$id.')');
+        return array(
+            'status' => 'success',
+            'messages' => 'Borrow details succesfully deleted!'
+        );
     }
 }

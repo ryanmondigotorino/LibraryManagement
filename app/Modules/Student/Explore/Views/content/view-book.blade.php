@@ -80,7 +80,7 @@
                 <p style="margin-top: 50%; font-family: 'Quicksand', sans-serif; text-align: center;">Written by:</p>
                 <p style="text-align: center; font-family: 'Quicksand', sans-serif; color:#FF3900;">{{$getBooks[0]->author_name}}</p>
                 <p style="text-align: center; font-family: 'Quicksand', sans-serif;">{{$getBooks[0]->author_email}}</p>
-                <button class="btn btn-outline-secondary borrow_btn ml-2">BORROW THIS BOOK</button>
+                <button type="button" class="btn btn-outline-secondary borrow_btn ml-2" data-id="{{$getBooks[0]->id}}">BORROW THIS BOOK</button>
             </div>
         </div>
     </div>
@@ -99,6 +99,49 @@
 <script>
     $('button.back_btn').on('click',function(){
         location.href="{{route('student.explore.index')}}";
+    });
+    $('button[type="button"].borrow_btn').on('click',function(){
+        swal({
+            title: "Confirmation",
+            text: "Borrow This Book?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((result) => {
+            if(result){
+                $.ajax({
+                    type: 'POST',
+                    url: '{{route("student.explore.borrowed-books-save")}}',
+                    data: {
+                        book_id: $(this).attr('data-id'),
+                        _token: "{{csrf_token()}}",
+                    },
+                    beforeSend: function(){
+                        $('button[type="button"].borrow_btn').html('<i class="fa fa-spinner fa-pulse"></i> Wait a moment.');
+                    },
+                    success:function(result){
+                        if(result['status'] == 'success'){
+                            swal({
+                                title: 'Success!',
+                                text: result['messages'],
+                                icon: result['status']
+                            }).then((result) => {
+                                location.href="{{route('student.explore.borrowed-books')}}";
+                            });
+                        }else{
+                            $('button[type="button"].borrow_btn').prop('disabled',false);
+                            swal({
+                                title: 'Error!',
+                                text: result['messages'],
+                                icon: result['status']
+                            })
+                        }
+                    }
+                }).done(function(){
+                    $('button[type="button"].borrow_btn').html('BORROW THIS BOOK');
+                });
+            }
+        });
     });
 </script>
 @endsection
