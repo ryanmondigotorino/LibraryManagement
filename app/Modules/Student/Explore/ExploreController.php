@@ -164,14 +164,14 @@ class ExploreController extends Controller
         ->limit($length)
         ->orderBy($columns[$request->order[0]['column']],$request->order[0]['dir'])
         ->get();
-
+        
         $array = $result = [];
 
         foreach($borrowedDetails as $key => $value){
             $books_id = json_decode($value->books);
             $book = [];
-            foreach($books_id as $key => $bookVal){
-                $getBooks = CF::model('Book')::find($key);
+            foreach($books_id as $keyBook => $bookVal){
+                $getBooks = CF::model('Book')::find($keyBook);
                 $book['title'] = $getBooks->title;
             }
             $middlename = $value->middlename == null || $value->middlename == '' ? ' ' : ' '.$value->middlename.' ';
@@ -190,7 +190,6 @@ class ExploreController extends Controller
         $totalCount = count($array);
         $result['borrowed_details'] = $array;
         $data = [];
-
         foreach($result['borrowed_details'] as $key => $value){
             $dataOutput = [
                 $value['id'],

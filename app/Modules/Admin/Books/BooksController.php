@@ -270,8 +270,8 @@ class BooksController extends Controller
         foreach($borrowedDetails as $key => $value){
             $books_id = json_decode($value->books);
             $book = [];
-            foreach($books_id as $key => $bookVal){
-                $getBooks = CF::model('Book')::find($key);
+            foreach($books_id as $keyBook => $bookVal){
+                $getBooks = CF::model('Book')::find($keyBook);
                 $book['title'] = $getBooks->title;
             }
             $middlename = $value->middlename == null || $value->middlename == '' ? ' ' : ' '.$value->middlename.' ';
