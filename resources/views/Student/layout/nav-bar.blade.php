@@ -8,7 +8,8 @@
     </nav>
     <a class="fa fa-user pr-2 text-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true"></a>
     <div class="dropdown-menu dropdown-menu-right">
-        <a class="dropdown-item" href="{{route('landing.home.sign-up')}}"><span class="fa fa-cog"></span> Account Settings</a>
+        <a class="dropdown-item" href="{{route('student.explore.borrowed-books')}}"><span class="fa fa-cog"></span> Borrowed Books</a>
+        <a class="dropdown-item" href="#"><span class="fa fa-cog"></span> Account Settings</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item logout_click" href="#"><span class="fa fa-sign-out"></span> Log-out</a>
     </div>

@@ -9,5 +9,8 @@ Route::group(['prefix' => 'books', 'namespace' => '\App\Modules\Admin\Books','mi
     Route::get('/{id}/edit-books','BooksController@editbooks')->name('admin.books.edit-books');
     Route::post('/edit-books-save','BooksController@editbooksave')->name('admin.books.edit-books-save');
     Route::get('/{id}/view-books/{title}','BooksController@viewbooks')->name('admin.books.view-books');
-    Route::get('/reservation','BooksController@reservation')->name('admin.books.reservation');
+    Route::get('/borrowed','BooksController@borrowed')->name('admin.books.borrowed');
+    Route::get('/admin.books.get-borrowed','BooksController@getborrowed')->name('admin.books.get-borrowed');
+    Route::post('/admin.books.approved-borrowed','BooksController@approvedborrowed')->name('admin.books.approved-borrowed');
+    Route::post('/admin.books.delete-borrowed','BooksController@deleteborrowed')->name('admin.books.delete-borrowed');
 });
