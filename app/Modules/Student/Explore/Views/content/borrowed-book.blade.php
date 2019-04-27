@@ -15,8 +15,8 @@
 @section('content')
 <div class="profile_container ml-4">
     <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
             <div class="card" style="width:100%;margin-top:80px;">
                 <div class="card-body">
                     <div class="profile_content">
