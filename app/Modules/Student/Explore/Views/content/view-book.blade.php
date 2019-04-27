@@ -59,6 +59,26 @@
         width: 200px;
         height: 250px;
     }
+    @media (min-width: 1440px){
+        .desc__box{
+            width: 750px;
+            background-color: rgba(255,255,255, 0.2);
+            margin: -4% 0 0 35%;
+            padding: 2%;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .author_desc{
+            width: 250px;
+            height: 325px;
+            background-color: rgba(255,255,255, 0.2);
+            margin: 5% 0 0 10%;
+            padding: 2%;
+            border-radius: 20px;
+            display: inline-block;
+        }
+    
+    }
 </style>
 @endsection
 

@@ -33,4 +33,7 @@ class AuthorController extends Controller
         }
         return view($this->render('index'),compact('getAuthors','placeholder'));
     }
+    public function viewauthor(){
+        return view($this->render('content.view-author'));
+    }
 }
