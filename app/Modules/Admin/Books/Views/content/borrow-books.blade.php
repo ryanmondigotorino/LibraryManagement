@@ -40,7 +40,7 @@
         <div class="modal-dialog items-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Penalty</h5>
+                    <h5 class="modal-title">Add Penalty if not returned</h5>
                     <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -106,8 +106,6 @@
                         $('button[type="submit"].add-penalty').html('<i class="fa fa-spinner fa-pulse"></i>');
                     },
                     success:function(result){
-                        console.log(result);
-                        return false;
                         if(result['status'] == 'success'){
                             swal({
                                 title: "Success",
