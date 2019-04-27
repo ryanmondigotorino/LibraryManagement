@@ -215,7 +215,7 @@ class BooksController extends Controller
     
     public function viewbooks(Request $request,$id,$title){
         $getBooks = CF::model('Book')::find($id);
-        return view($this->render('content.view-books'));
+        return view($this->render('content.view-books'),compact('getBooks'));
     }
 
     public function borrowed(){
@@ -282,8 +282,10 @@ class BooksController extends Controller
             $array[$key]['date_return'] = date('M j Y',$value->return_in);
             $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : $value->penalty;
             $array[$key]['borrowed_status'] = $value->borrowed_status;
-            $btn_status = $value->borrowed_status == 'approved' ? 'd-none' : '';
+            $btn_status = $value->borrowed_status == 'approved' || $value->borrowed_status == 'returned' ? 'd-none' : '';
+            $btn_approved = $value->borrowed_status == 'approved' ? '' : 'd-none';
             $array[$key]['button'] = '
+                <button class="btn btn-success '.$btn_approved.' return-'.$value->id.'" onclick="returnBorrow('.$value->id.');"><span class="fa fa-sign-out"></span> Mark Return</button>
                 <button class="btn btn-success '.$btn_status.'" onclick="approveBorrow('.$value->id.');"><span class="fa fa-check"></span></button>
                 <button class="btn btn-danger '.$btn_status.' borrow-'.$value->id.'" onclick="deleteBorrow('.$value->id.');"><span class="fa fa-trash"></span></button>
             ';
@@ -330,6 +332,19 @@ class BooksController extends Controller
         return array(
             'status' => 'success',
             'messages' => 'Borrow details succesfully approved!'
+        );
+    }
+
+    public function returnborrowed(Request $request){
+        $currentLoggedId = Auth::guard('admin')->user();
+        $id = $request->id;
+        $getBorrowedDetails = CF::model('Borrow')::find($id);
+        $getBorrowedDetails->borrowed_status = 'returned';
+        $getBorrowedDetails->save();
+        AL::audits('admin',$currentLoggedId,$request->ip(),'Mark return Borrowed Detail id ('.$id.')');
+        return array(
+            'status' => 'success',
+            'messages' => 'Borrow details succesfully returned!'
         );
     }
 
