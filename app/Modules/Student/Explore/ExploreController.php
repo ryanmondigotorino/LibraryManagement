@@ -182,7 +182,10 @@ class ExploreController extends Controller
             $array[$key]['date_return'] = date('M j Y',$value->return_in);
             $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : $value->penalty;
             $array[$key]['borrowed_status'] = $value->borrowed_status;
-            $btn_status = $value->borrowed_status == 'approved' ? 'd-none' : '';
+            $btn_pending = $value->borrowed_status == 'approved' ? 'd-none' : '';
+            $array[$key]['button'] = '
+                <button class="btn btn-danger '.$btn_pending.' borrow-'.$value->id.'" onclick="deleteBorrow('.$value->id.');"><span class="fa fa-remove"></span> Cancel Borrow</button>
+            ';
         }
         $totalCount = count($array);
         $result['borrowed_details'] = $array;
@@ -197,6 +200,7 @@ class ExploreController extends Controller
                 $value['date_return'],
                 $value['penalty'],
                 $value['borrowed_status'],
+                $value['button'],
             ];
             $data[] = $dataOutput;
         }
@@ -215,6 +219,16 @@ class ExploreController extends Controller
         try{
             $currentLoggedId = Auth::guard('student')->user();
             $id = $request->book_id;
+            $validateBook = CF::model('Borrow')->where('id',$id);
+            if($validateBook->count() > 0){
+                $validate = $validateBook->get();
+                if($validate[0]->borrowed_status == "approved" || $validate[0]->borrowed_status == "pending"){
+                    return [
+                        'status' => 'error',
+                        'messages' => 'You already borrowed this book.'
+                    ];
+                }
+            }
             $getQuantity = 1;
             $putId = '{"'.$id.'":'.$getQuantity.'}';
             $borrowed_books = array(
@@ -228,6 +242,7 @@ class ExploreController extends Controller
             DB::commit();
             return $result;
         }catch(\Exception $e){
+            return $e;
             $errors = json_decode($e->getMessage(), true);
             $display_errors = [];
             foreach($errors as $key => $value){
@@ -242,5 +257,18 @@ class ExploreController extends Controller
         }
         Session::flash('message',$result['status']);
         return back();
+    }
+
+    public function borrowedBooksCancel(Request $request){
+        $currentLoggedId = Auth::guard('student')->user();
+        $id = $request->id;
+        $getBorrowedDetails = CF::model('Borrow')::find($id);
+        $getBorrowedDetails->borrowed_status = 'deleted';
+        $getBorrowedDetails->save();
+        AL::audits('student',$currentLoggedId,$request->ip(),'Cancel Borrowed Detail id ('.$id.')');
+        return array(
+            'status' => 'success',
+            'messages' => 'Borrow details succesfully canceled!'
+        );
     }
 }

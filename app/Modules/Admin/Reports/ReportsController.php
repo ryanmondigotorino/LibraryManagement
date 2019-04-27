@@ -24,4 +24,27 @@ class ReportsController extends Controller
     public function index(Request $request){
         return view($this->render('index'));
     }
+
+    public function getReturnedBooksChart(Request $request){
+        $data = [];
+        $currentMonthStatus = $currentborrow = 0;
+        $data['statusMonthly']['Current Month']['borrow'] = 0;
+        for ($m=1; $m <=12 ; $m++) {
+            $month = date('Y-m', mktime(0, 0 ,0 ,$m,1,date('Y')));
+            $monthName = date('M', mktime(0,0,0, $m,1,date('Y')));
+            $borrow = CF::model('Borrow')
+                ->select('order_number')
+                ->where([
+                    ['borrowed_status','returned'],
+                    ['updated_at','like','%'.$month.'%'],
+                ])
+                ->count();
+            $data['statusMonthly'][$monthName]['borrow'] = $borrow;
+            if(date('Y-m') == $month){
+                $currentborrow = $borrow;
+            }
+            $data['statusMonthly']['Current Month']['borrow'] = $currentborrow;
+        }
+        return $data;
+    }
 }

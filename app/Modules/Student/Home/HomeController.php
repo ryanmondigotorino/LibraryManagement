@@ -24,23 +24,53 @@ class HomeController extends Controller
             $getuserdata->account_line = 1;
             $getuserdata->save();
         }
-
-        $getBooks = CF::model('Book')
-        ->select(
-            'books.id',
-            'books.front_image',
-            'books.back_image',
-            'books.genre',
-            'books.title',
-            'books.description',
-            'books.date_published',
-            'books.created_at',
-            'authors.name as author_name',
-            'authors.image as author_image',
-            'authors.email as author_email',
-            'authors.favorite_quote as author_quote'
-        )
-        ->leftjoin('authors','authors.id','books.author_id');
+        if($request->search){
+            $searched = $request->search;
+            $getBooks = CF::model('Book')
+                ->select(
+                    'books.id',
+                    'books.front_image',
+                    'books.back_image',
+                    'books.genre',
+                    'books.title',
+                    'books.description',
+                    'books.date_published',
+                    'books.created_at',
+                    'authors.name as author_name',
+                    'authors.image as author_image',
+                    'authors.email as author_email',
+                    'authors.favorite_quote as author_quote'
+                )
+                ->leftjoin('authors','authors.id','books.author_id')
+                ->where(function($query) use ($request,$searched){
+                    $query->orWhere('books.genre','like',"%".$searched."%");
+                    $query->orWhere('books.title','like',"%".$searched."%");
+                    $query->orWhere('books.description','like',"%".$searched."%");
+                    $query->orWhere('authors.email','like',"%".$searched."%");
+                    $query->orWhere('authors.name','like',"%".$searched."%");
+                })
+                ->orderBy('books.id','desc');
+            $placeholder = $searched;
+        }else{
+            $getBooks = CF::model('Book')
+                ->select(
+                    'books.id',
+                    'books.front_image',
+                    'books.back_image',
+                    'books.genre',
+                    'books.title',
+                    'books.description',
+                    'books.date_published',
+                    'books.created_at',
+                    'authors.name as author_name',
+                    'authors.image as author_image',
+                    'authors.email as author_email',
+                    'authors.favorite_quote as author_quote'
+                )
+                ->leftjoin('authors','authors.id','books.author_id')
+                ->orderBy('books.id','desc');
+            $placeholder = '';
+        }
         return view($this->render('index'),compact('getBooks'));
     }
 }

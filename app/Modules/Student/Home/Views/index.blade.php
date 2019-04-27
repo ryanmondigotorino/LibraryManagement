@@ -32,17 +32,20 @@
         <div class="col-lg-4"></div>
         <div class="col-lg-4 search-bar">
             <h3>
-                Excepteur sint occaecat cupidatat non proident, 
-                sunt in culpa qui officia
+                These are the available books now inside the library.
             </h3>
 
             <div class="input-group mt-4">
-                <form action="{{route('student.home.index')}}" class="">
-                        <input type="text" class="form-control mr-5" autocomplete="off" placeholder="Search.." name="search" value="">
+                <form action="{{route('student.home.index')}}" class="search_book">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control mr-5" autocomplete="off" placeholder="Search.." name="search" value="">
+                        </div>
+                        <div class="col-lg-4">
+                            <button class="btn btn-default ml-5" style="background-color:#A94C4C; color:#fff;" type="submit">SEARCH</button>
+                        </div>
+                    </div>
                 </form>
-                <span class="input-group-btn">
-                    <button class="btn btn-default ml-5" style="background-color:#A94C4C; color:#fff;" value="submit">SEARCH</button>
-                </span>
             </div>
         </div>
     </div>
@@ -63,4 +66,21 @@
 @endsection
 
 @section('pageJs')
+<script>
+    $('.search_book').on('submit',function(event){
+        event.preventDefault();
+        var thisTarget = $(event.target);
+        var actionURL = thisTarget.attr('action');
+        var searchbarValue = $('input[name="search"]').val();
+        var serializeAllData = thisTarget.serialize();
+        history.pushState({}, {}, window.location.origin + window.location.pathname + '?' + serializeAllData);
+        $.ajax({
+            type: 'get',
+            url: actionURL,
+            data: serializeAllData,
+        }).done(function(){
+            location.reload();
+        })
+    });
+</script>
 @endsection

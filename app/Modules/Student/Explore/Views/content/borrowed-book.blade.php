@@ -33,6 +33,7 @@
                                             <th>Date Return</th>
                                             <th>Penalty</th>
                                             <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -69,5 +70,49 @@
             }
         });
     });
+    function deleteBorrow(id){
+        swal({
+            title: "Confirmation",
+            text: "Cancel borrowed?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((result) => {
+            if(result){
+                $.ajax({
+                    type: 'POST',
+                    url: '{{route("student.explore.borrowed-books-cancel")}}',
+                    data: {
+                        id: id,
+                        _token : "{{ csrf_token() }}"
+                    },
+                    beforeSend:function(){
+                        $('button.btn.btn-success.return-'+id).prop('disabled',true);
+                        $('button.btn.btn-success.return-'+id).html('<i class="fa fa-spinner fa-pulse"></i>');
+                    },
+                    success:function(result){
+                        if(result['status'] == 'success'){
+                            swal({
+                                title: "Success",
+                                text:  result['messages'],
+                                icon: result['status'],
+                            }).then((resultStatus) => {
+                                location.reload();
+                            });
+                        }else{
+                            $('button.btn.btn-success.return-'+id).prop('disabled',false);
+                            swal({
+                                title: "Error",
+                                text: result['messages'],
+                                icon: result['status'],
+                            });
+                        }
+                    }
+                }).done(function(){
+                    $('button.btn.btn-success.return-'+id).html('<span class="fa fa-sign-out"></span> Mark Return');
+                });
+            }
+        });
+    }
 </script>
 @endsection
