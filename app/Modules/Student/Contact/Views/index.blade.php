@@ -65,21 +65,21 @@
                         <img class="img-first" src="{{URL::asset('public/css/assets/contact_images/Ryan.jpg')}}" alt="Ryan">
                         <div class="desc">
                             <h4>Ryan Torino</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit<p>
+                            <p>Hello I'm Ryan Nice to meet you.<p>
                         </div>
                     </div>
                     <div class="row">    
                         <img class="img-second" src="{{URL::asset('public/css/assets/contact_images/Henrie.jpg')}}" alt="Henrie">
                         <div class="desc">
                             <h4>Henrieta Avelino</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit<p>
+                            <p>Hello I'm Ate Henrie Nice to meet you.<p>
                         </div>
                     </div>
                     <div class="row">
                         <img class="img-third" src="{{URL::asset('public/css/assets/contact_images/Ellis.jpg')}}" alt="Ellis">
                         <div class="desc">
                             <h4>Ellis Hilao</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit<p>
+                            <p>Hello I'm Ellis Nice to meet you.<p>
                         </div>
                     </div>
                 </div>
