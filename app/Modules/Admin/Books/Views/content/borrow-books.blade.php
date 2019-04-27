@@ -49,7 +49,7 @@
                     <form action="{{route('admin.books.approved-borrowed')}}" class="add-penalty-form">@csrf
                         <div class="form-group">
                             <label for="penalty">Penalty</label>
-                            <input type="text" class="form-control" name="penalty" placeholder="Enter Penalty">
+                            <input type="number" class="form-control" name="penalty" placeholder="Enter Penalty">
                         </div>
                         <input type="hidden" value="{{$borrowed->id}}" name="borrow_id">
                         <div class="modal-footer">

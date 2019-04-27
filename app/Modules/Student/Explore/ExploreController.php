@@ -181,7 +181,7 @@ class ExploreController extends Controller
             $array[$key]['student_name'] = $value->firstname.$middlename.$value->lastname;
             $array[$key]['books'] = $book['title'];
             $array[$key]['date_return'] = date('M j Y',$value->return_in);
-            $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : $value->penalty;
+            $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : 'P. '.$value->penalty.' pesos';
             $array[$key]['borrowed_status'] = $value->borrowed_status;
             $btn_pending = $value->borrowed_status == 'approved' || $value->borrowed_status == 'returned' ? 'd-none' : '';
             $btn_renew = $value->borrowed_status == 'approved'? '' : 'd-none';
