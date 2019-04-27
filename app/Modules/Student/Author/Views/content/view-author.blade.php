@@ -50,6 +50,9 @@
     .author_works > a {
         color: #2699FB !important;
     }
+    .card-container{
+        background-color: #7FC4FD;
+    }
 </style>
 @endsection
 
@@ -57,27 +60,29 @@
 <div class="content-container">
     <div class="row">
         <div class="col-lg-9">
-            <button class="btn btn-default back_btn"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-default back_btn"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
             <div class="desc__box">
-                <img class="author_img" src="{{URL::asset('public/css/assets/author_image.jpg')}}" alt="" align="">
+                <img class="author_img" src="{{URL::asset('storage/uploads/authors/author-('.$getAuthors->id.')/'.$getAuthors->image)}}" alt="Image of {{$getAuthors->name}}" >
                 <div class="author_bio">
-                    <h3>John Green</h3>
+                    <h3>{{$getAuthors->name}}</h3>
                     <p style="font-family: 'Quicksand', sans-serif;">
-                        "It seemed like forever ago, like we've had this brief but still infinite forever. 
-                        Some infinities are bigger than other infinities"
+                        {{$getAuthors->favorite_quote}}
                     </p>
                 </div>
             </div>
             <div class="author_desc">
-                <h2>Excepteur sint occaeuiecat cupidatat.</h2>
-                <p class="mt-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut ero labore et dolore magna aliqua. 
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco poriti laboris nisi ut aliquip ex ea commodo consequat. 
-                    Duis aute irure dolor in reprehenderit in uienply voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                    Excepteur sint occaecat cupidatat norin proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-            </div>
-            <div class="author_works">
-                <p>LOREM IPSUM DOLOR AMET CONSECTETUER <a href="#" class="pull-right" style="color: #2699FB !important;"><i class="fa fa-globe" aria-hidden="true"> webpage </i></a> </p>
+                <h2>Books</h2>
+                <div class="row">
+                    @if($getBooks->count() > 0)
+                        @foreach($getBooks->get() as $books)
+                            @include('Admin.includes.card-books-template')
+                        @endforeach
+                    @else
+                        <div class="col-lg-12">
+                            <h1 class="mt-5 mb-5 text-center">No Books available.</h1>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
@@ -85,4 +90,9 @@
 @endsection
 
 @section('pageJs')
+<script>
+    $('button[type="button"].back_btn').on('click',function(){
+        location.href="{{route('student.author.index')}}";
+    });
+</script>
 @endsection
