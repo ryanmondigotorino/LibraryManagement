@@ -2,9 +2,6 @@
     <h5 class="my-0 mr-1 font-weight-normal"><img src="{{URL::asset('storage/uploads/app_images/mainfavicon.png')}}" style="width:120px;height:50px;"></h5>
     <nav class="my-1 my-md-0 mr-md-auto">
         <a class="p-3 text-white" href="{{route('landing.home.index')}}">HOME</a>
-        <a class="p-3 text-white" href="#">AUTHORS</a> 
-        <a class="p-3 text-white" href="">EXPLORE</a>
-        <a class="p-3 text-white" href="">CONTACT</a>
     </nav>
     <a class="fa fa-user pr-2 text-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true"></a>
     <div class="dropdown-menu dropdown-menu-right">
