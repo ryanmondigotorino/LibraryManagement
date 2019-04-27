@@ -13,4 +13,5 @@ Route::group(['prefix' => 'books', 'namespace' => '\App\Modules\Admin\Books','mi
     Route::get('/admin.books.get-borrowed','BooksController@getborrowed')->name('admin.books.get-borrowed');
     Route::post('/admin.books.approved-borrowed','BooksController@approvedborrowed')->name('admin.books.approved-borrowed');
     Route::post('/admin.books.delete-borrowed','BooksController@deleteborrowed')->name('admin.books.delete-borrowed');
+    Route::post('/admin.books.return-borrowed','BooksController@returnborrowed')->name('admin.books.return-borrowed');
 });
