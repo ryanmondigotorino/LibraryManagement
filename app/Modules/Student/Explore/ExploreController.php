@@ -182,7 +182,7 @@ class ExploreController extends Controller
             $array[$key]['date_return'] = date('M j Y',$value->return_in);
             $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : $value->penalty;
             $array[$key]['borrowed_status'] = $value->borrowed_status;
-            $btn_pending = $value->borrowed_status == 'approved' ? 'd-none' : '';
+            $btn_pending = $value->borrowed_status == 'approved' || $value->borrowed_status == 'returned' ? 'd-none' : '';
             $array[$key]['button'] = '
                 <button class="btn btn-danger '.$btn_pending.' borrow-'.$value->id.'" onclick="deleteBorrow('.$value->id.');"><span class="fa fa-remove"></span> Cancel Borrow</button>
             ';
