@@ -32,6 +32,9 @@
         padding-left:23%;
         color: #fff;
     }
+    .author_bio > p {
+        font-style: italic;
+    }
     .author_desc{
         width: 900px;
         margin: 3% 0 0 35%;
@@ -59,9 +62,9 @@
                 <img class="author_img" src="{{URL::asset('public/css/assets/author_image.jpg')}}" alt="" align="">
                 <div class="author_bio">
                     <h3>John Green</h3>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
-                        incididunt ut ero labore et dolore magna aliqua. Ut enim ad minim veniam.
+                    <p style="font-family: 'Quicksand', sans-serif;">
+                        "It seemed like forever ago, like we've had this brief but still infinite forever. 
+                        Some infinities are bigger than other infinities"
                     </p>
                 </div>
             </div>
