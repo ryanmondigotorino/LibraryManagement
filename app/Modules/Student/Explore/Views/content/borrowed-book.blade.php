@@ -45,6 +45,33 @@
         </div>
     </div>
 </div>
+@foreach($getBorrowedDetails as $borrow)
+<div class="modal fade" id="renewal-books-{{$borrow->id}}" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog items-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Renewal of borrowing</h5>
+                <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{route("student.explore.borrowed-books-renew")}}" class="renew-books-form">@csrf
+                    <div class="form-group">
+                        <label for="days">Number of days extended</label>
+                        <input type="number" class="form-control" name="days_extend" placeholder="Enter Number of days">
+                    </div>
+                    <input type="hidden" name="id" value="{{$borrow->id}}">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+                        <button type="submit" class="btn btn-secondary renew-books">Renew now</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 @endsection
 
 @section('pageJs')
@@ -70,6 +97,52 @@
             }
         });
     });
+    $('form.renew-books-form').on('submit',function(event){
+        event.preventDefault();
+        swal({
+            title: "Confirmation",
+            text: "Renew borrowed item?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((result) => {
+            if(result){
+                var id = $('input[type="hidden"]').val();
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    beforeSend:function(){
+                        $('button.btn.btn-success.renew-'+id).prop('disabled',true);
+                        $('button.btn.btn-success.renew-'+id).html('<i class="fa fa-spinner fa-pulse"></i>');
+                    },
+                    success:function(result){
+                        if(result['status'] == 'success'){
+                            swal({
+                                title: "Success",
+                                text:  result['messages'],
+                                icon: result['status'],
+                            }).then((resultStatus) => {
+                                location.reload();
+                            });
+                        }else{
+                            $('button.btn.btn-success.renew-'+id).prop('disabled',false);
+                            swal({
+                                title: "Error",
+                                text: result['messages'],
+                                icon: result['status'],
+                            });
+                        }
+                    }
+                }).done(function(){
+                    $('button.btn.btn-success.renew-'+id).html('<span class="fa fa-plus"></span> Renew Borrow');
+                });
+            }
+        });
+    });
+    function renewBorrow(id){
+        $('div#renewal-books-'+id).modal();
+    }
     function deleteBorrow(id){
         swal({
             title: "Confirmation",
