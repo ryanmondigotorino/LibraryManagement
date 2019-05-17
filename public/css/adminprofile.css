@@ -13,6 +13,10 @@ canvas {
 * Sidebar
 */
 
+.nav-item:hover{
+    background-color:#615F5F;
+}
+
 .sidebar {
     position: fixed;
     top: 0;

@@ -57,8 +57,8 @@ class CourseController extends Controller
             $array[$key]['name'] = $value->name;
             $array[$key]['created_at'] = date('M j Y',strtotime($value->created_at));
             $array[$key]['button'] = '
-                <button class="btn btn-secondary" onclick="editcourse('.$value->id.',\''.$value->name.'\');"><span class="fa fa-edit"></span></button>
-                <button class="btn btn-danger course-'.$value->id.'" onclick="deletecourse('.$value->id.',\''.$value->name.'\');"><span class="fa fa-trash"></span></button>
+                <button type="button" class="btn btn-secondary edit-course-btn" data-id="'.$value->id.'" data-name="'.$value->name.'"><span class="fa fa-edit"></span></button>
+                <button type="button" class="btn btn-danger course-'.$value->id.' delete-course-btn" data-url="'.route('admin.course.delete-courses').'" data-token="'.csrf_token().'" data-id="'.$value->id.'" data-name="'.$value->name.'"><span class="fa fa-trash"></span></button>
             ';
         }
 
@@ -97,6 +97,8 @@ class CourseController extends Controller
             $result = CF::model('Course')->saveData($course, true);
             DB::commit();
             AL::audits('admin',$currentLoggedId,$request->ip(),'Add course ('.$courseName.')');
+            $result['url'] = route('admin.course.index');
+            $result['message'] = 'Successfully added course!';
             return $result;
         }catch(\Exception $e){
             $errors = json_decode($e->getMessage(), true);
@@ -125,7 +127,7 @@ class CourseController extends Controller
         if($validateCourse > 0){
             return array(
                 'status' => 'error',
-                'messages' => 'The Course name is already taken'
+                'message' => 'The Course name is already taken'
             );
         }
         $courseDetails = CF::model('Course')::find($request->courseid);
@@ -134,7 +136,8 @@ class CourseController extends Controller
         $courseDetails->save();
         return array(
             'status' => 'success',
-            'messages' => 'Course successfully Edited!'
+            'message' => 'Course successfully Edited!',
+            'url' => route('admin.course.index')
         );
     }
 

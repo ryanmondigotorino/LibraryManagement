@@ -40,55 +40,12 @@
 <script src="{{ URL::asset('public/js/jspdf/jspdf.plugin.addhtml.js') }}"></script>
 <script src="{{ URL::asset('public/js/jspdf/jspdf.plugin.split_text_to_size.js') }}"></script>
 <script src="{{ URL::asset('public/js/jspdf/jspdf.plugin.standard_fonts_metrics.js') }}"></script>
+<script src="{{ URL::asset('public/js/includes/global-landing-form.class.js') }}"></script>
+<script src="{{ URL::asset('public/js/includes/global-landing-search.class.js') }}"></script>
+<script src="{{ URL::asset('public/js/includes/global-landing-table.class.js') }}"></script>
+<script src="{{ URL::asset('public/js/includes/global-image-form.class.js') }}"></script>
+<script src="{{ URL::asset('public/js/includes/global-report-graph.class.js') }}"></script>
 <script>
-    $(document).ready(function(){
-        $('.nav-item').on('mouseover',function(){
-            $(this).css('background-color','#615F5F');
-        });
-        $('.nav-item').on('mouseout',function(){
-            $(this).css('background-color','');
-        });
-    });
-    $(".globalTable").DataTable({
-        responsive: true,
-        autoWidth : false,
-        order: [[ 0, "asc" ]],
-        oLanguage : {
-        oPaginate: {
-            sNext: '<span class="pagination-fa"><i class="fa fa-chevron-right" ></i></span>',
-            sPrevious: '<span class="pagination-fa"><i class="fa fa-chevron-left" ></i></span>'
-        },
-        sSearch: '<i class="fa fa-search fa-fw"></i>',
-
-        }
-    });
-    $('.logout_click').on('click',function(){
-        swal({
-            title: "Confirmation",
-            text: "Logout now?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((result) => {
-            if(result){
-                $.ajax({
-                    type: 'POST',
-                    url: '{{route("landing.home.logout")}}',
-                    data: {
-                        guard: 'admin',
-                        model: 'admin',
-                        id: '{{Auth::guard("admin")->user()->id}}',
-                        _token : "{{ csrf_token() }}"
-                    },
-                    success:function(result){
-                        if(result == 'success'){
-                            window.location.href = "{{route('landing.home.index')}}";
-                        }
-                    }
-                })
-            }
-        });
-    });
     var myVar;
     function myFunction() {
         myVar = setTimeout(showPage, 100);

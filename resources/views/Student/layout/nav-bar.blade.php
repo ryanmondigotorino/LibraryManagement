@@ -10,6 +10,6 @@
         <a class="dropdown-item" href="{{route('student.explore.borrowed-books')}}"><span class="fa fa-cog"></span> Borrowed Books</a>
         <a class="dropdown-item" href="#"><span class="fa fa-cog"></span> Account Settings</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item logout_click" href="#" data-url="{{route("landing.home.logout")}}" data-id="{{$base_data->id}}" data-token="{{ csrf_token() }}"><span class="fa fa-sign-out"></span> Log-out</a>
+        <a class="dropdown-item logout_click" href="#" data-url="{{route("landing.home.logout")}}" data-id="{{$base_data->id}}" data-guard="student" data-model="Student" data-token="{{ csrf_token() }}"><span class="fa fa-sign-out"></span> Log-out</a>
     </div>
 </div>

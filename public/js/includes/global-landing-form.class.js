@@ -70,6 +70,21 @@ var GlobalForm = {
             var url = $(this).attr('data-url');
             location.href= url;
         });
+        $('button[type="button"].add-course').on('click',function(){
+            $('#add-course').modal();
+        });
+        $('button[type="button"].add-department').on('click',function(){
+            $('#add-department').modal();
+        });
+        $('button[type="button"].add-admin-account').on('click',function(){
+            $('div.modal#add-admin-modal').modal();
+        });
+        $('button[type="button"].add-librarian-account').on('click',function(){
+            $('div.modal#add-librarian-modal').modal();
+        });
+        $('.add-students-account').on('click',function(){
+            $('div.modal#add-students-modal').modal();
+        });
     },
 
     LANDINGPAGELOADER: function(){
@@ -138,7 +153,9 @@ var GlobalForm = {
         $('a.logout_click').on('click',function(){
             var id = $(this).attr('data-id'),
                 url = $(this).attr('data-url'),
-                token = $(this).attr('data-token');
+                token = $(this).attr('data-token'),
+                guard = $(this).attr('data-guard'),
+                model = $(this).attr('data-model');
             swal({
                 title: "Confirmation",
                 text: "Logout now?",
@@ -151,8 +168,8 @@ var GlobalForm = {
                         type: 'POST',
                         url: url,
                         data: {
-                            guard: 'student',
-                            model: 'Student',
+                            guard: guard,
+                            model: model,
                             id: id,
                             _token : token
                         },

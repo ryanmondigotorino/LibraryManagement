@@ -20,7 +20,7 @@
                         </div><hr>
                         <div class="row">
                             <div class="col-lg-12">
-                                <table class="table table-striped table_shad table-bordered table-hover get-courses">
+                                <table class="table table-striped table_shad table-bordered table-hover global-landing-table" data-url="{{route('admin.course.get-courses')}}" data-loader="{{URL::asset("public/icons/loading.gif")}}">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
@@ -48,14 +48,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{route('admin.course.add-courses')}}" class="add-course-form">@csrf
+                <form action="{{route('admin.course.add-courses')}}" class="global-landing-form">@csrf
                     <div class="form-group">
                         <label for="coursename">Course Name</label>
                         <input type="text" class="form-control" name="coursename" placeholder="Enter Course Name">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-                        <button type="submit" class="btn btn-secondary add-course">Add Course</button>
+                        <button type="submit" class="btn btn-secondary global-landing-form-btn">Add Course</button>
                     </div>
                 </form>
             </div>
@@ -73,7 +73,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{route('admin.course.edit-courses')}}" class="edit-course-form">@csrf
+                    <form action="{{route('admin.course.edit-courses')}}" class="global-landing-form">@csrf
                         <div class="form-group">
                             <label for="coursename">Course Name</label>
                             <input type="text" class="form-control" name="coursename" value="{{$course->name}}" placeholder="Enter Course Name">
@@ -81,7 +81,7 @@
                         <input type="hidden" name="courseid" value="{{$course->id}}">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-                            <button type="submit" class="btn btn-secondary edit-course">Edit Course</button>
+                            <button type="submit" class="btn btn-secondary global-landing-form-btn">Edit Course</button>
                         </div>
                     </form>
                 </div>
@@ -92,141 +92,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    $(document).ready(function(){
-        $(".get-courses").DataTable({
-            responsive: true,
-            serverSide: true,
-            bPaginate: true,
-            searching: true,
-            autoWidth : false,
-            order: [[ 0, "desc" ]],
-            processing: true,
-            language: {
-                processing: '<img src="{{URL::asset("public/icons/loading.gif")}}" style="width:10%; margin-bottom:10px;">'
-            },
-            ajax: {
-                url: "{{route('admin.course.get-courses')}}",
-            },
-            createdRow : function(row, data, dataIndex){
-                var thisRow = $(row);
-                thisRow.addClass('cntr');
-            }
-        });
-    });
-    $('.edit-course-form').on('submit',function(event){
-        event.preventDefault();
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            beforeSend: function(){
-                $('button[type="submit"].edit-course').prop('disabled',true);
-                $('button[type="submit"].edit-course').html('<i class="fa fa-spinner fa-pulse"></i>');
-            },
-            success: function(result){
-                if(result['status'] == 'success'){
-                    swal({
-                        title: 'Success!',
-                        text: result['messages'],
-                        icon: result['status']
-                    }).then((result) => {
-                        location.reload();
-                    });
-                }else{
-                    $('button[type="submit"].edit-course').prop('disabled',false);
-                    swal({
-                        title: 'Error!',
-                        text: result['messages'],
-                        icon: result['status']
-                    })
-                }
-            }
-        }).done(function(){
-            $('button[type="submit"].edit-course').html('Edit Course');
-        });
-    });
-    function editcourse(id,name){
-        $('#edit-course-'+id).modal();
-    }
-    function deletecourse(id,name){
-        swal({
-            title: "Confirmation!",
-            text: "Delete this "+name+" course?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((result) => {
-            if(result){
-                $.ajax({
-                    type: 'POST',
-                    url: "{{route('admin.course.delete-courses')}}",
-                    data: {
-                        id: id,
-                        _token: '{{csrf_token()}}'
-                    },
-                    beforeSend:function(){
-                        $('button.course-'+id).prop('disabled',true);
-                        $('button.course-'+id).html('<i class="fa fa-spinner fa-pulse"></i>');
-                    },
-                    success: function(result){
-                        if(result['status'] == 'success'){
-                            swal({
-                                title: 'Success!',
-                                text: result['messages'],
-                                icon: result['status']
-                            }).then((result) => {
-                                location.reload();
-                            });
-                        }else{
-                            $('button.course-'+id).prop('disabled',false);
-                            swal({
-                                title: 'Error!',
-                                text: result['messages'],
-                                icon: result['status']
-                            });
-                        }
-                    },
-                }).done(function(){
-                    $('button.course-'+id).html('<span class="fa fa-trash"></span>');
-                });
-            }
-        });
-    }
-    $('.add-course').on('click',function(){
-        $('#add-course').modal();
-    });
-    $('.add-course-form').on('submit',function(event){
-        event.preventDefault();
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            beforeSend: function(){
-                $('button[type="submit"].add-course').prop('disabled',true);
-                $('button[type="submit"].add-course').html('<i class="fa fa-spinner fa-pulse"></i>');
-            },
-            success: function(result){
-                if(result['status'] == 'success'){
-                    swal({
-                        title: 'Success!',
-                        text: result['messages'],
-                        icon: result['status']
-                    }).then((result) => {
-                        location.reload();
-                    });
-                }else{
-                    $('button[type="submit"].add-course').prop('disabled',false);
-                    swal({
-                        title: 'Error!',
-                        text: result['messages'],
-                        icon: result['status']
-                    })
-                }
-            }
-        }).done(function(){
-            $('button[type="submit"].add-course').html('Add Course');
-        });
-    });
-</script>
 @endsection

@@ -69,6 +69,7 @@ class AuthorController extends Controller
                 Storage::disk('uploads')->putFileAs('uploads/authors/author-('.$getauthorId.')',$image,$imageName);
                 AL::audits('admin',$currentLoggedId,$request->ip(),'Add author ('.$authorName.')');
                 DB::commit();
+                $result['url'] = route('admin.author.index');
                 return $result;
             }catch(\Exception $e){
                 return $e;
@@ -127,7 +128,8 @@ class AuthorController extends Controller
         AL::audits('admin',$currentLoggedId,$request->ip(),'Edit author ('.$authorName.')');
         return array(
             'status' => 'success',
-            'messages' => 'Author successfully Updated'
+            'messages' => 'Author successfully Updated',
+            'url' => route('admin.author.index')
         );
     }
 

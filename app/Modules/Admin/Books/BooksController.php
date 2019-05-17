@@ -111,6 +111,7 @@ class BooksController extends Controller
                 Storage::disk('uploads')->putFileAs('uploads/book_images/book-('.$getBookId.')',$back_image_file,$backImageName);
                 AL::audits('admin',$currentLoggedId,$request->ip(),'Add book ('.$bookTitle.')');
                 DB::commit();
+                $result['url'] = route('admin.books.index');
                 return $result;
             }catch(\Exception $e){
                 $errors = json_decode($e->getMessage(), true);
@@ -209,7 +210,8 @@ class BooksController extends Controller
         AL::audits('admin',$currentLoggedId,$request->ip(),'Edit book ('.$bookTitle.')');
         return [
             'status' => 'success',
-            'messages' => 'Book Successfully Updated'
+            'messages' => 'Book Successfully Updated',
+            'url' => route('admin.books.index')
         ];
     }
     
@@ -285,9 +287,9 @@ class BooksController extends Controller
             $btn_status = $value->borrowed_status == 'approved' || $value->borrowed_status == 'returned' ? 'd-none' : '';
             $btn_approved = $value->borrowed_status == 'approved' ? '' : 'd-none';
             $array[$key]['button'] = '
-                <button class="btn btn-success '.$btn_approved.' return-'.$value->id.'" onclick="returnBorrow('.$value->id.');"><span class="fa fa-sign-out"></span> Mark Return</button>
-                <button class="btn btn-success '.$btn_status.'" onclick="approveBorrow('.$value->id.');"><span class="fa fa-check"></span></button>
-                <button class="btn btn-danger '.$btn_status.' borrow-'.$value->id.'" onclick="deleteBorrow('.$value->id.');"><span class="fa fa-trash"></span></button>
+                <button type="button" class="btn btn-success '.$btn_approved.' return-'.$value->id.' return-borrow" data-id="'.$value->id.'" data-url="'.route('admin.books.return-borrowed').'" data-token="'.csrf_token().'"><span class="fa fa-sign-out"></span> Mark Return</button>
+                <button type="button" class="btn btn-success '.$btn_status.' approve-borrow" data-id="'.$value->id.'"><span class="fa fa-check"></span></button>
+                <button type="button" class="btn btn-danger '.$btn_status.' borrow-'.$value->id.' delete-borrow" data-id="'.$value->id.'" data-url="'.route('admin.books.delete-borrowed').'" data-token="'.csrf_token().'"><span class="fa fa-trash"></span></button>
             ';
         }
         $totalCount = count($array);
@@ -331,7 +333,8 @@ class BooksController extends Controller
         $getBorrowedDetails->save();
         return array(
             'status' => 'success',
-            'messages' => 'Borrow details succesfully approved!'
+            'messages' => 'Borrow details succesfully approved!',
+            'url' => route('admin.books.index')
         );
     }
 

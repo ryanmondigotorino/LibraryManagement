@@ -14,12 +14,12 @@
                         <div class="row">
                             <div class="col-lg-2"></div>
                             <div class="col-lg-8">
-                                <form action="{{route('admin.author.edit-author-save')}}" class="edit-author">
+                                <form action="{{route('admin.author.edit-author-save')}}" class="global-author">
                                     {{ csrf_field() }}
                                     <div class="form-group">
                                         <label for="authorImage">Author Image</label>
                                         <div class="form-group img-group">
-                                            <img src="{{URL::asset('storage/uploads/authors/author-('.$getAuthors->id.')/'.$getAuthors->image)}}" id="author-picture" class="item_image btn-edit-author-image" alt="Author Image">
+                                            <img src="{{URL::asset('storage/uploads/authors/author-('.$getAuthors->id.')/'.$getAuthors->image)}}" id="author-picture" class="item_image btn-global-author-image" alt="Author Image">
                                             <input type="file" class="d-none" name="authorImage"/>
                                         </div>
                                     </div>
@@ -51,63 +51,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    var globalImage;
-    $('.btn-edit-author-image').on('click',function(){
-        $("input[type='file'][name='authorImage']").click();
-        $("input[type='file'][name='authorImage']").on('change', function(){
-            $('.item_image').css('opacity','1');
-            var reader = new FileReader();
-            reader.onload = function(e){
-                $('#author-picture').attr('src',e.target.result);
-            }
-            if($('input[type="file"][name="authorImage"]')[0]['files'][0]){
-                reader.readAsDataURL($("input[type='file'][name='authorImage']")[0]['files'][0]);
-                globalImage = $("input[type='file'][name='authorImage']")[0]['files'][0];
-            }
-        });
-    });
-    $('form.edit-author').on('submit',function(event){
-        event.preventDefault();
-        var image = globalImage;
-        var formData = new FormData();
-        formData.append('authorImage',image);
-        formData.append('author_id',$('input[name="author_id"]').val());
-        formData.append('author_name',$('input[name="author_name"]').val());
-        formData.append('author_email',$('input[name="author_email"]').val());
-        formData.append('quote',$('textarea[name="quote"]').val());
-        formData.append('_token','{{csrf_token()}}');
-        $.ajax({
-            type:'POST',
-            url: $(this).attr('action'),
-            data: formData,
-            contentType: false,
-            processData: false,
-            beforeSend:function(){
-                $('button[type="submit"].edit-author').prop('disabled',true);
-                $('button[type="submit"].edit-author').html('<i class="fa fa-spinner fa-pulse"></i>');
-            },
-            success: function(result){
-                if(result['status'] == 'success'){
-                    swal({
-                        title: 'Success!',
-                        text: result['messages'],
-                        icon: result['status']
-                    }).then((result) => {
-                        location.href="{{route('admin.author.index')}}";
-                    });
-                }else{
-                    $('button[type="submit"].edit-author').prop('disabled',false);
-                    swal({
-                        title: 'Error!',
-                        text: result['messages'],
-                        icon: result['status']
-                    })
-                }
-            }
-        }).done(function(){
-            $('button[type="submit"].edit-author').html('<span class="fa fa-plus"></span> Edit');
-        });
-    });
-</script>
 @endsection
