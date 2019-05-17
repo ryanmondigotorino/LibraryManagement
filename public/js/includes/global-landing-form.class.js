@@ -2,7 +2,10 @@ var GlobalForm = {
 
     INIT: function(){
         this.EVENTS();
+        this.REDIRECT();
         this.LANDINGPAGELOADER();
+        this.BORROWBOOK();
+        this.LOGOUT();
     },
 
     EVENTS: function(){
@@ -60,9 +63,12 @@ var GlobalForm = {
                 }
             });
         });
-        
-        $('div.login_button button[type="button"].btn.btn-default').on('click',function(){
-            location.href="{{route('landing.home.login')}}";
+    },
+
+    REDIRECT: function(){
+        $('.redirect-link-btn').on('click',function(){
+            var url = $(this).attr('data-url');
+            location.href= url;
         });
     },
 
@@ -76,5 +82,89 @@ var GlobalForm = {
                 $('body').addClass('landing_page');
             }
         });
+    },
+
+    BORROWBOOK: function(){
+        $('button[type="button"].borrow_btn').on('click',function(){
+            var book_id = $(this).attr('data-id'),
+                url = $(this).attr('data-url'),
+                token = $(this).attr('data-token');
+            swal({
+                title: "Confirmation",
+                text: "Borrow This Book?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                if(result){
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            book_id: book_id,
+                            _token: token,
+                        },
+                        beforeSend: function(){
+                            $('button[type="button"].borrow_btn').html('<i class="fa fa-spinner fa-pulse"></i> Wait a moment.');
+                        },
+                        success:function(result){
+                            var result_url = result['url'];
+                            if(result['status'] == 'success'){
+                                swal({
+                                    title: 'Success!',
+                                    text: result['messages'],
+                                    icon: result['status']
+                                }).then((result) => {
+                                    location.href = result_url;
+                                });
+                            }else{
+                                $('button[type="button"].borrow_btn').prop('disabled',false);
+                                swal({
+                                    title: 'Error!',
+                                    text: result['messages'],
+                                    icon: result['status']
+                                })
+                            }
+                        }
+                    }).done(function(){
+                        $('button[type="button"].borrow_btn').html('BORROW THIS BOOK');
+                    });
+                }
+            });
+        });
+    },
+
+    LOGOUT: function(){
+        $('a.logout_click').on('click',function(){
+            var id = $(this).attr('data-id'),
+                url = $(this).attr('data-url'),
+                token = $(this).attr('data-token');
+            swal({
+                title: "Confirmation",
+                text: "Logout now?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                if(result){
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            guard: 'student',
+                            model: 'Student',
+                            id: id,
+                            _token : token
+                        },
+                        success:function(result){
+                            if(result == 'success'){
+                                location.reload();
+                            }
+                        }
+                    });
+                }
+            });
+        });
     }
-}
+};
+GlobalForm.INIT();

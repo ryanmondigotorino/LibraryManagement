@@ -22,7 +22,7 @@
                     <p style="font-size: 50px;color:#D63333;">Authors</p>
                 </div>
                 <div class="col-lg-6">
-                    <form action="{{route('student.author.index')}}" class="search-authors">
+                    <form action="{{route('student.author.index')}}" class="global-search-form">
                         <input type="text" class="form-control mt-4" autocomplete="off" placeholder="Search.." name="search" value="{{$placeholder}}">
                     </form>
                 </div>
@@ -52,21 +52,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    $('.search-authors').on('submit',function(event){
-        event.preventDefault();
-        var thisTarget = $(event.target);
-        var actionURL = thisTarget.attr('action');
-        var searchbarValue = $('input[name="search"]').val();
-        var serializeAllData = thisTarget.serialize();
-        history.pushState({}, {}, window.location.origin + window.location.pathname + '?' + serializeAllData);
-        $.ajax({
-            type: 'get',
-            url: actionURL,
-            data: serializeAllData,
-        }).done(function(){
-            location.reload();
-        })
-    });
-</script>
 @endsection

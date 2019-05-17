@@ -86,7 +86,7 @@
 <div class="content-container">
     <div class="row">
         <div class="col-lg-9">
-            <button class="btn btn-default back_btn"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+            <button class="btn btn-default back_btn redirect-link-btn" data-url="{{route('student.explore.index')}}"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
             <div class="desc__box">
                 <h2 style="color:#FF3900;">{{$getBooks[0]->title}}</h2>
                 <p>
@@ -100,7 +100,7 @@
                 <p style="margin-top: 50%; font-family: 'Quicksand', sans-serif; text-align: center;">Written by:</p>
                 <p style="text-align: center; font-family: 'Quicksand', sans-serif; color:#FF3900;">{{$getBooks[0]->author_name}}</p>
                 <p style="text-align: center; font-family: 'Quicksand', sans-serif;">{{$getBooks[0]->author_email}}</p>
-                <button type="button" class="btn btn-outline-secondary borrow_btn ml-2" data-id="{{$getBooks[0]->id}}">BORROW THIS BOOK</button>
+                <button type="button" class="btn btn-outline-secondary borrow_btn ml-2" data-id="{{$getBooks[0]->id}}" data-url="{{route("student.explore.borrowed-books-save")}}" data-token="{{csrf_token()}}">BORROW THIS BOOK</button>
             </div>
         </div>
     </div>
@@ -116,52 +116,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    $('button.back_btn').on('click',function(){
-        location.href="{{route('student.explore.index')}}";
-    });
-    $('button[type="button"].borrow_btn').on('click',function(){
-        swal({
-            title: "Confirmation",
-            text: "Borrow This Book?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((result) => {
-            if(result){
-                $.ajax({
-                    type: 'POST',
-                    url: '{{route("student.explore.borrowed-books-save")}}',
-                    data: {
-                        book_id: $(this).attr('data-id'),
-                        _token: "{{csrf_token()}}",
-                    },
-                    beforeSend: function(){
-                        $('button[type="button"].borrow_btn').html('<i class="fa fa-spinner fa-pulse"></i> Wait a moment.');
-                    },
-                    success:function(result){
-                        if(result['status'] == 'success'){
-                            swal({
-                                title: 'Success!',
-                                text: result['messages'],
-                                icon: result['status']
-                            }).then((result) => {
-                                location.href="{{route('student.explore.borrowed-books')}}";
-                            });
-                        }else{
-                            $('button[type="button"].borrow_btn').prop('disabled',false);
-                            swal({
-                                title: 'Error!',
-                                text: result['messages'],
-                                icon: result['status']
-                            })
-                        }
-                    }
-                }).done(function(){
-                    $('button[type="button"].borrow_btn').html('BORROW THIS BOOK');
-                });
-            }
-        });
-    });
-</script>
 @endsection

@@ -60,7 +60,7 @@
 <div class="content-container">
     <div class="row">
         <div class="col-lg-9">
-            <button type="button" class="btn btn-default back_btn"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-default back_btn redirect-link-btn" data-url="{{route('student.author.index')}}"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
             <div class="desc__box">
                 <img class="author_img" src="{{URL::asset('storage/uploads/authors/author-('.$getAuthors->id.')/'.$getAuthors->image)}}" alt="Image of {{$getAuthors->name}}" >
                 <div class="author_bio">
@@ -90,9 +90,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    $('button[type="button"].back_btn').on('click',function(){
-        location.href="{{route('student.author.index')}}";
-    });
-</script>
 @endsection
