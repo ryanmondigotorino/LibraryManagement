@@ -34,17 +34,8 @@
 <script src="{{ URL::asset('public/js/holder.min.js') }}"></script>
 <script src="{{ URL::asset('public/js/sweetalert.js') }}"></script>
 <script src="{{ URL::asset('public/js/jquery-validator.js') }}"></script>
-
+<script src="{{ URL::asset('public/js/includes/global-landing-form.class.js') }}"></script>
 <script>
-    $(document).ready(function(){
-        var path = window.location.pathname;
-        if(path.includes('login') || path.includes('sign-up')){
-            $('div.content1').addClass('d-none');
-        }else{
-            $('div.content1').removeClass('d-none');
-            $('body').addClass('landing_page');
-        }
-    });
     var myVar;
     function myFunction() {
         myVar = setTimeout(showPage, 100);
@@ -53,6 +44,7 @@
         document.getElementById("loader").style.display = "none";
         document.getElementById("myDiv").style.display = "block";
     }
+    GlobalForm.INIT();
 </script>
 @yield('pageJs')
 </html>

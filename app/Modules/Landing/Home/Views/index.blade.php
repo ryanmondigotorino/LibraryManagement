@@ -20,10 +20,6 @@
         </div>
     </div>
 @endsection
+
 @section('pageJs')
-<script>
-    $('button[type="button"].btn.btn-default').on('click',function(){
-        location.href="{{route('landing.home.login')}}";
-    });
-</script>
 @endsection
