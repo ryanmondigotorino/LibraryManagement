@@ -67,6 +67,10 @@
                                         <input type="date" class="form-control" max="{{date('Y-m-d',time())}}" name="book_published">
                                     </div>
                                     <div class="form-group">
+                                        <label for="Quantity">Quantity</label>
+                                        <input type="text" class="form-control" name="book_quantity" placeholder="Enter quantity (Qty..)">
+                                    </div>
+                                    <div class="form-group">
                                         <button class="btn btn-secondary global-books pull-right" type="submit"><span class="fa fa-plus"></span> Add</button>
                                     </div>
                                 </form>

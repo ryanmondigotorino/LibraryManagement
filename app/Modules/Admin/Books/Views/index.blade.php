@@ -11,11 +11,12 @@
                 <div class="card-body">
                     <div class="profile_content">
                         <div class="row">
-                            <div class="col-lg-10">
+                            <div class="col-lg-8">
                                 <h1 class="h2"><span class="fa fa-table"></span> Books</h1>
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-lg-4">
                                 <a href="{{route('admin.books.add-books')}}" class="btn btn-secondary"><span class="fa fa-plus"></span> Add Books</a>
+                                <a href="{{route('admin.books.inventory')}}" class="btn btn-secondary"><span class="fa fa-eye"></span> View Lists of Inventory</a>
                             </div>
                         </div><hr>
                         <div class="row">

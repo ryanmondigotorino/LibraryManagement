@@ -233,6 +233,30 @@ var GlobalTable = {
                         }
                     });
                 });
+                $('button[type="button"].add-book-quantity',row).on('click',function(){
+                    var id = $(this).attr('data-id');
+                    var title = $(this).attr('data-title');
+                    var quantity = $(this).attr('data-quantity');
+                    swal({
+                        title: "Confirmation",
+                        text: "Add quantity for this book?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    }).then((result) => {
+                        if(result){
+                            $('span.book-title').html(title);
+                            $('input[type="hidden"][name="book_id"]').val(id);
+                            $('span.current_quantity').html(quantity);
+                            $('div.modal#add-book-quantity').modal();
+                        }
+                    });
+                });
+                $('button[type="button"].remove-book-or-quantity',row).on('click',function(){
+                    var id = $(this).attr('data-id');
+                    $('input[type="hidden"][name="book_row_id"]').val(id);
+                    $('div.modal#remove-book-inventory').modal();
+                });
             }
         });
     },

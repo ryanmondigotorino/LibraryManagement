@@ -22,8 +22,6 @@ var GlobalForm = {
                     $(targetBtn).html('<i class="fa fa-spinner fa-pulse"></i> Processing..');
                 },
                 success:function(result){
-                    // console.log(result);
-                    // return false;
                     if(result['status'] == 'success'){
                         if(result['url'] == 'none'){
                             location.reload();

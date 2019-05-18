@@ -118,6 +118,7 @@ var GlobalImages = {
             formData.append('book_genre',$('select[name="book_genre"]').val());
             formData.append('book_description',$('textarea[name="book_description"]').val());
             formData.append('book_published',$('input[name="book_published"]').val());
+            formData.append('book_quantity',$('input[name="book_quantity"]').val());
             formData.append('_token',$('input[name="_token"]').val());
             if(url.includes('edit-books-save')){
                 formData.append('book_id',$('input[name="book_id"]').val());

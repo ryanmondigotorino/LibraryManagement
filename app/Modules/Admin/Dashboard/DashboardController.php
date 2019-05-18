@@ -184,7 +184,7 @@ class DashboardController extends Controller
             DB::commit();
             AL::audits('admin',$currentLoggedId,$request->ip(),'Add new '.$acctype.' ('.$username.')');
             $result['url'] = route('admin.dashboard.accounts.admins-account');
-            $result['message'] = 'Successfully added department!';
+            $result['message'] = 'Successfully added!';
             return $result;
         }catch(\Exception $e){
             $errors = json_decode($e->getMessage(), true);

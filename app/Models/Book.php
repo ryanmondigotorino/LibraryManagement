@@ -19,6 +19,8 @@ class Book extends BaseModel{
         'title',
         'description',
         'date_published',
+        'quantity',
+        'disperse',
     ];
 
     public static function rules($input = null){
@@ -30,6 +32,8 @@ class Book extends BaseModel{
             'title' => [ 'required','min:3' ],
             'description' => [ 'min:3' ],
             'date_published' => [ 'required' ],
+            'quantity' => [ 'required','numeric' ],
+            'disperse' => [ 'required','numeric' ],
         ];
 
         $data['messages'] = [
