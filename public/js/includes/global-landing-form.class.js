@@ -89,7 +89,7 @@ var GlobalForm = {
     LANDINGPAGELOADER: function(){
         $(document).ready(function(){
             var path = window.location.pathname;
-            if(path.includes('login') || path.includes('sign-up')){
+            if(path.includes('login') || path.includes('forgotpassword') || path.includes('sign-up')){
                 $('div.content1').addClass('d-none');
             }else{
                 $('div.content1').removeClass('d-none');

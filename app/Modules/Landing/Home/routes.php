@@ -10,4 +10,6 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Modules\Landing\Home','middl
     Route::post('/login-submit','HomeController@loginsubmit')->name('landing.home.login-submit');
     Route::post('/sign-up-submit','HomeController@signupsubmit')->name('landing.home.sign-up-submit');
     Route::post('/logout','HomeController@logout')->name('landing.home.logout');
+    Route::get('/forgotpassword','HomeController@forgotpassword')->name('landing.home.forgotpassword');
+    Route::post('/forgotpassword-email','HomeController@forgotpasswordemail')->name('landing.home.forgotpassword-email');
 });
