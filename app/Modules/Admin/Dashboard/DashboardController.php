@@ -262,10 +262,12 @@ class DashboardController extends Controller
             $btn_class = $acc_stat == 0 ? 'btn-success' : 'btn-danger';
             $btn_name = $acc_stat == 0 ? 'ACTIVATE' : 'DEACTIVATE';
 
+            $studImages = $value->image == null || $value->image == '' ? URL::asset('public/css/assets/noimage.png') : URL::asset('storage/uploads/profile_image/user('.$value->id.')/'.$value->image);
+            
             $middlename = $value->middlename == null || $value->middlename == '' ? ' ' : ' '.$value->middlename.' ';
             $array[$key]['student_num'] = $value->student_num;
             $array[$key]['line_status'] = $value->account_line == 1 ? '<img src="'.URL::asset('storage/uploads/account_line/online.png').'" alt="online" class="account_line"/>  Online' : '<img src="'.URL::asset('storage/uploads/account_line/offline.png').'" alt="online" class="account_line"/> Offline';
-            $array[$key]['image'] = '<img src="'.URL::asset('storage/uploads/profile_image/'.$value->image).'" alt="Profile Image" style="border-radius: 50%; width: 40px;height: 40px;"/>';
+            $array[$key]['image'] = '<img src="'.$studImages.'" alt="Profile Image" style="border-radius: 50%; width: 40px;height: 40px;"/>';
             $array[$key]['name'] = $value->firstname.$middlename.$value->lastname;
             $array[$key]['email'] = $value->email;
             $array[$key]['course_name'] = $value->name;
@@ -335,6 +337,8 @@ class DashboardController extends Controller
                 'date_registered' => time(),
             );
             $result = CF::model('Student')->saveData($students, true);
+            $result['url'] = route('admin.dashboard.accounts.students-account');
+            $result['message'] = 'Successfully added!';
             DB::commit();
             AL::audits('admin',$currentLoggedId,$request->ip(),'Add new student ('.$username.')');
             return $result;
