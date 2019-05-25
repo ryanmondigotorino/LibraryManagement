@@ -35,26 +35,19 @@
         </div>
         <div class="col-lg-6 mt-5 text-center login_form">
             <img class="logo" src="{{URL::asset('public/css/assets/mainfavicon.png')}}" alt="">
-            <h2 class="text-center bold login-title">WELCOME</h2>
+            <h2 class="text-center bold login-title">Forgot password</h2>
             <div class="row">
-                <div class="col-sm-7 col-lg-7 col-xl-8 text-center ml-auto mr-auto">
-                    <hr>
-                    <form action="{{route('landing.home.login-submit')}}" class="global-landing-form">
+                <div class="col-sm-7 col-lg-7 col-xl-8 text-center ml-auto mr-auto mt-5">
+                    <form action="{{route('landing.home.forgotpassword-email')}}" class="global-landing-form">
                         {{ csrf_field() }} 
                         <div class="form-group">
-                            <label for="email_username">Email or Username</label>
-                            <input type="text" class="form-control username" name="email_username" placeholder="Username or Email">
+                            <label for="email">Find account </label>
+                            <input type="text" class="form-control" name="email" placeholder="Enter your email">
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control password" name="password" placeholder="Password">
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="col-md-12 btn btn-default global-landing-form-btn" style="background-color:#800; color:#fff;" name="sbmt">LOGIN</button>
+                            <button type="submit" class="col-md-12 btn btn-default global-landing-form-btn" style="background-color:#800; color:#fff;" name="sbmt">Send request</button>
                         </div>
                     </form>
-                    <small>Don't have an account? <a href="{{route('landing.home.sign-up')}}" class="create_link"> REGISTER. </a></small>
-                    <br><small><a href="{{route('landing.home.forgotpassword')}}" class="create_link">Forgot passwoord? </a></small>
                 </div>
             </div>
         </div>

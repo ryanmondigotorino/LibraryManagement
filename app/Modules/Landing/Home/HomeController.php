@@ -82,7 +82,7 @@ class HomeController extends Controller
             }
         }else{
             $result['status'] = 'error';
-            $result['message'] = 'Invalid username or password!';   
+            $result['messages'] = 'Invalid username or password!';   
         }
         return $result;
     }
@@ -152,6 +152,38 @@ class HomeController extends Controller
         $customerDetails[0]->save();
         return redirect()->route('landing.home.login');
     }
+
+    public function forgotpassword(Request $request){
+        return view($this->render('logs.forgot-password'));
+    }
+
+    public function forgotpasswordemail(Request $request){
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email',
+        ]);
+        if($validator->fails()){
+            return array(
+                'status' => 'error',
+                'messages' => $validator->errors()->first()
+            );
+        }
+        $email = $request->email;
+        $getDetails = CF::model('Student')
+            ->where('email',$email);
+        if($getDetails->count() > 0){
+            return array(
+                'status' => 'success',
+                'message' => 'A confirmation email has been sent! please check your email.',
+                'url' => route('landing.home.login')
+            );
+        }else{
+            return array(
+                'status' => 'error',
+                'messages' => 'Email doesn\'t exists in our system'
+            );
+        }
+    }
+
     public function logout(Request $request){
         $guard = $request->guard;
         if(Auth::guard($guard)->check()){

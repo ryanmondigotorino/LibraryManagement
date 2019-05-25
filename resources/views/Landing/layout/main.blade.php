@@ -44,7 +44,6 @@
         document.getElementById("loader").style.display = "none";
         document.getElementById("myDiv").style.display = "block";
     }
-    GlobalForm.INIT();
 </script>
 @yield('pageJs')
 </html>
