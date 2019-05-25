@@ -36,6 +36,7 @@ class ExploreController extends Controller
                     'authors.email as author_email',
                     'authors.favorite_quote as author_quote'
                 )
+                ->whereNull('books.status')
                 ->leftjoin('authors','authors.id','books.author_id')
                 ->where(function($query) use ($request,$searched){
                     $query->orWhere('books.genre','like',"%".$searched."%");
@@ -61,6 +62,7 @@ class ExploreController extends Controller
                     'authors.email as author_email',
                     'authors.favorite_quote as author_quote'
                 )
+                ->whereNull('books.status')
                 ->leftjoin('authors','authors.id','books.author_id');
             $placeholder = '';
         }
@@ -81,6 +83,7 @@ class ExploreController extends Controller
                     'authors.email as author_email',
                     'authors.favorite_quote as author_quote'
                 )
+                ->whereNull('books.status')
                 ->leftjoin('authors','authors.id','books.author_id')
                 ->where(function($query) use ($request,$placeholderCategory){
                     $query->orWhere('books.genre','like',"%".$placeholderCategory."%");
@@ -112,6 +115,7 @@ class ExploreController extends Controller
                 'authors.email as author_email',
                 'authors.favorite_quote as author_quote'
             )
+            ->whereNull('books.status')
             ->leftjoin('authors','authors.id','books.author_id')
             ->where('books.id',$id)
             ->get();

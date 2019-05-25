@@ -125,47 +125,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    $('select[name="delete_action"]').on('change',function(){
-        var value = $(this).val(),
-            url = $(this).attr('data-url'),
-            id = $('input[type="hidden"][name="book_row_id"]').val()
-            token = $(this).attr('data-token');
-        if(value == 'delete_all'){
-            swal({
-                title: "Confirmation",
-                text: "Are you sure do you want to delete all quantity of books?",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            }).then((result) => {
-                if(result){
-                    $.ajax({
-                        type:"post",
-                        url: url,
-                        data:{
-                            id:id,
-                            _token: token
-                        },
-                        success:function(result){
-                            if(result['status'] == 'success'){
-                                swal({
-                                    title: 'Success!',
-                                    text: result['message'],
-                                    icon: result['status']
-                                }).then((result) => {
-                                    location.reload();
-                                });
-                            }
-                        }
-                    });
-                }
-            });
-        }else{
-            var id = $('input[type="hidden"][name="book_row_id"]').val()
-            $('div.modal#remove-book-inventory').modal('hide');
-            $('div.modal#enter-book-quantity-remove').modal();
-        }
-    });
-</script>
 @endsection

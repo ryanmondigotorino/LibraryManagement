@@ -2,10 +2,11 @@
 
 return [
     'student-nav-bar' => [
-        'HOME' => 'student.home.index',
-        'AUTHORS' => 'student.author.index',
-        'EXPLORE' => 'student.explore.index',
-        'CONTACT' => 'student.contact.index',
+        'HOME' => ['student.home.index'],
+        'PROFILE' => ['slug','student.home.profile'],
+        'AUTHORS' => ['student.author.index'],
+        'EXPLORE' => ['student.explore.index'],
+        'CONTACT' => ['student.contact.index'],
     ],
 
     'admin' => [

@@ -40,6 +40,7 @@
 <script src="{{ URL::asset('public/js/includes/global-landing-form.class.js') }}"></script>
 <script src="{{ URL::asset('public/js/includes/global-landing-search.class.js') }}"></script>
 <script src="{{ URL::asset('public/js/includes/global-landing-table.class.js') }}"></script>
+<script src="{{ URL::asset('public/js/includes/global-image-form.class.js') }}"></script>
 <script>
     var myVar;
     function myFunction() {
