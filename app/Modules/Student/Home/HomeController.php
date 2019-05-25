@@ -97,7 +97,7 @@ class HomeController extends Controller
             case 'jpg':
             case 'jpeg':
             case 'png':
-                $imageName = 'health_esperanza_'.time().'.'.$extension;
+                $imageName = 'library_management_'.time().'.'.$extension;
                 break;
             default:
                     $result['status'] = 'error';
