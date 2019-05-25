@@ -328,7 +328,6 @@ class DashboardController extends Controller
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
                 'lastname' => $request->lastname,
-                'image' => 'noimage.png',
                 'email' => $email,
                 'username' => $username,
                 'password' => bcrypt($request->confirm_password),
