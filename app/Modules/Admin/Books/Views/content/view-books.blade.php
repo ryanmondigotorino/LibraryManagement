@@ -39,7 +39,7 @@
                                 <h5>Books</h5><hr>
                                 <h6><b>Genre:</b>{{$getBooks->genre}}</h6><hr>
                                 <h6><b>Description: </b>{{$getBooks->description}}</h6>
-                                <button type="button" class="btn btn-secondary edit-book" data-url="{{route('admin.books.edit-books',$getBooks->id)}}" title="Edit Book" style="margin-top:1%;"><span class="fa fa-edit"></span> Edit Book</button>
+                                <button type="button" class="btn btn-secondary redirect-link-btn" data-url="{{route('admin.books.edit-books',$getBooks->id)}}" title="Edit Book" style="margin-top:1%;"><span class="fa fa-edit"></span> Edit Book</button>
                             </div>
                         </div><hr>
                     </div>
@@ -51,9 +51,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    $('button[type="button"].edit-book').on('click',function(){
-        location.href=$(this).attr('data-url');
-    });
-</script>
 @endsection

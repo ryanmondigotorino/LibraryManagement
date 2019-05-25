@@ -14,4 +14,9 @@ Route::group(['prefix' => 'books', 'namespace' => '\App\Modules\Admin\Books','mi
     Route::post('/admin.books.approved-borrowed','BooksController@approvedborrowed')->name('admin.books.approved-borrowed');
     Route::post('/admin.books.delete-borrowed','BooksController@deleteborrowed')->name('admin.books.delete-borrowed');
     Route::post('/admin.books.return-borrowed','BooksController@returnborrowed')->name('admin.books.return-borrowed');
+    Route::get('/inventory','BooksController@inventory')->name('admin.books.inventory');
+    Route::get('/get-inventory','BooksController@getinventory')->name('admin.books.get-inventory');
+    Route::post('/add-quantity-books','BooksController@addquantitybooks')->name('admin.books.add-quantity-books');
+    Route::post('/delete-all-quantity','BooksController@deleteallquantity')->name('admin.books.delete-all-quantity');
+    Route::post('/disperse-quantity','BooksController@dispersequantity')->name('admin.books.disperse-quantity');
 });

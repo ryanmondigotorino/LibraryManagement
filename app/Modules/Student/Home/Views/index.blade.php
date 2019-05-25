@@ -36,7 +36,7 @@
             </h3>
 
             <div class="input-group mt-4">
-                <form action="{{route('student.home.index')}}" class="search_book">
+                <form action="{{route('student.home.index')}}" class="global-search-form">
                     <div class="row">
                         <div class="col-lg-8">
                             <input type="text" class="form-control mr-5" autocomplete="off" placeholder="Search.." name="search" value="">
@@ -66,21 +66,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    $('.search_book').on('submit',function(event){
-        event.preventDefault();
-        var thisTarget = $(event.target);
-        var actionURL = thisTarget.attr('action');
-        var searchbarValue = $('input[name="search"]').val();
-        var serializeAllData = thisTarget.serialize();
-        history.pushState({}, {}, window.location.origin + window.location.pathname + '?' + serializeAllData);
-        $.ajax({
-            type: 'get',
-            url: actionURL,
-            data: serializeAllData,
-        }).done(function(){
-            location.reload();
-        })
-    });
-</script>
 @endsection

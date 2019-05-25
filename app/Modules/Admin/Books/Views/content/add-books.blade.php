@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-lg-2"></div>
                             <div class="col-lg-8">
-                                <form action="{{route('admin.books.add-books-save')}}" class="add-books">
+                                <form action="{{route('admin.books.add-books-save')}}" class="global-books">
                                     {{ csrf_field() }}
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -67,7 +67,11 @@
                                         <input type="date" class="form-control" max="{{date('Y-m-d',time())}}" name="book_published">
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn-secondary add-books pull-right" type="submit"><span class="fa fa-plus"></span> Add</button>
+                                        <label for="Quantity">Quantity</label>
+                                        <input type="text" class="form-control" name="book_quantity" placeholder="Enter quantity (Qty..)">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-secondary global-books pull-right" type="submit"><span class="fa fa-plus"></span> Add</button>
                                     </div>
                                 </form>
                             </div>
@@ -81,81 +85,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    var globalFrontImage;
-    var globalBackImage;
-    $('.btn_book-front-picture').on('click',function(){
-        $("input[type='file'][name='frontImage']").click();
-        $("input[type='file'][name='frontImage']").on('change', function(){
-            $('.item_image').css('opacity','1');
-            var reader = new FileReader();
-            reader.onload = function(e){
-                $('#book-front-picture').attr('src',e.target.result);
-            }
-            if($('input[type="file"][name="frontImage"]')[0]['files'][0]){
-                reader.readAsDataURL($("input[type='file'][name='frontImage']")[0]['files'][0]);
-                globalFrontImage = $("input[type='file'][name='frontImage']")[0]['files'][0];
-            }
-        });
-    });
-    $('.btn_book-back-picture').on('click',function(){
-        $("input[type='file'][name='backImage']").click();
-        $("input[type='file'][name='backImage']").on('change', function(){
-            $('.item_image').css('opacity','1');
-            var reader = new FileReader();
-            reader.onload = function(e){
-                $('#book-back-picture').attr('src',e.target.result);
-            }
-            if($('input[type="file"][name="backImage"]')[0]['files'][0]){
-                reader.readAsDataURL($("input[type='file'][name='backImage']")[0]['files'][0]);
-                globalBackImage = $("input[type='file'][name='backImage']")[0]['files'][0];
-            }
-        });
-    });
-    $('form.add-books').on('submit',function(event){
-        event.preventDefault();
-        var frontImage = globalFrontImage;
-        var backImage = globalBackImage;
-        var formData = new FormData();
-        formData.append('book_front',frontImage);
-        formData.append('book_back',backImage);
-        formData.append('book_author',$('select[name="book_author"]').val());
-        formData.append('book_title',$('input[name="book_title"]').val());
-        formData.append('book_genre',$('select[name="book_genre"]').val());
-        formData.append('book_description',$('textarea[name="book_description"]').val());
-        formData.append('book_published',$('input[name="book_published"]').val());
-        formData.append('_token','{{csrf_token()}}');
-        $.ajax({
-            type:'POST',
-            url: $(this).attr('action'),
-            data: formData,
-            contentType: false,
-            processData: false,
-            beforeSend:function(){
-                $('button[type="submit"].add-books').prop('disabled',true);
-                $('button[type="submit"].add-books').html('<i class="fa fa-spinner fa-pulse"></i>');
-            },
-            success: function(result){
-                if(result['status'] == 'success'){
-                    swal({
-                        title: 'Success!',
-                        text: result['messages'],
-                        icon: result['status']
-                    }).then((result) => {
-                        location.href="{{route('admin.books.index')}}";
-                    });
-                }else{
-                    $('button[type="submit"].add-books').prop('disabled',false);
-                    swal({
-                        title: 'Error!',
-                        text: result['messages'],
-                        icon: result['status']
-                    })
-                }
-            }
-        }).done(function(){
-            $('button[type="submit"].add-books').html('<span class="fa fa-plus"></span> Add');
-        });
-    });
-</script>
 @endsection

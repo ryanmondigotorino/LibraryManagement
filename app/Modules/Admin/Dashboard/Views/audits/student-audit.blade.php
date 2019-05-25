@@ -28,7 +28,7 @@
                         </div>
                         <div class="row mt-5">
                             <div class="col-lg-12">
-                                <table class="table table-striped table_shad table-bordered table-hover get-student-logs">
+                                <table class="table table-striped table_shad table-bordered table-hover global-audit-table for-student" data-url="{{route('admin.dashboard.accounts.get-student-logs')}}" data-loader="{{URL::asset("public/icons/loading.gif")}}">
                                     <thead>
                                         <tr>
                                             <th>No.</th>
@@ -57,63 +57,6 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
-    $(document).ready(function(){
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = today.getFullYear();
-        today = dd + '/' + mm + '/' + yyyy;
-        let params = new URLSearchParams(window.location.search);
-        let dateFrom = '';
-        let dateTo = '';
-        if(params.get("date") == undefined){
-            dateFrom = today
-            dateTo = today
-        }else{
-            dateFrom = params.get("date").split(' - ')[0];
-            dateTo = params.get("date").split(' - ')[1];
-        }
-        $('input[name="dates"]').daterangepicker({
-            opens : 'left',
-            applyButtonClasses : 'btn--teal',
-            cancelButtonClasses : 'btn-danger',
-            autoApply: true,
-            locale: { format: 'DD/MM/Y' },
-            startDate: dateFrom, 
-            endDate: dateTo
-        });
-        var dateSerialize = 'date=' + $("input[name='dates']").val();
-        history.pushState({}, {}, window.location.origin + window.location.pathname + '?' + dateSerialize);
-        $(".get-student-logs").DataTable({
-            responsive: true,
-            serverSide: true,
-            bPaginate: true,
-            searching: true,
-            autoWidth : false,
-            order: [[ 0, "desc" ]],
-            processing: true,
-            language: {
-                processing: '<img src="{{URL::asset("public/icons/loading.gif")}}" style="width:10%; margin-bottom:10px;">'
-            },
-            ajax: {
-                url: "{{route('admin.dashboard.accounts.get-student-logs')}}",
-                data:{
-                    datePicker: $("input[name='dates']").val(),
-                }
-            },
-            createdRow : function(row, data, dataIndex){
-                var thisRow = $(row);
-                thisRow.addClass('cntr');
-            },
-        });
-    });
-    $('.runSearch').on('click',function(event){
-        var dateSerialize = 'date=' + $("input[name='dates']").val();
-        history.pushState({}, {}, window.location.origin + window.location.pathname + '?' + dateSerialize);
-        location.reload();
-    });
-    $('.download-reports').on('click',function(){
-        window.open("/accounts/student-audit/download-xlsx"+window.location.search);
-    });
+    GlobalTable.AUDITS();
 </script>
 @endsection

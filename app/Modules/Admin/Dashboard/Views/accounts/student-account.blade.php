@@ -20,7 +20,7 @@
                         </div><hr>
                         <div class="row">
                             <div class="col-lg-12">
-                                <table class="table table-striped table_shad table-bordered table-hover get-students">
+                                <table class="table table-striped table_shad table-bordered table-hover global-accounts-table" data-url="{{route('admin.dashboard.accounts.get-students-account')}}" data-type="none" data-loader="{{URL::asset("public/icons/loading.gif")}}">
                                     <thead>
                                         <tr>
                                             <th>Student No.</th>
@@ -52,7 +52,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{route('admin.dashboard.accounts.add-students-account')}}" class="add-students-form">@csrf
+                <form action="{{route('admin.dashboard.accounts.add-students-account')}}" class="global-landing-form">@csrf
                     <div class="form-group">
                         <label for="coursename">Course Name</label>
                         <select name="coursename" class="form-control">
@@ -102,7 +102,7 @@
                     <input type="hidden" name="account_status" value="students">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-                        <button type="submit" class="btn btn-secondary create-students">Create Students</button>
+                        <button type="submit" class="btn btn-secondary global-landing-form-btn">Create Students</button>
                     </div>
                 </form>
             </div>
@@ -112,105 +112,4 @@
 @endsection
 
 @section('pageJs')
-<script>
-    $(document).ready(function(){
-        $(".get-students").DataTable({
-            responsive: true,
-            serverSide: true,
-            bPaginate: true,
-            searching: true,
-            autoWidth : false,
-            order: [[ 0, "desc" ]],
-            processing: true,
-            language: {
-                processing: '<img src="{{URL::asset("public/icons/loading.gif")}}" style="width:10%; margin-bottom:10px;">'
-            },
-            ajax: {
-                url: "{{route('admin.dashboard.accounts.get-students-account')}}",
-            },
-            createdRow : function(row, data, dataIndex){
-                var thisRow = $(row);
-                thisRow.addClass('cntr');
-            },
-        });
-    });
-    $('.add-students-account').on('click',function(){
-        $('#add-students-modal').modal();
-    });
-    $('.add-students-form').on('submit',function(event){
-        event.preventDefault();
-        $.ajax({
-            type: 'POST',
-            url : $(this).attr('action'),
-            data: $(this).serialize(),
-            beforeSend: function(){
-                $('button[type="submit"].create-students').prop('disabled',true);
-                $('button[type="submit"].create-students').html('<i class="fa fa-spinner fa-pulse"></i> Processing');
-            },
-            success: function(result){
-                if(result['status'] == 'error'){
-                    $('button[type="submit"].create-students').prop('disabled',false);
-                    $('button[type="submit"].create-students').html('Create Students');
-                    swal({
-                        title: "Error!",
-                        text: result['messages'],
-                        icon: result['status'],
-                    });
-                }else{
-                    $('button[type="submit"].create-students').html('Create Students');
-                    swal({
-                        title: "Success",
-                        text: result['messages'],
-                        icon: result['status'],
-                    }).then((resultStatus) => {
-                        location.reload();
-                    });
-                }
-            }
-        });
-    });
-    function changeStat(id,acc_stat){
-        var status;
-        if(acc_stat == 0){
-            status = "Activate Account?"
-        }else{
-            status = "Deactivate Account?"
-        }
-        swal({
-            title: "Confirmation",
-            text: status,
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((result) => {
-            if(result){
-                $.ajax({
-                    type:"POST",
-                    url:"{{route('admin.dashboard.accounts.change-acc-stat')}}",
-                    data:{
-                        'id': id,
-                        'acc_stat':acc_stat,
-                        'model': 'Student',
-                        '_token': '{{csrf_token()}}'
-                    },
-                    success:function(getResult){
-                        var text = "";
-                        if(getResult == 0){
-                            text = "Status Successfully Deactivate!";
-                        }else{
-                            text = "Status Successfully Activate!";
-                        }
-                        swal({
-                            title: "Success",
-                            text: text,
-                            icon: "success",
-                        }).then((resultStatus) => {
-                            location.reload();
-                        });
-                    }
-                });
-            }
-        });
-    }
-</script>
 @endsection

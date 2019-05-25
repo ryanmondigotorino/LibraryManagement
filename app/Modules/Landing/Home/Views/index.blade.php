@@ -16,14 +16,10 @@
             </p>
         </div>
         <div class="login_button">
-            <button type="button" class="btn btn-default btn-lg">LOG-IN</button>
+            <button type="button" class="btn btn-default redirect-link-btn btn-lg" data-url="{{route('landing.home.login')}}">LOG-IN</button>
         </div>
     </div>
 @endsection
+
 @section('pageJs')
-<script>
-    $('button[type="button"].btn.btn-default').on('click',function(){
-        location.href="{{route('landing.home.login')}}";
-    });
-</script>
 @endsection

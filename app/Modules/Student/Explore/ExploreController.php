@@ -36,6 +36,7 @@ class ExploreController extends Controller
                     'authors.email as author_email',
                     'authors.favorite_quote as author_quote'
                 )
+                ->whereNull('books.status')
                 ->leftjoin('authors','authors.id','books.author_id')
                 ->where(function($query) use ($request,$searched){
                     $query->orWhere('books.genre','like',"%".$searched."%");
@@ -61,6 +62,7 @@ class ExploreController extends Controller
                     'authors.email as author_email',
                     'authors.favorite_quote as author_quote'
                 )
+                ->whereNull('books.status')
                 ->leftjoin('authors','authors.id','books.author_id');
             $placeholder = '';
         }
@@ -81,6 +83,7 @@ class ExploreController extends Controller
                     'authors.email as author_email',
                     'authors.favorite_quote as author_quote'
                 )
+                ->whereNull('books.status')
                 ->leftjoin('authors','authors.id','books.author_id')
                 ->where(function($query) use ($request,$placeholderCategory){
                     $query->orWhere('books.genre','like',"%".$placeholderCategory."%");
@@ -112,6 +115,7 @@ class ExploreController extends Controller
                 'authors.email as author_email',
                 'authors.favorite_quote as author_quote'
             )
+            ->whereNull('books.status')
             ->leftjoin('authors','authors.id','books.author_id')
             ->where('books.id',$id)
             ->get();
@@ -181,13 +185,13 @@ class ExploreController extends Controller
             $array[$key]['student_name'] = $value->firstname.$middlename.$value->lastname;
             $array[$key]['books'] = $book['title'];
             $array[$key]['date_return'] = date('M j Y',$value->return_in);
-            $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : $value->penalty;
+            $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : 'P. '.number_format($value->penalty,2).' pesos';
             $array[$key]['borrowed_status'] = $value->borrowed_status;
             $btn_pending = $value->borrowed_status == 'approved' || $value->borrowed_status == 'returned' ? 'd-none' : '';
             $btn_renew = $value->borrowed_status == 'approved'? '' : 'd-none';
             $array[$key]['button'] = '
-                <button class="btn btn-success '.$btn_renew.' renew-'.$value->id.'" onclick="renewBorrow('.$value->id.');"><span class="fa fa-plus"></span> Renew Borrow</button>
-                <button class="btn btn-danger '.$btn_pending.' borrow-'.$value->id.'" onclick="deleteBorrow('.$value->id.');"><span class="fa fa-remove"></span> Cancel Borrow</button>
+                <button type="button" class="btn btn-success '.$btn_renew.' renew-'.$value->id.' renew-borrow" data-id="'.$value->id.'"><span class="fa fa-plus"></span> Renew Borrow</button>
+                <button type="button" class="btn btn-danger '.$btn_pending.' borrow-'.$value->id.' delete-borrow" data-id="'.$value->id.'" data-token="'.csrf_token().'" data-url="'.route("student.explore.borrowed-books-cancel").'"><span class="fa fa-remove"></span> Cancel Borrow</button>
             ';
         }
         $totalCount = count($array);
@@ -240,6 +244,7 @@ class ExploreController extends Controller
                 'borrowed_status' => 'pending'
             );
             $result = CF::model('Borrow')->saveData($borrowed_books, true);
+            $result['url'] = route('student.explore.borrowed-books');
             AL::audits('student',$currentLoggedId,$request->ip(),'Borrow Book');
             DB::commit();
             return $result;

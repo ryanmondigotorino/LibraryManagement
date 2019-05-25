@@ -14,6 +14,7 @@ use View;
 use DB;
 use URL;
 use Browser;
+use Validator;
 
 class BooksController extends Controller
 {
@@ -39,6 +40,7 @@ class BooksController extends Controller
                 'authors.email as author_email',
                 'authors.favorite_quote as author_quote'
             )
+            ->whereNull('books.status')
             ->leftjoin('authors','authors.id','books.author_id');
         return view($this->render('index'),compact('getBooks'));
     }
@@ -100,6 +102,8 @@ class BooksController extends Controller
                     'added_by' => $currentLoggedId->id,
                     'front_image' => $frontImageName,
                     'back_image' => $backImageName,
+                    'quantity' => $request->book_quantity,
+                    'disperse' => 0,
                     'author_id' => $request->book_author,
                     'genre' => $request->book_genre,
                     'title' => $bookTitle,
@@ -111,6 +115,7 @@ class BooksController extends Controller
                 Storage::disk('uploads')->putFileAs('uploads/book_images/book-('.$getBookId.')',$back_image_file,$backImageName);
                 AL::audits('admin',$currentLoggedId,$request->ip(),'Add book ('.$bookTitle.')');
                 DB::commit();
+                $result['url'] = route('admin.books.index');
                 return $result;
             }catch(\Exception $e){
                 $errors = json_decode($e->getMessage(), true);
@@ -209,7 +214,8 @@ class BooksController extends Controller
         AL::audits('admin',$currentLoggedId,$request->ip(),'Edit book ('.$bookTitle.')');
         return [
             'status' => 'success',
-            'messages' => 'Book Successfully Updated'
+            'messages' => 'Book Successfully Updated',
+            'url' => route('admin.books.index')
         ];
     }
     
@@ -280,14 +286,14 @@ class BooksController extends Controller
             $array[$key]['student_name'] = $value->firstname.$middlename.$value->lastname;
             $array[$key]['books'] = $book['title'];
             $array[$key]['date_return'] = date('M j Y',$value->return_in);
-            $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : $value->penalty;
+            $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : 'P. '.number_format($value->penalty,2).' pesos';
             $array[$key]['borrowed_status'] = $value->borrowed_status;
             $btn_status = $value->borrowed_status == 'approved' || $value->borrowed_status == 'returned' ? 'd-none' : '';
             $btn_approved = $value->borrowed_status == 'approved' ? '' : 'd-none';
             $array[$key]['button'] = '
-                <button class="btn btn-success '.$btn_approved.' return-'.$value->id.'" onclick="returnBorrow('.$value->id.');"><span class="fa fa-sign-out"></span> Mark Return</button>
-                <button class="btn btn-success '.$btn_status.'" onclick="approveBorrow('.$value->id.');"><span class="fa fa-check"></span></button>
-                <button class="btn btn-danger '.$btn_status.' borrow-'.$value->id.'" onclick="deleteBorrow('.$value->id.');"><span class="fa fa-trash"></span></button>
+                <button type="button" class="btn btn-success '.$btn_approved.' return-'.$value->id.' return-borrow" data-id="'.$value->id.'" data-url="'.route('admin.books.return-borrowed').'" data-token="'.csrf_token().'"><span class="fa fa-sign-out"></span> Mark Return</button>
+                <button type="button" class="btn btn-success '.$btn_status.' approve-borrow" data-id="'.$value->id.'"><span class="fa fa-check"></span></button>
+                <button type="button" class="btn btn-danger '.$btn_status.' borrow-'.$value->id.' delete-borrow" data-id="'.$value->id.'" data-url="'.route('admin.books.delete-borrowed').'" data-token="'.csrf_token().'"><span class="fa fa-trash"></span></button>
             ';
         }
         $totalCount = count($array);
@@ -331,7 +337,8 @@ class BooksController extends Controller
         $getBorrowedDetails->save();
         return array(
             'status' => 'success',
-            'messages' => 'Borrow details succesfully approved!'
+            'messages' => 'Borrow details succesfully approved!',
+            'url' => route('admin.books.index')
         );
     }
 
@@ -358,6 +365,150 @@ class BooksController extends Controller
         return array(
             'status' => 'success',
             'messages' => 'Borrow details succesfully deleted!'
+        );
+    }
+    
+    public function inventory(Request $request){
+        return view($this->render('content.inventory'));
+    }
+
+    public function getinventory(Request $request){
+        $start = $request->start;
+        $length = $request->length;
+        $columns = [
+            'books.id',
+            'authors.name',
+            'books.title',
+            'books.genre',
+            'books.date_published',
+            'books.quantity',
+            'books.disperse',
+            'books.id',
+        ];
+        $booksDetails = CF::model('Book')
+            ->select(
+                'books.id',
+                'authors.name as author_name',
+                'books.title',
+                'books.genre',
+                'books.date_published',
+                'books.quantity',
+                'books.disperse'
+            )
+            ->whereNull('books.status')
+            ->leftjoin('authors','authors.id','books.author_id');
+
+        $booksDetailsCount = $booksDetails->count();
+        $booksDetails = $booksDetails->where(function($query) use ($request){
+            $query
+                ->orWhere('books.id','LIKE',"%".$request->search['value']."%")
+                ->orWhere('authors.name','LIKE',"%".$request->search['value']."%")
+                ->orWhere('books.title','LIKE',"%".$request->search['value']."%")
+                ->orWhere('books.genre','LIKE',"%".$request->search['value']."%");
+        })
+        ->offset($start)
+        ->limit($length)
+        ->orderBy($columns[$request->order[0]['column']],$request->order[0]['dir'])
+        ->get();
+
+        $array = $result = [];
+
+        foreach($booksDetails as $key => $value){
+            $array[$key]['id'] = $value->id;
+            $array[$key]['author_name'] = $value->author_name;
+            $array[$key]['book_title'] = $value->title;
+            $array[$key]['genre'] = $value->genre;
+            $array[$key]['date_published'] = date('M j Y',$value->date_published);
+            $array[$key]['book_qty'] = $value->quantity;
+            $array[$key]['book_disperse'] = $value->disperse;
+            $array[$key]['button'] = '
+                <button type="button" class="btn btn-success add-book-quantity" data-id="'.$value->id.'" data-title="'.$value->title.'" data-quantity="'.$value->quantity.'"><span class="fa fa-plus"></span></button>
+                <button type="button" class="btn btn-danger remove-book-or-quantity" data-id="'.$value->id.'"><span class="fa fa-trash"></span></button>
+            ';
+        }
+        $totalCount = count($array);
+        $result['book_details'] = $array;
+        $data = [];
+
+        foreach($result['book_details'] as $key => $value){
+            $dataOutput = [
+                $value['id'],
+                $value['author_name'],
+                $value['book_title'],
+                $value['genre'],
+                $value['date_published'],
+                $value['book_qty'],
+                $value['book_disperse'],
+                $value['button'],
+            ];
+            $data[] = $dataOutput;
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => $totalCount,
+            "recordsFiltered" => $booksDetailsCount,
+            "data"            => $data
+            );
+            
+        return json_encode($json_data); 
+    }
+
+    public function addquantitybooks(Request $request){
+        $getBookDetails = CF::model('Book')::find($request->book_id);
+        $validator = Validator::make($request->all(),[
+            'quantity' => 'required|numeric'
+        ]);
+        if($validator->fails()){
+            return array(
+                'status' => 'error',
+                'messages' => $validator->errors()->first()
+            );
+        }
+        $getBookDetails->quantity = ($getBookDetails->quantity + $request->quantity);
+        $getBookDetails->save();
+        return [
+            'status' => 'success',
+            'url' => route('admin.books.inventory'),
+            'message' => 'Quantity successfully added!'
+        ];
+    }
+    public function deleteallquantity(Request $request){
+        $getBookDetails = CF::model('Book')::find($request->id);
+        $getBookDetails->status = 0;
+        $getBookDetails->save();
+        return array(
+            'status' => 'success',
+            'message' => 'Books are successfully deleted!'
+        );
+    }
+
+    public function dispersequantity(Request $request){
+        $id = $request->book_row_id;
+        $quantity = $request->remove_quantity;
+        $getBookDetails = CF::model('Book')::find($id);
+        $validator = Validator::make($request->all(),[
+            'remove_quantity' => 'required|numeric'
+        ]);
+        if($validator->fails()){
+            return array(
+                'status' => 'error',
+                'messages' => $validator->errors()->first()
+            );
+        }
+        $getMinQuan = ($getBookDetails->quantity - $quantity);
+        if($getMinQuan < 0){
+            return array(
+                'status' => 'error',
+                'messages' => 'your input must be less than or equal, than the actual quantity'
+            ); 
+        }
+        $getBookDetails->quantity = $getMinQuan;
+        $getBookDetails->disperse = ($getBookDetails->disperse + $quantity);
+        $getBookDetails->save();
+        return array(
+            'status' => 'success',
+            'message' => 'Quantity successfully updated!',
+            'url' => route('admin.books.inventory')
         );
     }
 }

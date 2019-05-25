@@ -103,7 +103,7 @@ class DashboardController extends Controller
             $array[$key]['email'] = $value->email;
             $array[$key]['date_registered'] = date('M j Y',$value->date_registered);
             $array[$key]['buttons'] = "
-                <button class='acc_stat btn ".$btn_class." box_shad' onclick='changeStat(".$value->id.",".$acc_stat.");'>".$btn_name."</button>
+            <button type='button' class='acc_stat btn ".$btn_class." box_shad change-stat' data-id='".$value->id."' data-stat='".$acc_stat."' data-model='Admin' data-url='".route('admin.dashboard.accounts.change-acc-stat')."' data-token='".csrf_token()."'>".$btn_name."</button>
             ";
         }
         $totalCount = count($array);
@@ -183,6 +183,8 @@ class DashboardController extends Controller
             $result = CF::model('Admin')->saveData($admin, true);
             DB::commit();
             AL::audits('admin',$currentLoggedId,$request->ip(),'Add new '.$acctype.' ('.$username.')');
+            $result['url'] = route('admin.dashboard.accounts.admins-account');
+            $result['message'] = 'Successfully added!';
             return $result;
         }catch(\Exception $e){
             $errors = json_decode($e->getMessage(), true);
@@ -269,7 +271,7 @@ class DashboardController extends Controller
             $array[$key]['course_name'] = $value->name;
             $array[$key]['department_name'] = $value->department_name;
             $array[$key]['buttons'] = "
-                <button class='acc_stat btn ".$btn_class." box_shad' onclick='changeStat(".$value->id.",".$acc_stat.");'>".$btn_name."</button>
+                <button type='button' class='acc_stat btn ".$btn_class." box_shad change-stat' data-id='".$value->id."' data-stat='".$acc_stat."' data-model='Student' data-url='".route('admin.dashboard.accounts.change-acc-stat')."' data-token='".csrf_token()."'>".$btn_name."</button>
             ";
         }
         $totalCount = count($array);

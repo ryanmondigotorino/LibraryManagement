@@ -2,7 +2,7 @@
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{{route('admin.dashboard.index')}}">Welcome! {{$base_data->account_type == 'librarian' ? 'Librarian' : 'Admin'}} {{$base_data->firstname}}</a>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link logout_click" href="#">Sign out</a>
+            <a class="nav-link logout_click" href="#" data-url="{{route("landing.home.logout")}}" data-id="{{$base_data->id}}" data-guard="admin" data-model="Admin" data-token="{{ csrf_token() }}">Sign out</a>
         </li>
     </ul>
 </nav>
@@ -10,142 +10,25 @@
     <div class="row">
         <nav class="col-md-3 col-lg-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span class="navHead">Home</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.dashboard.index')}}">
-                            <span class="fa fa-home"></span>
-                            Dashboard 
+                @foreach(config('nav-bars.'.$base_data->account_type) as $nav_key => $nav_value)
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span class="navHead">{{$nav_key}}</span>
+                        <a class="d-flex align-items-center text-muted" href="#">
+                            <span data-feather="plus-circle"></span>
                         </a>
-                    </li>
-                </ul>
-                <h6 class="{{$base_data->account_type == 'librarian' ? 'd-none' : 'sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted'}}">
-                    <span class="navHead">Accounts Management</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column {{$base_data->account_type == 'librarian' ? 'd-none' : ''}}">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.dashboard.accounts.admins-account')}}">
-                            <span class="fa fa-user-secret"></span>
-                            Admins Account 
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.dashboard.accounts.librarian-account')}}">
-                            <span class="fa fa-book"></span>
-                            Librarian Account 
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.dashboard.accounts.students-account')}}">
-                            <span class="fa fa-users"></span>
-                            Students Account
-                        </a>
-                    </li>
-                </ul>
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span class="navHead">Books</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.books.index')}}">
-                            <span class="fa fa-book"></span>
-                            View Books
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.books.borrowed')}}">
-                            <span class="fa fa-check"></span>
-                            Borrowed
-                        </a>
-                    </li>
-                </ul>
-                <h6 class="{{$base_data->account_type == 'librarian' ? 'd-none' : 'sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted'}}">
-                    <span class="navHead">Course</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column {{$base_data->account_type == 'librarian' ? 'd-none' : ''}}">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.course.index')}}">
-                            <span class="fa fa-table"></span>
-                            View Courses
-                        </a>
-                    </li>
-                </ul>
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span class="navHead">Author</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.author.index')}}">
-                            <span class="fa fa-table"></span>
-                            View Authors
-                        </a>
-                    </li>
-                </ul>
-                <h6 class="{{$base_data->account_type == 'librarian' ? 'd-none' : 'sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted'}}">
-                    <span class="navHead">Department</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column {{$base_data->account_type == 'librarian' ? 'd-none' : ''}}">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.department.index')}}">
-                            <span class="fa fa-table"></span>
-                            View Departments
-                        </a>
-                    </li>
-                </ul>
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span class="navHead">Audit Logs</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link {{$base_data->account_type == 'librarian' ? 'd-none' : ''}}" href="{{route('admin.dashboard.accounts.admin-audit')}}">
-                            <span class="fa fa-table"></span>
-                            View Admin Audit
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.dashboard.accounts.student-audit')}}">
-                            <span class="fa fa-table"></span>
-                            View Student Audit
-                        </a>
-                    </li>
-                </ul>
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span class="navHead">Reports</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.reports.index')}}">
-                            <span class="fa fa-table"></span>
-                            View Reports
-                        </a>
-                    </li>
-                </ul>
+                    </h6>
+                    @foreach(config('nav-bars.'.$base_data->account_type.'.'.$nav_key) as $key_content => $content_nav)
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                @php $route = isset($content_nav['slug']) ? route($content_nav['route'],$content_nav['slug']) : route($content_nav['route']) @endphp
+                                <a class="nav-link" href="{{$route}}">
+                                    <span class="{{$content_nav['icon']}}"></span>
+                                    {{$key_content}} 
+                                </a>
+                            </li>
+                        </ul>
+                    @endforeach
+                @endforeach
             </div>
         </nav>
     </div>

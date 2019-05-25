@@ -72,16 +72,17 @@ class HomeController extends Controller
                     AL::audits('student',$user,$request->ip(),'Logged-in');
                 }
                 $result['status'] = 'success';
-                $result['msg'] = 'Login Successful';
+                $result['url'] = 'none';
+                $result['message'] = 'Login Successful';
             }else{
                 $result['status'] = 'warning';
-                $result['msg'] = 'Your account was not activated! Please check your email.';
+                $result['message'] = 'Your account was not activated! Please check your email.';
                 Auth::guard('student')->logout();
                 Auth::guard('admin')->logout();
             }
         }else{
             $result['status'] = 'error';
-            $result['msg'] = 'Invalid username or password!';   
+            $result['message'] = 'Invalid username or password!';   
         }
         return $result;
     }
@@ -125,6 +126,9 @@ class HomeController extends Controller
                 'email' => $email
             );
             Mail::to($email)->send(new SendEmailVerification($data));
+            $result['status'] = 'success';
+            $result['url'] = route('landing.home.login');
+            $result['message'] = 'Signup Successful. Please check your email for account verification.';
             return $result;
         }catch(\Exception $e){
             $errors = json_decode($e->getMessage(), true);

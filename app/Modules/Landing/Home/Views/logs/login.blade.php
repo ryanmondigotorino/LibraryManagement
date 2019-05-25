@@ -39,7 +39,7 @@
             <div class="row">
                 <div class="col-sm-7 col-lg-7 col-xl-8 text-center ml-auto mr-auto">
                     <hr>
-                    <form class="loginClick">
+                    <form action="{{route('landing.home.login-submit')}}" class="global-landing-form">
                         {{ csrf_field() }} 
                         <div class="form-group">
                             <label for="email_username">Email or Username</label>
@@ -50,7 +50,7 @@
                             <input type="password" class="form-control password" name="password" placeholder="Password">
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="col-md-12 btn btn-default login_button" style="background-color:#800; color:#fff;" name="sbmt">LOGIN</button>
+                            <button type="submit" class="col-md-12 btn btn-default global-landing-form-btn" style="background-color:#800; color:#fff;" name="sbmt">LOGIN</button>
                         </div>
                     </form>
                     <small>Don't have an account? <a href="{{route('landing.home.sign-up')}}" class="create_link"> REGISTER. </a></small>
@@ -64,41 +64,4 @@
 
 
 @section('pageJs')
-<script>
-    $('.loginClick').on('submit',function(event){
-        event.preventDefault();
-        $.ajax({
-            type:"POST",
-            url:"{{route('landing.home.login-submit')}}",
-            data: $(this).serialize(),
-            beforeSend: function(){
-                $("button[type='submit']").prop('disabled',true);
-                $("button[type='submit']").html('<i class="fa fa-spinner fa-pulse"></i> Processing');
-            },
-            success: function(result){
-                if(result['status'] == 'success'){
-                    location.reload();
-                }else if(result['status'] == 'warning'){
-                    $("button[type='submit']").prop('disabled',false);
-                    swal({
-                        title: "Warning",
-                        text: result['msg'],
-                        icon: result['status'],
-                        button: "Ok",
-                    });
-                }else{
-                    $("button[type='submit']").prop('disabled',false);
-                    swal({
-                        title: "Error",
-                        text: result['msg'],
-                        icon: result['status'],
-                        button: "Ok",
-                    });
-                }
-            }
-        }).done(function(){
-            $("button[type='submit']").html('Login')
-        });
-    });
-</script>
 @endsection

@@ -37,35 +37,11 @@
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-
+<script src="{{ URL::asset('public/js/includes/global-landing-form.class.js') }}"></script>
+<script src="{{ URL::asset('public/js/includes/global-landing-search.class.js') }}"></script>
+<script src="{{ URL::asset('public/js/includes/global-landing-table.class.js') }}"></script>
+<script src="{{ URL::asset('public/js/includes/global-image-form.class.js') }}"></script>
 <script>
-    $('.logout_click').on('click',function(){
-        swal({
-            title: "Confirmation",
-            text: "Logout now?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((result) => {
-            if(result){
-                $.ajax({
-                    type: 'POST',
-                    url: '{{route("landing.home.logout")}}',
-                    data: {
-                        guard: 'student',
-                        model: 'Student',
-                        id: '{{Auth::guard("student")->user()->id}}',
-                        _token : "{{ csrf_token() }}"
-                    },
-                    success:function(result){
-                        if(result == 'success'){
-                            window.location.href = "{{route('landing.home.index')}}";
-                        }
-                    }
-                });
-            }
-        });
-    });
     var myVar;
     function myFunction() {
         myVar = setTimeout(showPage, 100);

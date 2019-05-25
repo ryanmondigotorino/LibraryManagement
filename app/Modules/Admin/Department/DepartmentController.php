@@ -56,8 +56,8 @@ class DepartmentController extends Controller
             $array[$key]['department_name'] = $value->department_name;
             $array[$key]['created_at'] = date('M j Y',strtotime($value->created_at));
             $array[$key]['button'] = '
-                <button class="btn btn-secondary" onclick="editdepartment('.$value->id.',\''.$value->department_name.'\');"><span class="fa fa-edit"></span></button>
-                <button class="btn btn-danger department-'.$value->id.'" onclick="deletedepartment('.$value->id.',\''.$value->department_name.'\');"><span class="fa fa-trash"></span></button>
+                <button type="button" class="btn btn-secondary edit-department" data-id="'.$value->id.'"><span class="fa fa-edit"></span></button>
+                <button type="button" class="btn btn-danger department-'.$value->id.' delete-department" data-id="'.$value->id.'" data-url="'.route('admin.department.delete-department').'" data-token="'.csrf_token().'" data-name="'.$value->department_name.'"><span class="fa fa-trash"></span></button>
             ';
         }
 
@@ -96,6 +96,8 @@ class DepartmentController extends Controller
             $result = CF::model('Department')->saveData($department, true);
             DB::commit();
             AL::audits('admin',$currentLoggedId,$request->ip(),'Add new department ('.$departmentName.')');
+            $result['url'] = route('admin.department.index');
+            $result['message'] = 'Successfully added department!';
             return $result;
         }catch(\Exception $e){
             $errors = json_decode($e->getMessage(), true);
@@ -105,7 +107,7 @@ class DepartmentController extends Controller
             }
             $result = [
                 'status' => 'error',
-                'message' => implode("\n",$display_errors)
+                'messages' => implode("\n",$display_errors)
             ];
             DB::rollBack();
             return $result;
@@ -123,7 +125,7 @@ class DepartmentController extends Controller
         if($validateDepartment > 0){
             return array(
                 'status' => 'error',
-                'messages' => 'The Department name is already taken'
+                'message' => 'The Department name is already taken'
             );
         }
         $departmentDetails = CF::model('Department')::find($request->departmentid);
@@ -133,7 +135,8 @@ class DepartmentController extends Controller
         $departmentDetails->save();
         return array(
             'status' => 'success',
-            'messages' => 'Department successfully Edited!'
+            'url' => route('admin.department.index'),
+            'message' => 'Department successfully Edited!'
         );
     }
 

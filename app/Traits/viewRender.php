@@ -24,7 +24,9 @@ trait ViewRender {
             }
             if (Auth::guard('student')->check()){
                 $user =  Auth::guard('student')->user();
+                $middlename = $user->middlename == null || $user->middlename == '' ? ' ' : ' '.$user->middlename.' ';
                 \View::share('base_data', $user);
+                \View::share('middlename', $middlename);
             }
         }
     }

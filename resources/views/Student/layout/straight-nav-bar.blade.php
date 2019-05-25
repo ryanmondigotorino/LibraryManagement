@@ -2,26 +2,13 @@
     <div class="sidebar-sticky">
         <h5 class="my-0 mr-1 font-weight-normal"><img src="{{URL::asset('storage/uploads/app_images/mainfavicon.png')}}" class="img-fluid" ></h5>
         <ul class="nav flex-column mt-5">
-            <li class="nav-item">
-                <a class="nav-link sidebar-font-text" href="{{route('student.home.index')}}">
-                    HOME
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link sidebar-font-text" href="{{route('student.author.index')}}">
-                    AUTHORS
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link sidebar-font-text" href="{{route('student.explore.index')}}">
-                    EXPLORE
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link sidebar-font-text" href="{{route('student.contact.index')}}">
-                    CONTACT
-                </a>
-            </li>
+            @foreach(config('nav-bars.student-nav-bar') as $key => $value)
+                <li class="nav-item">
+                    <a class="nav-link sidebar-font-text" href="{{count($value) == 1 ? route($value[0]) : route($value[1],$base_data->username)}}">
+                        {{$key}}
+                    </a>
+                </li>
+            @endforeach
         </ul>        
     </div>
 </nav>
