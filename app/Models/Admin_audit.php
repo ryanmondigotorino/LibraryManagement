@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 use App\Models\BaseModel;
-
+/**
+ * ------------------------------------------------------------------------------------------
+ * -    This is the Admin_audit
+ * ------------------------------------------------------------------------------------------
+ */
 class Admin_audit extends BaseModel{
     use SoftDeletes;
     protected $fillable = [
