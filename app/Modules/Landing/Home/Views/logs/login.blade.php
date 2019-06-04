@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="col-lg-6 mt-5 text-center login_form">
-            <img class="logo" src="{{URL::asset('public/css/assets/mainfavicon.png')}}" alt="">
+            <a href="{{route('landing.home.index')}}"><img class="logo" src="{{URL::asset('public/css/assets/mainfavicon.png')}}" alt=""></a>
             <h2 class="text-center bold login-title">WELCOME</h2>
             <div class="row">
                 <div class="col-sm-7 col-lg-7 col-xl-8 text-center ml-auto mr-auto">

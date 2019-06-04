@@ -94,11 +94,11 @@ class DashboardController extends Controller
             $acc_stat = $value->account_status;
             $btn_class = $acc_stat == 0 ? 'btn-success' : 'btn-danger';
             $btn_name = $acc_stat == 0 ? 'ACTIVATE' : 'DEACTIVATE';
-
+            $adminImage = $value->image == 'noimage.png' ? URL::asset('public/css/assets/profile_image/'.$value->image) : URL::asset('storage/uploads/profile_image/'.$value->image);
             $middlename = $value->middlename == null || $value->middlename == '' ? ' ' : ' '.$value->middlename.' ';
             $array[$key]['id'] = $value->id;
-            $array[$key]['line_status'] = $value->account_line == 1 ? '<img src="'.URL::asset('storage/uploads/account_line/online.png').'" alt="online" class="account_line"/>  Online' : '<img src="'.URL::asset('storage/uploads/account_line/offline.png').'" alt="online" class="account_line"/> Offline';
-            $array[$key]['image'] = '<img src="'.URL::asset('storage/uploads/profile_image/'.$value->image).'" alt="Profile Image" style="border-radius: 50%; width: 40px;height: 40px;"/>';
+            $array[$key]['line_status'] = $value->account_line == 1 ? '<img src="'.URL::asset('public/css/assets/account_line/online.png').'" alt="online" class="account_line"/>  Online' : '<img src="'.URL::asset('public/css/assets/account_line/offline.png').'" alt="online" class="account_line"/> Offline';
+            $array[$key]['image'] = '<img src="'.$adminImage.'" alt="Profile Image" style="border-radius: 50%; width: 40px;height: 40px;"/>';
             $array[$key]['name'] = $value->firstname.$middlename.$value->lastname;
             $array[$key]['email'] = $value->email;
             $array[$key]['date_registered'] = date('M j Y',$value->date_registered);
@@ -266,7 +266,7 @@ class DashboardController extends Controller
             
             $middlename = $value->middlename == null || $value->middlename == '' ? ' ' : ' '.$value->middlename.' ';
             $array[$key]['student_num'] = $value->student_num;
-            $array[$key]['line_status'] = $value->account_line == 1 ? '<img src="'.URL::asset('storage/uploads/account_line/online.png').'" alt="online" class="account_line"/>  Online' : '<img src="'.URL::asset('storage/uploads/account_line/offline.png').'" alt="online" class="account_line"/> Offline';
+            $array[$key]['line_status'] = $value->account_line == 1 ? '<img src="'.URL::asset('public/css/assets/account_line/online.png').'" alt="online" class="account_line"/>  Online' : '<img src="'.URL::asset('public/css/assets/account_line/offline.png').'" alt="online" class="account_line"/> Offline';
             $array[$key]['image'] = '<img src="'.$studImages.'" alt="Profile Image" style="border-radius: 50%; width: 40px;height: 40px;"/>';
             $array[$key]['name'] = $value->firstname.$middlename.$value->lastname;
             $array[$key]['email'] = $value->email;

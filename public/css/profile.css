@@ -7,6 +7,9 @@
 .navproflinks{
     margin-right: 8%;
 }
+.login_container{
+    overflow: hidden;
+}
 .sidebar {
     position: fixed;
     top: 0;
