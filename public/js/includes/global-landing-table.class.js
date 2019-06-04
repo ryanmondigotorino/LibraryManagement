@@ -23,9 +23,18 @@ var GlobalTable = {
             ajax: {
                 url: url,
             },
-            createdRow : function(row){
+            createdRow : function(row,data){
                 var thisRow = $(row);
                 thisRow.addClass('cntr');
+                if(data[5] >= 0){
+                    if(data[5] > 10){
+                        $(row).addClass('colorGreen');
+                    }else if(data[5] > 5 && data[5] <= 10){
+                        $(row).addClass('colorOrange');
+                    }else if(data[5] > 0 && data[5] <= 5){
+                        $(row).addClass('colorRed');
+                    }
+                }
                 $('button[type="button"].delete-borrow',row).on('click',function(){
                     var id = $(this).attr('data-id'),
                         url = $(this).attr('data-url'),

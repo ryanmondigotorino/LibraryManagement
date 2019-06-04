@@ -12,6 +12,15 @@
                     <div class="profile_content">
                         <h1 class="h2"><span class="fa fa-table"></span> Books Inventory</h1><hr>
                         <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-2"><strong class="pull-right">Legend: </strong></div>
+                            <div class="col-lg-8">
+                                <p><strong><span class="legend-green">Green</span></strong> : Plenty of copies|
+                                <strong><span class="legend-orange">Orange</span></strong> : Moderate copies|
+                                <strong><span class="legend-red">Red</span></strong> : Few copies left</p>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-12">
                                 <table class="table table-striped table_shad table-bordered table-hover global-landing-table" data-url="{{route('admin.books.get-inventory')}}" data-loader="{{URL::asset("public/icons/loading.gif")}}">
                                     <thead>
@@ -53,7 +62,7 @@
                     <input type="hidden" name="book_id">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-                        <button type="submit" class="btn btn-secondary global-landing-form-btn">Add Penalty</button>
+                        <button type="submit" class="btn btn-secondary global-landing-form-btn">Add Quantity</button>
                     </div>
                 </form>
             </div>

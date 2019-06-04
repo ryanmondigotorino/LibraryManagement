@@ -87,18 +87,6 @@ canvas {
     width: 100%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.legend-green{
-    color: #68D66F;
-}
-.legend-light-orange{
-    color: #E27131;
-}
-.legend-orange{
-    color: #B74F15;
-}
-.legend-red{
-    color: #EC4E4E;
-}
 .search-item-choose{
     cursor: pointer;
 }

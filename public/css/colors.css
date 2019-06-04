@@ -1,0 +1,18 @@
+.colorGreen {
+    background-color:#85AE7A !important;
+}
+.colorOrange{
+    background-color:#D49168 !important;
+}
+.colorRed {
+    background-color:#CD6771 !important;
+}
+.legend-green{
+    color: #85AE7A;
+}
+.legend-orange{
+    color: #D49168;
+}
+.legend-red{
+    color: #CD6771;
+}

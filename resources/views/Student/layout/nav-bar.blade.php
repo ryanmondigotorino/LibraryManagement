@@ -1,5 +1,5 @@
 <div class="d-flex flex-column fixed-top flex-md-row align-items-center p-3 px-md-3 mb-3 border-bottom shadow-sm" style="background-color: #A94C4C;">
-    <h5 class="my-0 mr-1 font-weight-normal"><img src="{{URL::asset('storage/uploads/app_images/mainfavicon.png')}}" style="width:120px;height:50px;"></h5>
+    <h5 class="my-0 mr-1 font-weight-normal"><img src="{{URL::asset('public/css/assets/mainfavicon.png')}}" style="width:120px;height:50px;"></h5>
     <nav class="my-1 my-md-0 mr-md-auto">
         @php $cntr = 0; @endphp
         @foreach(config('nav-bars.student-nav-bar') as $key => $value)

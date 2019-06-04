@@ -12,7 +12,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="{{URL::asset('storage/uploads/app_images/mainfavicon.png')}}" type="image/png">
+    <link rel="shortcut icon" href="{{URL::asset('public/css/assets/mainfavicon.png')}}" type="image/png">
+    <link rel="stylesheet" href="{{URL::asset('public/css/colors.css')}}">
     <title>Dashboard</title>
     @yield('pageCss')
 </head>
