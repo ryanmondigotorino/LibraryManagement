@@ -16,13 +16,13 @@
 
                 <div class="carousel-inner">
                     <div class="carousel-item">
-                    <img class="img-fluid" src="{{URL::asset('storage/uploads/signup_images/crosswalk.jpg')}}" alt="Floating Books">
+                    <img class="img-fluid" src="{{URL::asset('public/css/assets/signup_images/crosswalk.jpg')}}" alt="Floating Books">
                     </div>
                     <div class="carousel-item active">
-                    <img class="img-fluid" src="{{URL::asset('storage/uploads/signup_images/crowd.jpg')}}" alt="Books">
+                    <img class="img-fluid" src="{{URL::asset('public/css/assets/signup_images/crowd.jpg')}}" alt="Books">
                     </div>
                     <div class="carousel-item">
-                    <img class="img-fluid" src="{{URL::asset('storage/uploads/signup_images/people.jpg')}}" alt="Library">
+                    <img class="img-fluid" src="{{URL::asset('public/css/assets/signup_images/people.jpg')}}" alt="Library">
                     </div>
                 </div>
 
