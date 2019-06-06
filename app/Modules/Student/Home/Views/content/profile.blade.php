@@ -36,7 +36,7 @@
                     <div class="profile_content">
                         <div class="row" style="margin-bottom:2%;">
                             <div class="col-lg-4">
-                                <img src="{{$base_data->image == null || $base_data->image == '' ? URL::asset('public/css/assets/noimage.png') : URL::asset('storage/uploads/profile_image/user('.$base_data->id.')/'.$base_data->image)}}" alt="profile image" class="image_profile img-fluid">
+                                <img src="{{$base_data->image == null || $base_data->image == '' ? URL::asset('public/css/assets/profile_image/noimage.png') : URL::asset('storage/uploads/profile_image/user('.$base_data->id.')/'.$base_data->image)}}" alt="profile image" class="image_profile img-fluid">
                             </div>
                             <div class="col-lg-8">
                                 <h2 style="margin-top:5%;">{{$base_data->firstname.$middlename.$base_data->lastname}}</h2>

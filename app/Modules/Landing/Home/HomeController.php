@@ -29,6 +29,16 @@ class HomeController extends Controller
     }
 
     public function index(Request $request){
+        $getBorrows = CF::model('Borrow')->get();
+        foreach($getBorrows as $borrows){
+            $fromdb = strtotime(date('M j Y',$borrows->return_in));
+            $currentdate = strtotime(date('M j Y',time()));
+            if($fromdb <= $currentdate && $borrows->borrowed_status == 'approved'){
+                $borrows->penalty = $borrows->penalty + 100;
+                $borrows->return_in = strtotime("+1 weekday",time());
+                $borrows->save();
+            }
+        }
         if(Auth::guard('student')->check()){
             return redirect()->route('student.home.index');
         }if(Auth::guard('admin')->check()){
@@ -112,7 +122,6 @@ class HomeController extends Controller
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
                 'lastname' => $request->lastname,
-                'image' => 'noimage.png',
                 'email' => $email,
                 'username' => $username,
                 'password' => bcrypt($request->confirm_password),
