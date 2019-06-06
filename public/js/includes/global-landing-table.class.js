@@ -136,7 +136,52 @@ var GlobalTable = {
                 });
                 $('button[type="button"].approve-borrow',row).on('click',function(){
                     var id = $(this).attr('data-id');
-                    $('#add-penalty-'+id).modal();
+                    var url = $(this).attr('data-url');
+                    var token = $(this).attr('data-token');
+                    swal({
+                        title: "Confirmation!",
+                        text: "Approve this borrow book transaction?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    }).then((result) => {
+                        if(result){
+                            $.ajax({
+                                type: 'POST',
+                                url: url,
+                                data: {
+                                    id: id,
+                                    _token: token
+                                },
+                                beforeSend:function(){
+                                    $('button.course-'+id).prop('disabled',true);
+                                    $('button.course-'+id).html('<i class="fa fa-spinner fa-pulse"></i>');
+                                },
+                                success: function(result){
+                                    console.log(result);
+                                    return false;
+                                    if(result['status'] == 'success'){
+                                        swal({
+                                            title: 'Success!',
+                                            text: result['messages'],
+                                            icon: result['status']
+                                        }).then((result) => {
+                                            location.reload();
+                                        });
+                                    }else{
+                                        $('button.course-'+id).prop('disabled',false);
+                                        swal({
+                                            title: 'Error!',
+                                            text: result['messages'],
+                                            icon: result['status']
+                                        });
+                                    }
+                                },
+                            }).done(function(){
+                                $('button.course-'+id).html('<span class="fa fa-trash"></span>');
+                            });
+                        }
+                    });
                 });
                 $('button[type="button"].edit-course-btn',row).on('click',function(){
                     var id = $(this).attr('data-id');
