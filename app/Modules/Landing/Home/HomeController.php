@@ -211,31 +211,24 @@ class HomeController extends Controller
             'new_password' => 'required_with:confirm_password|min:8|same:confirm_password',
             'confirm_password' => 'required|min:8'
         ]);
-        if(Hash::check($request->oldpassword,$getStudentDetails->password)){
-            if($validator->fails()){
-                return array(
-                    'status' => 'error',
-                    'messages' => $validator->errors()->first()
-                );
-            }elseif(Hash::check($request->new_password,$getStudentDetails->password)){
-                return array(
-                    'status' => 'error',
-                    'messages' => 'Your new password must be different from your old password'
-                );
-            }else{
-                $getStudentDetails->password = bcrypt($request->confirm_password);
-                $getStudentDetails->save();
-                AL::audits('student',$getStudentDetails,$request->ip(),'Change password via forgot password');
-                return array(
-                    'status' => 'success',
-                    'message' => 'Password successfully changed',
-                    'url' => route('landing.home.login')
-                );
-            }
-        }else{
+        if($validator->fails()){
             return array(
                 'status' => 'error',
-                'messages' => 'Old Password not matched'
+                'messages' => $validator->errors()->first()
+            );
+        }elseif(Hash::check($request->new_password,$getStudentDetails->password)){
+            return array(
+                'status' => 'error',
+                'messages' => 'Your new password must be different from your old password'
+            );
+        }else{
+            $getStudentDetails->password = bcrypt($request->confirm_password);
+            $getStudentDetails->save();
+            AL::audits('student',$getStudentDetails,$request->ip(),'Change password via forgot password');
+            return array(
+                'status' => 'success',
+                'message' => 'Password successfully changed',
+                'url' => route('landing.home.login')
             );
         }
     }
