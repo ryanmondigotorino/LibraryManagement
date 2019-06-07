@@ -23,9 +23,18 @@ var GlobalTable = {
             ajax: {
                 url: url,
             },
-            createdRow : function(row){
+            createdRow : function(row,data){
                 var thisRow = $(row);
                 thisRow.addClass('cntr');
+                if(data[5] >= 0){
+                    if(data[5] > 10){
+                        $(row).addClass('colorGreen');
+                    }else if(data[5] > 5 && data[5] <= 10){
+                        $(row).addClass('colorOrange');
+                    }else if(data[5] > 0 && data[5] <= 5){
+                        $(row).addClass('colorRed');
+                    }
+                }
                 $('button[type="button"].delete-borrow',row).on('click',function(){
                     var id = $(this).attr('data-id'),
                         url = $(this).attr('data-url'),
@@ -127,7 +136,52 @@ var GlobalTable = {
                 });
                 $('button[type="button"].approve-borrow',row).on('click',function(){
                     var id = $(this).attr('data-id');
-                    $('#add-penalty-'+id).modal();
+                    var url = $(this).attr('data-url');
+                    var token = $(this).attr('data-token');
+                    swal({
+                        title: "Confirmation!",
+                        text: "Approve this borrow book transaction?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    }).then((result) => {
+                        if(result){
+                            $.ajax({
+                                type: 'POST',
+                                url: url,
+                                data: {
+                                    id: id,
+                                    _token: token
+                                },
+                                beforeSend:function(){
+                                    $('button.course-'+id).prop('disabled',true);
+                                    $('button.course-'+id).html('<i class="fa fa-spinner fa-pulse"></i>');
+                                },
+                                success: function(result){
+                                    console.log(result);
+                                    return false;
+                                    if(result['status'] == 'success'){
+                                        swal({
+                                            title: 'Success!',
+                                            text: result['messages'],
+                                            icon: result['status']
+                                        }).then((result) => {
+                                            location.reload();
+                                        });
+                                    }else{
+                                        $('button.course-'+id).prop('disabled',false);
+                                        swal({
+                                            title: 'Error!',
+                                            text: result['messages'],
+                                            icon: result['status']
+                                        });
+                                    }
+                                },
+                            }).done(function(){
+                                $('button.course-'+id).html('<span class="fa fa-trash"></span>');
+                            });
+                        }
+                    });
                 });
                 $('button[type="button"].edit-course-btn',row).on('click',function(){
                     var id = $(this).attr('data-id');

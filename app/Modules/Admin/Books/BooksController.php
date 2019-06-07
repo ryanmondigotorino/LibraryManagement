@@ -292,7 +292,7 @@ class BooksController extends Controller
             $btn_approved = $value->borrowed_status == 'approved' ? '' : 'd-none';
             $array[$key]['button'] = '
                 <button type="button" class="btn btn-success '.$btn_approved.' return-'.$value->id.' return-borrow" data-id="'.$value->id.'" data-url="'.route('admin.books.return-borrowed').'" data-token="'.csrf_token().'"><span class="fa fa-sign-out"></span> Mark Return</button>
-                <button type="button" class="btn btn-success '.$btn_status.' approve-borrow" data-id="'.$value->id.'"><span class="fa fa-check"></span></button>
+                <button type="button" class="btn btn-success '.$btn_status.' approve-borrow" data-id="'.$value->id.'" data-token="'.csrf_token().'" data-url="'.route('admin.books.approved-borrowed').'"><span class="fa fa-check"></span></button>
                 <button type="button" class="btn btn-danger '.$btn_status.' borrow-'.$value->id.' delete-borrow" data-id="'.$value->id.'" data-url="'.route('admin.books.delete-borrowed').'" data-token="'.csrf_token().'"><span class="fa fa-trash"></span></button>
             ';
         }
@@ -324,15 +324,7 @@ class BooksController extends Controller
     }
 
     public function approvedborrowed(Request $request){
-        $penalty = $request->penalty;
-        if($penalty == null || $penalty == ''){
-            return array(
-                'status' => 'error',
-                'messages' => 'Penalty Cannot be null'
-            );
-        }
-        $getBorrowedDetails = CF::model('Borrow')::find($request->borrow_id);
-        $getBorrowedDetails->penalty = $penalty;
+        $getBorrowedDetails = CF::model('Borrow')::find($request->id);
         $getBorrowedDetails->borrowed_status = 'approved';
         $getBorrowedDetails->save();
         return array(

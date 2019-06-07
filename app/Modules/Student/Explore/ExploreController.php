@@ -237,6 +237,10 @@ class ExploreController extends Controller
             }
             $getQuantity = 1;
             $putId = '{"'.$id.'":'.$getQuantity.'}';
+            $getBookDetails = CF::model('Book')::find($id);
+            $getBookDetails->quantity = ($getBookDetails->quantity - $getQuantity);
+            $getBookDetails->disperse = ($getBookDetails->disperse + $getQuantity);
+            $getBookDetails->save();
             $borrowed_books = array(
                 'student_id' => $currentLoggedId->id,
                 'books' => $putId,

@@ -8,7 +8,8 @@ use Illuminate\Validation\Rule;
 use App\Models\BaseModel;
 /**
  * ------------------------------------------------------------------------------------------
- * -    This is the Admin_audit
+ * -    This is the Admin audit model which manage the DB Connection and validation of all 
+ * -    POST input.
  * ------------------------------------------------------------------------------------------
  */
 class Admin_audit extends BaseModel{

@@ -19,7 +19,7 @@
                                     <div class="form-group">
                                         <label for="authorImage">Author Image</label>
                                         <div class="form-group img-group">
-                                            <img src="{{URL::asset('storage/uploads/profile_image/noimage.png')}}" id="author-picture" class="item_image btn-global-author-image" alt="Author Image">
+                                            <img src="{{URL::asset('public/css/assets/profile_image/noimage.png')}}" id="author-picture" class="item_image btn-global-author-image" alt="Author Image">
                                             <input type="file" class="d-none" name="authorImage"/>
                                         </div>
                                     </div>

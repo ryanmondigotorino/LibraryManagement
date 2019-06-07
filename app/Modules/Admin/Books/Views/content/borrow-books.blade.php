@@ -35,33 +35,6 @@
         </div>
     </div>
 </div>
-@foreach($getBorrowedDetails as $borrowed)
-    <div class="modal fade" id="add-penalty-{{$borrowed->id}}" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog items-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Penalty if not returned</h5>
-                    <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{route('admin.books.approved-borrowed')}}" class="global-landing-form">@csrf
-                        <div class="form-group">
-                            <label for="penalty">Penalty</label>
-                            <input type="number" class="form-control" name="penalty" placeholder="100..">
-                        </div>
-                        <input type="hidden" value="{{$borrowed->id}}" name="borrow_id">
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-                            <button type="submit" class="btn btn-secondary global-landing-form-btn">Add Penalty</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-@endforeach
 @endsection
 
 @section('pageJs')

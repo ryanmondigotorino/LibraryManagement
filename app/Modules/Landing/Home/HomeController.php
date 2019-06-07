@@ -10,6 +10,8 @@ use ClassFactory as CF;
 use AuditLogs as AL;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\SendEmailVerification;
+use App\Mail\SendForgotPasswordVerification;
+use Illuminate\Support\Facades\Hash;
 
 use Auth;
 use View;
@@ -27,6 +29,16 @@ class HomeController extends Controller
     }
 
     public function index(Request $request){
+        $getBorrows = CF::model('Borrow')->get();
+        foreach($getBorrows as $borrows){
+            $fromdb = strtotime(date('M j Y',$borrows->return_in));
+            $currentdate = strtotime(date('M j Y',time()));
+            if($fromdb <= $currentdate && $borrows->borrowed_status == 'approved'){
+                $borrows->penalty = $borrows->penalty + 100;
+                $borrows->return_in = strtotime("+1 weekday",time());
+                $borrows->save();
+            }
+        }
         if(Auth::guard('student')->check()){
             return redirect()->route('student.home.index');
         }if(Auth::guard('admin')->check()){
@@ -110,7 +122,6 @@ class HomeController extends Controller
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
                 'lastname' => $request->lastname,
-                'image' => 'noimage.png',
                 'email' => $email,
                 'username' => $username,
                 'password' => bcrypt($request->confirm_password),
@@ -171,6 +182,12 @@ class HomeController extends Controller
         $getDetails = CF::model('Student')
             ->where('email',$email);
         if($getDetails->count() > 0){
+            $userDetails = $getDetails->get()[0];
+            $data = array(
+                'name' => $userDetails,
+            );
+            AL::audits('student',$userDetails,$request->ip(),'Send forgot password email');
+            Mail::to($email)->send(new SendForgotPasswordVerification($data));
             return array(
                 'status' => 'success',
                 'message' => 'A confirmation email has been sent! please check your email.',
@@ -180,6 +197,45 @@ class HomeController extends Controller
             return array(
                 'status' => 'error',
                 'messages' => 'Email doesn\'t exists in our system'
+            );
+        }
+    }
+
+    public function newpassword(Request $request,$id,$studno){
+        return view($this->render('logs.new-password'),compact('id','studno'));
+    }
+
+    public function newpasswordsubmit(Request $request,$id,$studno){
+        $getStudentDetails = CF::model('Student')::find($id);
+        $validator = Validator::make($request->all(),[
+            'new_password' => 'required_with:confirm_password|min:8|same:confirm_password',
+            'confirm_password' => 'required|min:8'
+        ]);
+        if(Hash::check($request->oldpassword,$getStudentDetails->password)){
+            if($validator->fails()){
+                return array(
+                    'status' => 'error',
+                    'messages' => $validator->errors()->first()
+                );
+            }elseif(Hash::check($request->new_password,$getStudentDetails->password)){
+                return array(
+                    'status' => 'error',
+                    'messages' => 'Your new password must be different from your old password'
+                );
+            }else{
+                $getStudentDetails->password = bcrypt($request->confirm_password);
+                $getStudentDetails->save();
+                AL::audits('student',$getStudentDetails,$request->ip(),'Change password via forgot password');
+                return array(
+                    'status' => 'success',
+                    'message' => 'Password successfully changed',
+                    'url' => route('landing.home.login')
+                );
+            }
+        }else{
+            return array(
+                'status' => 'error',
+                'messages' => 'Old Password not matched'
             );
         }
     }

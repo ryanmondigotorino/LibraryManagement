@@ -12,4 +12,6 @@ Route::group(['prefix' => '/', 'namespace' => '\App\Modules\Landing\Home','middl
     Route::post('/logout','HomeController@logout')->name('landing.home.logout');
     Route::get('/forgotpassword','HomeController@forgotpassword')->name('landing.home.forgotpassword');
     Route::post('/forgotpassword-email','HomeController@forgotpasswordemail')->name('landing.home.forgotpassword-email');
+    Route::get('/{id}/new-password/{studno}','HomeController@newpassword')->name('landing.home.new-password');
+    Route::post('/{id}/new-password-submit/{studno}','HomeController@newpasswordsubmit')->name('landing.home.new-password-submit');
 });
