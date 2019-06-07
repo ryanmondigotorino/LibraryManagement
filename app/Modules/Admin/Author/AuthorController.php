@@ -22,15 +22,21 @@ class AuthorController extends Controller
     public function __construct(){
         date_default_timezone_set('Asia/Manila');
     }
-
+    
+    /* Gets the list of all authors */
+    
     public function index(Request $request){
         $getAuthors = CF::model('Author');
         return view($this->render('index'),compact('getAuthors'));
     }
 
+    /* Add the author's information  */
+
     public function addAuthor(Request $request){
         return view($this->render('content.add-author'));
     }
+
+    /* Saves the author's information */
 
     public function addAuthorSave(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
@@ -90,10 +96,14 @@ class AuthorController extends Controller
         }
     }
 
+    /* Edits the author's information */
+
     public function editAuthor(Request $request,$id){
         $getAuthors = CF::model('Author')::find($id);
         return view($this->render('content.edit-author'),compact('getAuthors'));
     }
+
+    /* Save the edited author's information */
 
     public function editAuthorSave(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
@@ -132,6 +142,8 @@ class AuthorController extends Controller
             'url' => route('admin.author.index')
         );
     }
+
+    /* Views the specific author's information */
 
     public function viewAuthor(Request $request,$id,$slug){
         $getAuthors = CF::model('Author')::find($id);

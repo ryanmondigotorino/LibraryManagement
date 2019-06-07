@@ -24,6 +24,8 @@ class BooksController extends Controller
         date_default_timezone_set('Asia/Manila');
     }
 
+    /* */
+
     public function index(){
         $getBooks = CF::model('Book')
             ->select(
@@ -45,10 +47,14 @@ class BooksController extends Controller
         return view($this->render('index'),compact('getBooks'));
     }
 
+    /* */
+
     public function addbooks(){
         $getAuthors = CF::model('Author')::all();
         return view($this->render('content.add-books'),compact('getAuthors'));
     }
+
+    /* */
 
     public function addbooksave(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
@@ -135,6 +141,8 @@ class BooksController extends Controller
         }
     }
 
+    /* */
+
     public function editbooks(Request $request,$id){
         $getAuthors = CF::model('Author')::all();
         $getBooks = CF::model('Book')
@@ -157,6 +165,8 @@ class BooksController extends Controller
             ->where('books.id',$id)->get();
         return view($this->render('content.edit-books'),compact('getBooks','getAuthors'));
     }
+
+    /* */
 
     public function editbooksave(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
@@ -218,6 +228,8 @@ class BooksController extends Controller
             'url' => route('admin.books.index')
         ];
     }
+
+    /* */
     
     public function viewbooks(Request $request,$id,$title){
         $getBooks = CF::model('Book')::find($id);
@@ -228,6 +240,8 @@ class BooksController extends Controller
         $getBorrowedDetails = CF::model('Borrow')::all();
         return view($this->render('content.borrow-books'),compact('getBorrowedDetails'));
     }
+
+    /* */
 
     public function getborrowed(Request $request){
         $start = $request->start;
@@ -323,6 +337,8 @@ class BooksController extends Controller
         return json_encode($json_data); 
     }
 
+    /* */
+
     public function approvedborrowed(Request $request){
         $getBorrowedDetails = CF::model('Borrow')::find($request->id);
         $getBorrowedDetails->borrowed_status = 'approved';
@@ -333,6 +349,8 @@ class BooksController extends Controller
             'url' => route('admin.books.index')
         );
     }
+
+    /* */
 
     public function returnborrowed(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
@@ -347,6 +365,8 @@ class BooksController extends Controller
         );
     }
 
+    /* */
+
     public function deleteborrowed(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         $id = $request->id;
@@ -359,10 +379,14 @@ class BooksController extends Controller
             'messages' => 'Borrow details succesfully deleted!'
         );
     }
+
+    /* */
     
     public function inventory(Request $request){
         return view($this->render('content.inventory'));
     }
+
+    /* */
 
     public function getinventory(Request $request){
         $start = $request->start;
@@ -445,6 +469,8 @@ class BooksController extends Controller
         return json_encode($json_data); 
     }
 
+    /* */
+
     public function addquantitybooks(Request $request){
         $getBookDetails = CF::model('Book')::find($request->book_id);
         $validator = Validator::make($request->all(),[
@@ -464,6 +490,9 @@ class BooksController extends Controller
             'message' => 'Quantity successfully added!'
         ];
     }
+
+    /* */
+
     public function deleteallquantity(Request $request){
         $getBookDetails = CF::model('Book')::find($request->id);
         $getBookDetails->status = 0;
@@ -473,6 +502,8 @@ class BooksController extends Controller
             'message' => 'Books are successfully deleted!'
         );
     }
+
+    /* */
 
     public function dispersequantity(Request $request){
         $id = $request->book_row_id;
