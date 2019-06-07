@@ -54,7 +54,7 @@
                         </div>
                     </form>
                     <small>Don't have an account? <a href="{{route('landing.home.sign-up')}}" class="create_link"> REGISTER. </a></small>
-                    <br><small><a href="{{route('landing.home.forgotpassword')}}" class="create_link">Forgot passwoord? </a></small>
+                    <br><small><a href="{{route('landing.home.forgotpassword')}}" class="create_link">Forgot password? </a></small>
                 </div>
             </div>
         </div>
