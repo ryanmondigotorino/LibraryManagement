@@ -42,10 +42,6 @@
                 <div class="col-sm-7 col-lg-7 col-xl-8 text-center ml-auto mr-auto mt-5">
                     <form action="{{route('landing.home.new-password-submit',[$id,$studno])}}" class="global-landing-form">
                         {{ csrf_field() }} 
-                        <div class="form-group mb-4">
-                            <label for="oldpassword">Old password </label>
-                            <input type="password" class="form-control" name="oldpassword" placeholder="Enter your old password">
-                        </div>
                         <div class="form-group mt-5">
                             <label for="newpassword">New password </label>
                             <input type="password" class="form-control" name="new_password" placeholder="Enter your new password">
