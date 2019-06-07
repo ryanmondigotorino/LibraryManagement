@@ -27,6 +27,9 @@ class DepartmentController extends Controller
         return view($this->render('index'),compact('getDepartment'));
     }
 
+    
+    /* Gets the list of Department */
+
     public function getdepartment(Request $request){
         $start = $request->start;
         $length = $request->length;
@@ -84,6 +87,9 @@ class DepartmentController extends Controller
         return json_encode($json_data); 
     }
 
+    
+    /* Add a Department */
+
     public function adddepartment(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         DB::beginTransaction();
@@ -115,6 +121,9 @@ class DepartmentController extends Controller
         Session::flash('message',$result['status']);
         return back();
     }
+
+    /* Edit Department's Information  */
+
     public function editdepartment(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         $departmentName = $request->departmentname;
@@ -139,6 +148,8 @@ class DepartmentController extends Controller
             'message' => 'Department successfully Edited!'
         );
     }
+
+    /* Delete a Department */
 
     public function deletedepartment(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
