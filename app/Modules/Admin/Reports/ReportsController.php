@@ -27,6 +27,8 @@ class ReportsController extends Controller
         return view($this->render('index'));
     }
 
+    /* Data of Returned Books in a Chart */
+
     public function getReturnedBooksChart(Request $request){
         $data = [];
         $currentMonthStatus = $currentborrow = 0;
@@ -49,6 +51,8 @@ class ReportsController extends Controller
         }
         return $data;
     }
+
+    /* Gets the data of Returned Books */
 
     public function getReturnBooks(Request $request){
         $dateRange = $request->datePicker != null ? $request->datePicker : '';
@@ -142,6 +146,8 @@ class ReportsController extends Controller
             
         return json_encode($json_data); 
     }
+
+    /* Download the data of Returned Books */
 
     public function downloadxlsx(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();

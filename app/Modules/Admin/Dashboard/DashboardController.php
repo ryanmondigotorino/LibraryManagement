@@ -35,6 +35,8 @@ class DashboardController extends Controller
         return view($this->render('index'));
     }
 
+    /* Gets the status of Borrowed Books monthly */
+
     public function getBorrowedBooksChart(Request $request){
         $data = [];
         $currentMonthStatus = $currentborrow = 0;
@@ -57,9 +59,13 @@ class DashboardController extends Controller
         return $data;
     }
 
+    /* Renders the view for Admin Accounts */
+
     public function admins(){
         return view($this->render('accounts.admin-account'));
     }
+
+    /* Gets the list of Admins */
 
     public function getadmins(Request $request){
         $start = $request->start;
@@ -132,6 +138,8 @@ class DashboardController extends Controller
         return json_encode($json_data); 
     }
 
+    /* Change the Account Status to Activate or Deactivate */
+
     public function change_acc_stat(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         $account_status = $request->acc_stat;
@@ -149,6 +157,8 @@ class DashboardController extends Controller
         AL::audits('admin',$currentLoggedId,$request->ip(),$getActualStatus.' '.$getStatusModel.' ('.$accountsData->username.')');
         return $putUpdateStatus;
     }
+
+     /* Add Admin Accounts */
 
     public function addAdmins(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
@@ -201,15 +211,21 @@ class DashboardController extends Controller
         }
     }
 
+    /* Render the view for Librarians Account Page */
+
     public function librarian(Request $request){
         return view($this->render('accounts.librarian-account'));
     }
+
+    /* Render the view for Students Account Page */
 
     public function students(Request $request){
         $getCourse = CF::model('Course')->where('course_status','!=','down')->get();
         $getDepartment = CF::model('Department')->where('department_status','!=','down')->get();
         return view($this->render('accounts.student-account'),compact('getCourse','getDepartment'));
     }
+
+    /* Gets the list of Students registerded */
 
     public function getstudents(Request $request){
         $start = $request->start;
@@ -303,6 +319,9 @@ class DashboardController extends Controller
         return json_encode($json_data); 
     }
 
+    /* Add Students Account */
+
+
     public function addStudents(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         DB::beginTransaction();
@@ -356,9 +375,13 @@ class DashboardController extends Controller
         }
     }
 
+    /* Render the view of Audit Rails of Admins */
+
     public function adminaudit(){
         return view($this->render('audits.admin-audit'));
     }
+
+    /* Get the Audit Rails Data of Admin */
 
     public function getadminlogs(Request $request){
         $dateRange = $request->datePicker != null ? $request->datePicker : '';
@@ -441,6 +464,8 @@ class DashboardController extends Controller
         return json_encode($json_data); 
     }
 
+    /* Download Audit Rails to Excel */
+
     public function admindownloadXlsx(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         $dateRange = $request->date != null ? $request->date : '';
@@ -500,6 +525,8 @@ class DashboardController extends Controller
         return Exporter::make('Excel')->load(collect(array_merge($mainData,$data)))->stream(date('Y-m-d-HiA-').'audit-logs-lists.xlsx');
     }
 
+    /* Query for Admin Audit Rails */
+
     public function __mainQueryAdminAudit($request,$dateFrom,$dateTo){
         $query = CF::model('Admin_audit')
             ->select(
@@ -519,9 +546,13 @@ class DashboardController extends Controller
         return $query;
     }
 
+    /* Render the view of Audit Rails of Students */
+
     public function studentaudit(){
         return view($this->render('audits.student-audit'));
     }
+
+    /* Get the Audit Rails Data of Students */
 
     public function getstudentlogs(Request $request){
         $dateRange = $request->datePicker != null ? $request->datePicker : '';
@@ -606,6 +637,8 @@ class DashboardController extends Controller
         return json_encode($json_data); 
     }
 
+     /* Download Audit Rails to Excel */
+
     public function studentdownloadXlsx(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         $dateRange = $request->date != null ? $request->date : '';
@@ -664,6 +697,8 @@ class DashboardController extends Controller
         AL::audits('admin',$currentLoggedId,$request->ip(),'Download the Audit Logs for Student');
         return Exporter::make('Excel')->load(collect(array_merge($mainData,$data)))->stream(date('Y-m-d-HiA-').'audit-logs-lists.xlsx');
     }
+
+    /* Query for Student Audit Rails */
 
     public function __mainQueryStudentAudit($request,$dateFrom,$dateTo){
         $query = CF::model('Student_audit')

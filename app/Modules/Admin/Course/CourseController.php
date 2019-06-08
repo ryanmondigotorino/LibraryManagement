@@ -28,6 +28,8 @@ class CourseController extends Controller
         return view($this->render('index'),compact('getCourse'));
     }
 
+    /* Gets the list of Courses */
+
     public function getcourses(Request $request){
         $start = $request->start;
         $length = $request->length;
@@ -84,6 +86,8 @@ class CourseController extends Controller
             
         return json_encode($json_data); 
     }
+    
+    /* Add a Course */
 
     public function addcourses(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
@@ -117,6 +121,8 @@ class CourseController extends Controller
         return back();
     }
 
+    /* Edit the Course Information */
+
     public function editcourses(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         $courseName = $request->coursename;
@@ -140,6 +146,8 @@ class CourseController extends Controller
             'url' => route('admin.course.index')
         );
     }
+
+    /* Delete the Course */
 
     public function deletecourses(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
