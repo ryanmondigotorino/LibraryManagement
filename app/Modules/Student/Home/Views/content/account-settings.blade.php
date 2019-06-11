@@ -87,6 +87,49 @@
         </div>
     </div>
 </div>
+<div class="container">
+    <div class="content-container">
+        <div class="row">
+            <div class="card box_shad card-profile-container" style="width:100%">
+                <div class="card-body">
+                    <div class="profile_content">
+                        <h1><span class="fa fa-edit"></span> Change password</h1><hr>
+                        <form action="{{route('student.home.edit-password-save',$base_data->username)}}" class="global-landing-form">
+                            {{ csrf_field() }}
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="oldpassword">Old password</label>
+                                        <input type="password" class="form-control" placeholder="Enter Old password" name="old_password">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="newpassword">New password</label>
+                                        <input type="password" class="form-control" placeholder="Enter New password" name="new_password">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="confirmpassword">Confirm password</label>
+                                        <input type="password" class="form-control" placeholder="Enter Confirm password" name="confirm_password">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <button class="btn btn-success pull-right global-landing-form-btn" type="submit"><span class="fa fa-edit"></span> Change password</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('pageJs')

@@ -20,6 +20,11 @@
                         </div><hr>
                         <div class="row">
                             <div class="col-lg-12">
+                                <h3 class="text-center">Password will expire in: 5 days</h3>
+                            </div>
+                        </div><hr>
+                        <div class="row">
+                            <div class="col-lg-12">
                                 <table class="table table-striped table_shad table-bordered table-hover global-accounts-table" data-url="{{route('admin.dashboard.accounts.get-students-account')}}" data-type="none" data-loader="{{URL::asset("public/icons/loading.gif")}}">
                                     <thead>
                                         <tr>

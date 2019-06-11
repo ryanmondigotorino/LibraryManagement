@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\App;
 use ClassFactory as CF;
 use AuditLogs as AL;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 use Auth;
 use View;
@@ -161,5 +162,42 @@ class HomeController extends Controller
             'message' => 'Information successfully updated',
             'url' => route('student.home.profile-settings',$base_data->username)
         );
+    }
+
+    public function editpasswordsave(Request $request){
+        $base_data = Auth::guard('student')->user();
+        $getStudentDetails = CF::model('Student')::find($base_data->id);
+
+        $validator = Validator::make($request->all(),[
+            'new_password' => 'required_with:confirm_password|min:8|same:confirm_password',
+            'confirm_password' => 'required|min:8'
+        ]);
+        if(Hash::check($request->old_password,$getStudentDetails->password)){
+            if($validator->fails()){
+                return array(
+                    'status' => 'error',
+                    'messages' => $validator->errors()->first()
+                );
+            }elseif(Hash::check($request->new_password,$getStudentDetails->password)){
+                return array(
+                    'status' => 'error',
+                    'messages' => 'Your new password must be different from your old password'
+                );
+            }else{
+                $getStudentDetails->password = bcrypt($request->confirm_password);
+                $getStudentDetails->save();
+                AL::audits('student',$getStudentDetails,$request->ip(),'Change password via settings');
+                return array(
+                    'status' => 'success',
+                    'message' => 'Password successfully changed',
+                    'url' => route('student.home.index')
+                );
+            }
+        }else{
+            return array(
+                'status' => 'error',
+                'messages' => 'Your old password doesn\'t match!'
+            );
+        }
     }
 }
