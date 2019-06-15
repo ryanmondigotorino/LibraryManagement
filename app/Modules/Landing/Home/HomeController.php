@@ -20,6 +20,13 @@ use URL;
 use Browser;
 use Validator;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - HomeController. This Class Controller handles the views pages and transaction
+ * - which includes the System index page, Login page, and sign up page.
+ * ---------------------------------------------------------------------------
+ */
+
 class HomeController extends Controller
 {
     public static $view_path = "Landing.Home";
