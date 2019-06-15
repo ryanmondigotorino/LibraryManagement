@@ -13,6 +13,13 @@ use View;
 use DB;
 use URL;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - ContactController This class controller is for Contact page
+ * - in student page
+ * ---------------------------------------------------------------------------
+ */
+
 class ContactController extends Controller
 {
     public static $view_path = "Student.Contact";

@@ -16,6 +16,13 @@ use URL;
 use Browser;
 use Validator;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - AuthorController This class controller is for Author pages and transactions 
+ * - in administrator page
+ * ---------------------------------------------------------------------------
+ */
+
 class AuthorController extends Controller
 {
     public static $view_path = "Admin.Author";

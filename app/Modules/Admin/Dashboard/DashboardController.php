@@ -17,6 +17,14 @@ use Exporter;
 use Validator;
 use Browser;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - DashboardController This class controller is for Dashboard pages, 
+ * - accounts pages, audits pages and other transactions which include the
+ * - admin index page, accounts management and audit pages in administrator.
+ * ---------------------------------------------------------------------------
+ */
+
 class DashboardController extends Controller
 {
     public static $view_path = "Admin.Dashboard";

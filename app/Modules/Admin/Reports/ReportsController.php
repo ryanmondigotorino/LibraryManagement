@@ -15,6 +15,14 @@ use URL;
 use Exporter;
 use AuditLogs as AL;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - ReportsController This class controller is for Reports view pages 
+ * - and transactions, which include the download of excel reports in 
+ * - administrator page.
+ * ---------------------------------------------------------------------------
+ */
+
 class ReportsController extends Controller
 {
     public static $view_path = "Admin.Reports";

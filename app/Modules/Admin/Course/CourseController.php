@@ -16,6 +16,13 @@ use URL;
 use Browser;
 use Validator;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - CourseController This class controller is for Course view pages and transactions 
+ * - in administrator page.
+ * ---------------------------------------------------------------------------
+ */
+
 class CourseController extends Controller
 {
     public static $view_path = "Admin.Course";
