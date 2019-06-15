@@ -16,6 +16,13 @@ use DB;
 use URL;
 use Validator;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - HomeController The HomeController of student handles the index page of 
+ * - Student page, also the profile and account settings of the user.
+ * ---------------------------------------------------------------------------
+ */
+
 class HomeController extends Controller
 {
     public static $view_path = "Student.Home";

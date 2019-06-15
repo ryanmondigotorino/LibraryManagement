@@ -14,6 +14,13 @@ use View;
 use DB;
 use URL;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - ExploreController This class controller is for Book reservation views,
+ * - table output, Borrowing, searching book, find via genre and more.
+ * ---------------------------------------------------------------------------
+ */
+
 class ExploreController extends Controller
 {
     public static $view_path = "Student.Explore";

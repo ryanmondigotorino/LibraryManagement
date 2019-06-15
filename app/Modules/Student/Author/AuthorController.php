@@ -13,6 +13,13 @@ use View;
 use DB;
 use URL;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - AuthorController This class controller is for Author pages and transactions 
+ * - in student page
+ * ---------------------------------------------------------------------------
+ */
+
 class AuthorController extends Controller
 {
     public static $view_path = "Student.Author";
