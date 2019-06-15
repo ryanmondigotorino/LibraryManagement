@@ -16,6 +16,13 @@ use URL;
 use Browser;
 use Validator;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - BooksController This class controller is for Book view pages and transactions 
+ * - in administrator page.
+ * ---------------------------------------------------------------------------
+ */
+
 class BooksController extends Controller
 {
     public static $view_path = "Admin.Books";

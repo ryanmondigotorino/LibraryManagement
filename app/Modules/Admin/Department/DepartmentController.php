@@ -15,6 +15,13 @@ use DB;
 use URL;
 use Validator;
 
+/**
+ * ---------------------------------------------------------------------------
+ * - DepartmentController This class controller is for Department view pages 
+ * - and transactions in administrator page.
+ * ---------------------------------------------------------------------------
+ */
+
 class DepartmentController extends Controller
 {
     public static $view_path = "Admin.Department";
