@@ -26,7 +26,7 @@ class StudentFaker extends Seeder
                 'email' => $faker->email,
                 'username' => $faker->username,
                 'password' => bcrypt("123456789"),
-                'account_line' => 1,
+                'account_line' => 0,
                 'account_status' => 1,
                 'date_registered' => time(),
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
