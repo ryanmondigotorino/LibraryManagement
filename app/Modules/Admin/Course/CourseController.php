@@ -14,6 +14,7 @@ use View;
 use DB;
 use URL;
 use Browser;
+use Validator;
 
 class CourseController extends Controller
 {
@@ -126,6 +127,15 @@ class CourseController extends Controller
     public function editcourses(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         $courseName = $request->coursename;
+        $validator = Validator::make($request->all(),[
+            'coursename' => 'required'
+        ]);
+        if($validator->fails()){
+            return array(
+                'status' => 'error',
+                'messages' => $validator->errors()->first()
+            );
+        }
         $validateCourse = CF::model('Course')
             ->where('course_status','!=','down')
             ->where('name',$courseName)
