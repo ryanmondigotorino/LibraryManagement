@@ -143,7 +143,7 @@ class CourseController extends Controller
         if($validateCourse > 0){
             return array(
                 'status' => 'error',
-                'message' => 'The Course name is already taken'
+                'messages' => 'The Course name is already taken'
             );
         }
         $courseDetails = CF::model('Course')::find($request->courseid);

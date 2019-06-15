@@ -13,6 +13,7 @@ use Auth;
 use View;
 use DB;
 use URL;
+use Validator;
 
 class DepartmentController extends Controller
 {
@@ -127,6 +128,15 @@ class DepartmentController extends Controller
     public function editdepartment(Request $request){
         $currentLoggedId = Auth::guard('admin')->user();
         $departmentName = $request->departmentname;
+        $validator = Validator::make($request->all(),[
+            'departmentname' => 'required'
+        ]);
+        if($validator->fails()){
+            return array(
+                'status' => 'error',
+                'messages' => $validator->errors()->first()
+            );
+        }
         $validateDepartment = CF::model('Department')
             ->where('department_status','!=','down')
             ->where('department_name',$departmentName)

@@ -245,6 +245,10 @@ class BooksController extends Controller
         return view($this->render('content.view-books'),compact('getBooks'));
     }
 
+    public function returned(Request $request){
+        return view($this->render('content.returned-books'));
+    }
+
     /* View the list of students who borrowed books */
 
     public function borrowed(){
@@ -254,7 +258,7 @@ class BooksController extends Controller
 
     /* Gets the list of students who borrowed books */
 
-    public function getborrowed(Request $request){
+    public function getborrowed(Request $request,$slug){
         $start = $request->start;
         $length = $request->length;
         $columns = [
@@ -266,7 +270,25 @@ class BooksController extends Controller
             'borrows.penalty',
             'borrows.borrowed_status',
         ];
-        $borrowedDetails = CF::model('Borrow')
+        
+        if($slug == 'returned'){
+            $borrowedDetails = CF::model('Borrow')
+                ->select(
+                    'borrows.id',
+                    'students.student_num',
+                    'students.firstname',
+                    'students.middlename',
+                    'students.lastname',
+                    'borrows.books',
+                    'borrows.return_in',
+                    'borrows.penalty',
+                    'borrows.borrowed_status'
+                )
+                ->join('students','students.id','borrows.student_id')
+                ->where('borrows.borrowed_status','returned')
+                ->where('borrows.borrowed_status','!=','deleted');
+        }else{
+            $borrowedDetails = CF::model('Borrow')
             ->select(
                 'borrows.id',
                 'students.student_num',
@@ -279,7 +301,9 @@ class BooksController extends Controller
                 'borrows.borrowed_status'
             )
             ->join('students','students.id','borrows.student_id')
+            ->where('borrows.borrowed_status','!=','returned')
             ->where('borrows.borrowed_status','!=','deleted');
+        }
         $borrowedDetailsCount = $borrowedDetails->count();
         $borrowedDetails = $borrowedDetails->where(function($query) use ($request){
             $query
@@ -367,12 +391,27 @@ class BooksController extends Controller
         $currentLoggedId = Auth::guard('admin')->user();
         $id = $request->id;
         $getBorrowedDetails = CF::model('Borrow')::find($id);
+        $getBookDetails = json_decode($getBorrowedDetails->books);
+        $book_info = [];
+        $cntr = -1;
+        foreach($getBookDetails as $key => $value){
+            $cntr += 1;
+            $book_info['book_id'][$cntr] = $key;
+            $book_info['quantity'][$cntr] = $value;
+        }
+        $book_id = implode(',',$book_info['book_id']);
+        $book_quantity = implode(',',$book_info['quantity']);
+        $getBooks = CF::model('Book')::find($book_id);
+        $getBooks->quantity = ($getBooks->quantity + 1);
+        $getBooks->disperse = ($getBooks->disperse - 1);
+        $getBooks->save();
         $getBorrowedDetails->borrowed_status = 'returned';
         $getBorrowedDetails->save();
         AL::audits('admin',$currentLoggedId,$request->ip(),'Mark return Borrowed Detail id ('.$id.')');
         return array(
             'status' => 'success',
-            'messages' => 'Borrow details succesfully returned!'
+            'messages' => 'Borrow details succesfully returned!',
+            'url' => route('admin.books.returned')
         );
     }
 

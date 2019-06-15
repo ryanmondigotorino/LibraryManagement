@@ -117,7 +117,7 @@ var GlobalTable = {
                                             text:  result['messages'],
                                             icon: result['status'],
                                         }).then((resultStatus) => {
-                                            location.reload();
+                                            location.href=result['url'];
                                         });
                                     }else{
                                         $('button.btn.btn-success.return-'+id).prop('disabled',false);
