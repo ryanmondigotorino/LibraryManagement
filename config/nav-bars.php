@@ -39,6 +39,10 @@ return [
                 'route' => 'admin.books.borrowed',
                 'icon' => 'fa fa-check'
             ],
+            'Returned' => [
+                'route' => 'admin.books.returned',
+                'icon' => 'fa fa-sign-out'
+            ],
         ],
         'Course' => [
             'View Courses' => [
