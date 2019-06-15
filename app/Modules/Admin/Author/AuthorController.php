@@ -14,6 +14,7 @@ use View;
 use DB;
 use URL;
 use Browser;
+use Validator;
 
 class AuthorController extends Controller
 {
@@ -78,7 +79,6 @@ class AuthorController extends Controller
                 $result['url'] = route('admin.author.index');
                 return $result;
             }catch(\Exception $e){
-                return $e;
                 $errors = json_decode($e->getMessage(), true);
                 $display_errors = [];
                 foreach($errors as $key => $value){
@@ -110,6 +110,16 @@ class AuthorController extends Controller
         $id = $request->author_id;
         $getAuthorDetails = CF::model('Author')::find($id);
         $image = $request->authorImage;
+        $validator = Validator::make($request->all(),[
+            'author_name' => 'required',
+            'author_email' => 'required',
+        ]);
+        if($validator->fails()){
+            return array(
+                'status' => 'error',
+                'messages' => $validator->errors()->first()
+            );
+        }
         if($image == 'undefined'){
             $imageName = $getAuthorDetails->image;
         }else{

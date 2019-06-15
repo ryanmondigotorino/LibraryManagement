@@ -174,6 +174,15 @@ class BooksController extends Controller
         $getBookDetails = CF::model('Book')::find($id);
         $frontImage = $request->book_front;
         $backImage = $request->book_back;
+        $validator = Validator::make($request->all(),[
+            'book_title' => 'required'
+        ]);
+        if($validator->fails()){
+            return array(
+                'status' => 'error',
+                'messages' => $validator->errors()->first()
+            );
+        }
         if($frontImage == 'undefined'){
             $frontimageName = $getBookDetails->front_image;
         }else{

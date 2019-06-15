@@ -21,11 +21,14 @@ class Author extends BaseModel{
         $id = isset($input['id']) ? $input['id'] : null;
         $data['rules'] = [
             'name' => [ 'required','min:3',Rule::unique('authors')->ignore($id), ],
+            'email' => [ 'required','min:3','email',Rule::unique('authors')->ignore($id), ],
         ];
 
         $data['messages'] = [
             'name.required' => 'The Author name is required',
             'name.unique' => 'The Author name is already existed',
+            'email.required' => 'The Author email is required',
+            'email.unique' => 'The Author email is already existed',
         ];
 
         return $data;
