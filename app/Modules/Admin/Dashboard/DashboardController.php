@@ -261,8 +261,8 @@ class DashboardController extends Controller
                 'courses.name',
                 'departments.department_name'
             )
-            ->join('courses','courses.id','students.course_id')
-            ->join('departments','departments.id','students.department_id');
+            ->leftjoin('courses','courses.id','students.course_id')
+            ->leftjoin('departments','departments.id','students.department_id');
         $studentResultCount = $studentDetails->count();
         $studentDetails = $studentDetails->where(function($query) use ($request){
             $query
