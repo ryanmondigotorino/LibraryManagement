@@ -107,8 +107,8 @@
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8 books_img">
-            <img class="book_cover" src="{{URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->front_image)}}" alt="Front Cover">
-            <img class="book_cover" src="{{URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->back_image)}}" alt="Back Cover">
+            <img class="book_cover" src="{{$getBooks[0]->front_image == null ? URL::asset('public/css/assets/noimage.png') : URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->front_image)}}" alt="Front Cover">
+            <img class="book_cover" src="{{$getBooks[0]->back_image == null ? URL::asset('public/css/assets/noimage.png') : URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->back_image)}}" alt="Back Cover">
         </div>
         <div class="col-lg-2"></div>
     </div>
