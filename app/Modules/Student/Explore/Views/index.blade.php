@@ -149,6 +149,9 @@
         $('div#paginate-container').jscroll({
             loadingHtml: '<div class="text-center"><img width="50" src="{{URL::asset("public/icons/loading.gif")}}" alt="Loading..."/></div>',
             padding: 20,
+            callback: function(){
+                GlobalForm.REDIRECT();
+            },
             nextSelector: 'a.book-lists-pagination:last',
         });
     });
