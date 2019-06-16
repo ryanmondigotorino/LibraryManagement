@@ -18,16 +18,8 @@
                                 <a href="{{route('admin.author.add-author')}}" class="btn btn-secondary"><span class="fa fa-plus"></span> Add Author</a>
                             </div>
                         </div><hr>
-                        <div class="row">
-                            @if($getAuthors->count() > 0)
-                                @foreach($getAuthors->get() as $authors)
-                                    @include('Admin.includes.card-authors-template')
-                                @endforeach
-                            @else
-                                <div class="col-lg-12">
-                                    <h1 class="mt-5 mb-5 text-center">No Authors added.</h1>
-                                </div>
-                            @endif
+                        <div id="paginate-container">
+                            @include('Admin.includes.paginate-card-authors')
                         </div>
                     </div>
                 </div>
@@ -38,4 +30,14 @@
 @endsection
 
 @section('pageJs')
+    <script src="{{URL::asset('public/js/plugins/jscroll/jquery.jscroll.js')}}"></script>
+    <script>
+        $(document).ready(function(){
+            $('div#paginate-container').jscroll({
+                loadingHtml: '<div class="text-center"><img width="50" src="{{URL::asset("public/icons/loading.gif")}}" alt="Loading..."/></div>',
+                padding: 20,
+                nextSelector: 'a.author-lists-pagination:last',
+            });
+        });
+    </script>
 @endsection

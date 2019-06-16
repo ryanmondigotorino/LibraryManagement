@@ -19,10 +19,10 @@
                                     </ul>
                                     <div class="carousel-inner">
                                         <div class="carousel-item active">
-                                            <img src="{{URL::asset('storage/uploads/book_images/book-('.$getBooks->id.')/'.$getBooks->front_image)}}" alt="Front image" class="img-fluid" style="width:100%;height:500px;">
+                                            <img src="{{$getBooks->front_image == null ? URL::asset('public/css/assets/noimage.png') : URL::asset('storage/uploads/book_images/book-('.$getBooks->id.')/'.$getBooks->front_image)}}" alt="Front image" class="img-fluid" style="width:100%;height:500px;">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="{{URL::asset('storage/uploads/book_images/book-('.$getBooks->id.')/'.$getBooks->back_image)}}" alt="Back image" class="img-fluid" style="width:100%;height:500px;">
+                                            <img src="{{$getBooks->back_image == null ? URL::asset('public/css/assets/noimage.png') : URL::asset('storage/uploads/book_images/book-('.$getBooks->id.')/'.$getBooks->back_image)}}" alt="Back image" class="img-fluid" style="width:100%;height:500px;">
                                         </div>
                                     </div>
 

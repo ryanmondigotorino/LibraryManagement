@@ -21,7 +21,7 @@
                                             <div class="form-group">
                                                 <label for="frontimage">Front Book Image</label>
                                                 <div class="form-group img-group">
-                                                    <img src="{{URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->front_image)}}" id="book-front-picture" class="item_image btn_book-front-picture" alt="Book Front Image">
+                                                    <img src="{{$getBooks[0]->front_image == null ? URL::asset('public/css/assets/noimage.png') : URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->front_image)}}" id="book-front-picture" class="item_image btn_book-front-picture" alt="Book Front Image">
                                                     <input type="file" class="d-none" name="frontImage"/>
                                                 </div>
                                             </div>
@@ -30,7 +30,7 @@
                                             <label for="frontimage">Back Book Image</label>
                                             <div class="form-group">
                                                 <div class="form-group img-group">
-                                                    <img src="{{URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->back_image)}}" id="book-back-picture" class="item_image btn_book-back-picture" alt="Book Back Image">
+                                                    <img src="{{$getBooks[0]->back_image == null ? URL::asset('public/css/assets/noimage.png') : URL::asset('storage/uploads/book_images/book-('.$getBooks[0]->id.')/'.$getBooks[0]->back_image)}}" id="book-back-picture" class="item_image btn_book-back-picture" alt="Book Back Image">
                                                     <input type="file" class="d-none" name="backImage"/>
                                                 </div>
                                             </div>

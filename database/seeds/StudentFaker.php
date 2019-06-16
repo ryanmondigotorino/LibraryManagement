@@ -14,7 +14,7 @@ class StudentFaker extends Seeder
     public function run()
     {
         $faker = Faker::create();
-    	foreach (range(1,200) as $index) {
+    	foreach (range(1,5000) as $index) {
             $studentnum = CF::model('Student')->select('id')->withTrashed()->orderBy('id','desc')->limit(1);
             $getStudentNumber = $studentnum->count() > 0 ? $studentnum->get()[0]->id + 1 : 1;
 	        DB::table('students')->insert([

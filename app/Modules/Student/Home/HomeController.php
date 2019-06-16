@@ -60,7 +60,7 @@ class HomeController extends Controller
                     $query->orWhere('authors.email','like',"%".$searched."%");
                     $query->orWhere('authors.name','like',"%".$searched."%");
                 })
-                ->orderBy('books.id','desc');
+                ->orderBy('books.id','desc')->paginate(12);
             $placeholder = $searched;
         }else{
             $getBooks = CF::model('Book')
@@ -80,10 +80,14 @@ class HomeController extends Controller
                 )
                 ->whereNull('books.status')
                 ->leftjoin('authors','authors.id','books.author_id')
-                ->orderBy('books.id','desc');
+                ->orderBy('books.id','desc')->paginate(12);
             $placeholder = '';
         }
-        return view($this->render('index'),compact('getBooks'));
+        if(isset($request->page) || $request->page > 1){
+            return view('Admin.includes.paginate-card-books',compact('getBooks'));
+        }else{
+            return view($this->render('index'),compact('getBooks'));
+        }
     }
 
     public function profile(Request $request,$slug){

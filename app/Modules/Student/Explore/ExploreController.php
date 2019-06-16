@@ -51,7 +51,7 @@ class ExploreController extends Controller
                     $query->orWhere('books.description','like',"%".$searched."%");
                     $query->orWhere('authors.email','like',"%".$searched."%");
                     $query->orWhere('authors.name','like',"%".$searched."%");
-                });
+                })->paginate(12);
             $placeholder = $searched;
         }else{
             $getBooks = CF::model('Book')
@@ -70,7 +70,8 @@ class ExploreController extends Controller
                     'authors.favorite_quote as author_quote'
                 )
                 ->whereNull('books.status')
-                ->leftjoin('authors','authors.id','books.author_id');
+                ->leftjoin('authors','authors.id','books.author_id')
+                ->paginate(12);
             $placeholder = '';
         }
         if($request->search_category){
@@ -94,16 +95,25 @@ class ExploreController extends Controller
                 ->leftjoin('authors','authors.id','books.author_id')
                 ->where(function($query) use ($request,$placeholderCategory){
                     $query->orWhere('books.genre','like',"%".$placeholderCategory."%");
-                });
+                })->paginate(12);
         }else{
             $placeholderCategory = 'Suggested for you';
         }
-        return view($this->render('index'),
-            compact(
-                'getBooks',
-                'placeholder',
-                'placeholderCategory'
-            ));
+        if(isset($request->page) || $request->page > 1){
+            return view('Student.includes.paginate-line-books',
+                compact(
+                    'getBooks',
+                    'placeholder',
+                    'placeholderCategory'
+                ));
+        }else{
+            return view($this->render('index'),
+                compact(
+                    'getBooks',
+                    'placeholder',
+                    'placeholderCategory'
+                ));
+        }
     }
     public function viewbook(Request $request,$id){
         $getBooks = CF::model('Book')
@@ -160,6 +170,7 @@ class ExploreController extends Controller
                 'borrows.borrowed_status'
             )
             ->join('students','students.id','borrows.student_id')
+            ->where('students.student_num',$currentLoggedId->student_num)
             ->where('borrows.borrowed_status','!=','deleted');
         $borrowedDetailsCount = $borrowedDetails->count();
         $borrowedDetails = $borrowedDetails->where(function($query) use ($request){

@@ -118,46 +118,22 @@
         </div>
     </div><br>
     <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-8">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-10">
+            <div class="suggested-container">
+                <p class="suggested-box">{{$placeholderCategory}}</p>
+            </div>
+        </div>
+        <div class="col-lg-2"></div>
+        <div class="col-lg-10">
             <div class="item-cart1 mt-4 my-cart">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="suggested-container">
-                                <p class="suggested-box">{{$placeholderCategory}}</p>
-                            </div>
+                <div class="row">
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-10">
+                        <div id="paginate-container">
+                            @include('Student.includes.paginate-line-books')
                         </div>
                     </div>
-                    @if($getBooks->count() > 0)
-                        @php $cntr = 0; @endphp
-                        @foreach($getBooks->get() as $key => $books)
-                            <div class="row mt-4">
-                                <div class="col-lg-1"></div>
-                                <div class="col-lg-8">
-                                    <div class="books-inline-container redirect-link-btn" data-url="{{route('student.explore.view-book',$books->id)}}">
-                                        <p class="category-font-sections mt-2 ml-4">
-                                            <b>{{($key + 1). '. ' .$books->title}}</b>, by 
-                                            ({{$books->author_name == null || $books->author_name == '' ? 'No Author Available' : $books->author_name}})
-                                            -- {{$books->author_email}}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <button class="btn btn-view-books redirect-link-btn mt-1" data-url="{{route('student.explore.view-book',$books->id)}}">View</button>
-                                </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <div class="row mt-4">
-                            <div class="col-lg-1"></div>
-                            <div class="col-lg-9">
-                                <div class="books-inline-container">
-                                    <p class="category-font-sections mt-2 ml-4 text-center">No Books Available</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
                 </div>
             </div>
         </div>
@@ -166,7 +142,15 @@
 @endsection
 
 @section('pageJs')
+<script src="{{URL::asset('public/js/plugins/jscroll/jquery.jscroll.js')}}"></script>
 <script>
     $('body').addClass('explore_page');
+    $(document).ready(function(){
+        $('div#paginate-container').jscroll({
+            loadingHtml: '<div class="text-center"><img width="50" src="{{URL::asset("public/icons/loading.gif")}}" alt="Loading..."/></div>',
+            padding: 20,
+            nextSelector: 'a.book-lists-pagination:last',
+        });
+    });
 </script>
 @endsection'
