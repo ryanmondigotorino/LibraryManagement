@@ -34,8 +34,12 @@ class AuthorController extends Controller
     /* Gets the list of all authors */
     
     public function index(Request $request){
-        $getAuthors = CF::model('Author');
-        return view($this->render('index'),compact('getAuthors'));
+        $getAuthors = CF::model('Author')->paginate(12);
+        if(isset($request->page) || $request->page > 1){
+            return view('Admin.includes.paginate-card-authors',compact('getAuthors'));
+        }else{
+            return view($this->render('index'),compact('getAuthors'));
+        }
     }
 
     /* Add the author's information  */
@@ -180,7 +184,11 @@ class AuthorController extends Controller
                 'authors.favorite_quote as author_quote'
             )
             ->leftjoin('authors','authors.id','books.author_id')
-            ->where('authors.id',$id);
-        return view($this->render('content.view-author'),compact('getAuthors','getBooks'));
+            ->where('authors.id',$id)->paginate(12);;
+        if(isset($request->page) || $request->page > 1){
+            return view('Admin.includes.paginate-card-books',compact('getAuthors','getBooks'));
+        }else{
+            return view($this->render('content.view-author'),compact('getAuthors','getBooks'));
+        }
     }
 }

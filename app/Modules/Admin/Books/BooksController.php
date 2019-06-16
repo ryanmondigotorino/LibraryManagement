@@ -33,7 +33,7 @@ class BooksController extends Controller
 
     /* Gets the list of all books */
 
-    public function index(){
+    public function index(Request $request){
         $getBooks = CF::model('Book')
             ->select(
                 'books.id',
@@ -50,8 +50,12 @@ class BooksController extends Controller
                 'authors.favorite_quote as author_quote'
             )
             ->whereNull('books.status')
-            ->leftjoin('authors','authors.id','books.author_id');
-        return view($this->render('index'),compact('getBooks'));
+            ->leftjoin('authors','authors.id','books.author_id')->paginate(12);
+        if(isset($request->page) || $request->page > 1){
+            return view('Admin.includes.paginate-card-books',compact('getBooks'));
+        }else{
+            return view($this->render('index'),compact('getBooks'));
+        }
     }
 
     /* Add Book's Information */

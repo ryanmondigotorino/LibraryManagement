@@ -19,16 +19,8 @@
                                 <a href="{{route('admin.books.inventory')}}" class="btn btn-secondary"><span class="fa fa-eye"></span> View Lists of Inventory</a>
                             </div>
                         </div><hr>
-                        <div class="row">
-                            @if($getBooks->count() > 0)
-                                @foreach($getBooks->get() as $books)
-                                    @include('Admin.includes.card-books-template')
-                                @endforeach
-                            @else
-                                <div class="col-lg-12">
-                                    <h1 class="mt-5 mb-5 text-center">No Books available.</h1>
-                                </div>
-                            @endif
+                        <div id="paginate-container">
+                            @include('Admin.includes.paginate-card-books')
                         </div>
                     </div>
                 </div>
@@ -39,4 +31,14 @@
 @endsection
 
 @section('pageJs')
+    <script src="{{URL::asset('public/js/plugins/jscroll/jquery.jscroll.js')}}"></script>
+    <script>
+        $(document).ready(function(){
+            $('div#paginate-container').jscroll({
+                loadingHtml: '<div class="text-center"><img width="50" src="{{URL::asset("public/icons/loading.gif")}}" alt="Loading..."/></div>',
+                padding: 20,
+                nextSelector: 'a.book-lists-pagination:last',
+            });
+        });
+    </script>
 @endsection

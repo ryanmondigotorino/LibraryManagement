@@ -158,8 +158,6 @@ var GlobalTable = {
                                     $('button.course-'+id).html('<i class="fa fa-spinner fa-pulse"></i>');
                                 },
                                 success: function(result){
-                                    console.log(result);
-                                    return false;
                                     if(result['status'] == 'success'){
                                         swal({
                                             title: 'Success!',

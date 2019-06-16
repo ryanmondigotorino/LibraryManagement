@@ -5,7 +5,7 @@
         </div>
         <div class="card-body">
             <div class="items">
-                <img src="{{URL::asset('storage/uploads/book_images/book-('.$books->id.')/'.$books->front_image.'')}}" alt="{{$books->title}}" height="350px;" width="100%"><hr>
+                <img src="{{$books->front_image == null && $books->back_image == null ? URL::asset('public/css/assets/noimage.png') : URL::asset('storage/uploads/book_images/book-('.$books->id.')/'.$books->front_image.'')}}" alt="{{$books->title}}" height="250px;" width="100%"><hr>
                 <p><b>Author: </b>{{$books->author_name == null || $books->author_name == '' ? 'No author available' : $books->author_name}}</p><hr>
                 Description:
                 <div class="item-description">
