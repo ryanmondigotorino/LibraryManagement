@@ -40,7 +40,7 @@ class HomeController extends Controller
         foreach($getBorrows as $borrows){
             $fromdb = strtotime(date('M j Y',$borrows->return_in));
             $currentdate = strtotime(date('M j Y',time()));
-            if($fromdb <= $currentdate && $borrows->borrowed_status == 'approved'){
+            if($fromdb <= $currentdate && ($borrows->borrowed_status == 'approved' || $borrows->borrowed_status == 'pending')){
                 $borrows->penalty = $borrows->penalty + 100;
                 $borrows->return_in = strtotime("+1 weekday",time());
                 $borrows->save();
