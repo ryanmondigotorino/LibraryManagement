@@ -293,7 +293,9 @@ class BooksController extends Controller
                     'borrows.books',
                     'borrows.return_in',
                     'borrows.penalty',
-                    'borrows.borrowed_status'
+                    'borrows.borrowed_status',
+                    'borrows.initial_return',
+                    'borrows.updated_at'
                 )
                 ->join('students','students.id','borrows.student_id')
                 ->where('borrows.borrowed_status','returned')
@@ -309,7 +311,9 @@ class BooksController extends Controller
                 'borrows.books',
                 'borrows.return_in',
                 'borrows.penalty',
-                'borrows.borrowed_status'
+                'borrows.borrowed_status',
+                'borrows.initial_return',
+                'borrows.updated_at'
             )
             ->join('students','students.id','borrows.student_id')
             ->where('borrows.borrowed_status','!=','returned')
@@ -345,7 +349,8 @@ class BooksController extends Controller
             $array[$key]['student_num'] = $value->student_num;
             $array[$key]['student_name'] = $value->firstname.$middlename.$value->lastname;
             $array[$key]['books'] = $book['title'];
-            $array[$key]['date_return'] = date('M j Y',$value->return_in);
+            $array[$key]['date_return'] = $slug == 'returned' ? date('M j Y',$value->initial_return) : date('M j Y',$value->return_in);
+            $array[$key]['actual_return'] = $slug == 'returned' ? date('M j Y',strtotime($value->updated_at)) : 'Not yet returned';
             $array[$key]['penalty'] = $value->penalty == null || $value->penalty == '' ? 'Penalty not set.' : 'P. '.number_format($value->penalty,2).' pesos';
             $array[$key]['borrowed_status'] = $value->borrowed_status;
             $btn_status = $value->borrowed_status == 'approved' || $value->borrowed_status == 'returned' ? 'd-none' : '';
@@ -367,6 +372,7 @@ class BooksController extends Controller
                 $value['student_name'],
                 $value['books'],
                 $value['date_return'],
+                $value['actual_return'],
                 $value['penalty'],
                 $value['borrowed_status'],
                 $value['button'],
