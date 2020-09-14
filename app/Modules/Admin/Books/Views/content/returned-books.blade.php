@@ -20,7 +20,8 @@
                                             <th>Student Number</th>
                                             <th>Student Name</th>
                                             <th>Books</th>
-                                            <th>Date Return</th>
+                                            <th>Initial Return</th>
+                                            <th>Actual Return</th>
                                             <th>Penalty</th>
                                             <th>Status</th>
                                             <th>Action</th>

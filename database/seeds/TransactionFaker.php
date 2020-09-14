@@ -18,7 +18,9 @@ class TransactionFaker extends Seeder
 	        DB::table('borrows')->insert([
                 'student_id' => rand(1,200),
 	            'books' => "{\"".rand(1,7)."\":1}",
+	            'initial_return' => 1561075200,
 	            'return_in' => strtotime("+5 weekday",time()),
+	            'penalty' => 800,
                 'borrowed_status' => 'returned',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
